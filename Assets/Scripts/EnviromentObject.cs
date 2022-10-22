@@ -17,12 +17,16 @@ public class EnviromentObject : MonoBehaviour
         RotateTowardsCamera();
     }
 
-    private void RotateTowardsCamera() //IN PROGRESS :(
+    private void RotateTowardsCamera() //Rotates this object towards the camera so that it appears the same irrespective of distance/orientation
     {
-        Vector3 positionDifference = player.camera.transform.position - transform.position;
-        Vector3 forward = transform.forward;
-        Vector3 newDirection = Vector3.Cross(positionDifference, forward); //The vector math is not even close to being right btw
 
-        transform.rotation = Quaternion.Euler(newDirection); //Supposed to make the object look at the camera
+        Vector3 positionDifference = player.camera.transform.position - transform.position; // Gets the vector of the object to the camera
+        float rotationFloat = positionDifference.normalized.z; //Gets the z component of the unit vector 
+
+        float rotationAngle = Mathf.Rad2Deg *  ((float)Math.Acos(rotationFloat)); //Converts the z component to the angle from the z-axis
+
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(-rotationAngle, currentRotation.y, currentRotation.z); //Changes the x rotation component to the evaluated angle
+
     }
 }
