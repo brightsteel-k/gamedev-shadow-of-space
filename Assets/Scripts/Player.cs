@@ -1,44 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
     public static Player WorldPlayer;
-    [SerializeField] private float speed;
+    [SerializeField] private EventManager eventManager;
+    [SerializeField] private CharacterController characterController;
     public GameObject mainCamera;
+
+    [SerializeField] private float speed;
     [SerializeField] private float rotation = 3 * Mathf.PI / 2;
     [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1 / 8;
     [SerializeField] private KeyCode RotateKey;
     public float rotationTime = 0.33f;
-    [SerializeField] private EventManager eventManager;
-    [SerializeField] private bool canMove = true;
+    [SerializeField] private bool canRotate = true;
 
 
     private void Start()
     {
+        characterController = GetComponent<CharacterController>();
         WorldPlayer = GetComponent<Player>();
         EventManager.OnWorldPivot += PivotCamera;
     }
 
-    //Runs every frame
     private void Update()
     {
-        Move();
-
-        if (Input.GetKeyDown(RotateKey) && canMove)
+        if (Input.GetKeyDown(RotateKey) && canRotate)
         {
             eventManager.WorldPivot();
         }
     }
 
-    private void ToggleMove() => canMove = !canMove;
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    private void CreateTile()
+    {
+        Tile newTile = ScriptableObject.CreateInstance<Tile>();
+        newTile.color = new Color(5, 66, 163, 1);
+    }
+
+    private void ToggleMove() => canRotate = !canRotate;
 
     private void Move()
     {
-        Vector3 positionDifference = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        transform.position = transform.position += positionDifference * (speed * Time.deltaTime); //Moves the player
+        Vector3 movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        characterController.Move(movementInput * speed * Time.fixedDeltaTime);
     }
 
     private void PivotCamera()
