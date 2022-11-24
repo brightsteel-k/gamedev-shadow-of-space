@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    public static Player WorldPlayer;
     [SerializeField] private float speed;
     public GameObject mainCamera;
     [SerializeField] private float rotation = 3 * Mathf.PI / 2;
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-
+        WorldPlayer = GetComponent<Player>();
         EventManager.OnWorldPivot += PivotCamera;
     }
 
