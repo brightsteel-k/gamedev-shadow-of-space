@@ -11,7 +11,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1 / 8;
     [SerializeField] private KeyCode RotateKey;
+    public float rotationTime = 0.33f;
     [SerializeField] private EventManager eventManager;
+    [SerializeField] private bool canMove = true;
 
 
     private void Start()
@@ -24,12 +26,14 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
-        if (Input.GetKeyDown(RotateKey))
+
+        if (Input.GetKeyDown(RotateKey) && canMove)
         {
-            Debug.Log("Should do a thing!");
             eventManager.WorldPivot();
         }
     }
+
+    private void ToggleMove() => canMove = !canMove;
 
     private void Move()
     {
@@ -48,10 +52,14 @@ public class Player : MonoBehaviour
         }
 
         Vector2 position = new Vector2(Mathf.Cos(rotation), Mathf.Sin(rotation)) * cameraOffsetRadius;
-
-        mainCamera.transform.localPosition = new Vector3(position.x, 6, position.y);
+        Vector3 newLocalPosition = new Vector3(position.x, 6, position.y);
         Vector3 currentRotation = mainCamera.transform.localEulerAngles;
-        mainCamera.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y - (rotationChange * Mathf.Rad2Deg), currentRotation.z);
+
+        LeanTween.moveLocal(mainCamera, newLocalPosition, rotationTime).setEase(LeanTweenType.easeOutQuint);
+        LeanTween.rotate(mainCamera, Quaternion.Euler(currentRotation.x, currentRotation.y - (rotationChange * Mathf.Rad2Deg), currentRotation.z).eulerAngles, rotationTime)
+            .setEase(LeanTweenType.easeOutQuint)
+            .setOnStart(ToggleMove)
+            .setOnComplete(ToggleMove);
     }
 
 }

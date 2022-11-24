@@ -48,6 +48,6 @@ public class EnviromentObject : MonoBehaviour
         Quaternion currentRotation = transform.rotation;
         float rotationChange = Mathf.Rad2Deg* 2 * Mathf.PI * player.rotationChangeQuotient;
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
-        transform.rotation = modifiedRotation;
+        LeanTween.rotate(this.gameObject, modifiedRotation.eulerAngles, player.rotationTime).setEase(LeanTweenType.easeOutQuint);
     }
 }
