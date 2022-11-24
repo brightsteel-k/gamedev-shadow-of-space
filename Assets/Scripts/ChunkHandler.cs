@@ -16,11 +16,14 @@ public class ChunkHandler : MonoBehaviour
 
     void InitalizeChunks()
     {
-        Tile t = ScriptableObject.CreateInstance<Tile>();
-        t.color = new Color(5, 66, 163, 255);
-        tilemap.SetTile(new Vector3Int(0, 0), t);        
-        Debug.Log(tilemap.CellToWorld(new Vector3Int(0, 0)));
         tilemap.RefreshAllTiles();
+        for (int x = -5; x < 5; x++)
+        {
+            for (int z = -5; z < 5; z++)
+            {
+                tilemap.SetTile(new Vector3Int(x, z), new Chunk());
+            }
+        }
     }
 
     // Update is called once per frame

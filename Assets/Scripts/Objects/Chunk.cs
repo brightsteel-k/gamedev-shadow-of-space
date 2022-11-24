@@ -11,7 +11,13 @@ public class Chunk : Tile
 
     public Chunk()
     {
-        
+        InitAppearance();
+    }
+
+    void InitAppearance()
+    {
+        color = new Color(5, 66, 163, 255);
+        sprite = Resources.Load<Sprite>("Textures/temp_ground");
     }
 
     public void GenerateObjects()
