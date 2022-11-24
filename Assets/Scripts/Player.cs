@@ -39,18 +39,12 @@ public class Player : MonoBehaviour
         Move();
     }
 
-    private void CreateTile()
-    {
-        Tile newTile = ScriptableObject.CreateInstance<Tile>();
-        newTile.color = new Color(5, 66, 163, 1);
-    }
-
     private void ToggleMove() => canRotate = !canRotate;
 
     private void Move()
     {
         Vector3 movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        characterController.Move(movementInput * speed * Time.fixedDeltaTime);
+        characterController.Move(speed * Time.fixedDeltaTime * movementInput);
     }
 
     private void PivotCamera()
