@@ -7,26 +7,47 @@ public class EnviromentObject : MonoBehaviour
 {
     private Player player;
 
-    void Start()
+    private void Start()
     {
+        EventManager.OnWorldPivot += Pivot;
         player = FindObjectOfType<Player>();
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        RotateTowardsCamera();
+        EventManager.OnWorldPivot -= Pivot;
+    }
+
+    private void Update()
+    {
+        //RotateTowardsCamera();
+        //DetermineRenderOrder();
+    }
+
+    private void DetermineRenderOrder()
+    {
+        if (transform.position.x > player.transform.position.x)
+        {
+            GetComponent<SpriteRenderer>().rendererPriority = 1;
+        } else
+        {
+            GetComponent<SpriteRenderer>().rendererPriority = 3;
+        }
     }
 
     private void RotateTowardsCamera() //Rotates this object towards the camera so that it appears the same irrespective of distance/orientation
     {
+        Quaternion currentRotation = transform.rotation;
+        Quaternion newRotation = Quaternion.FromToRotation(transform.position, player.mainCamera.transform.position);
+        Quaternion modifiedRotation = Quaternion.Euler(newRotation.eulerAngles.x, currentRotation.eulerAngles.y, currentRotation.eulerAngles.z);
+        transform.rotation = modifiedRotation;
+    }
 
-        Vector3 positionDifference = player.camera.transform.position - transform.position; // Gets the vector of the object to the camera
-        float rotationFloat = positionDifference.normalized.z; //Gets the z component of the unit vector 
-
-        float rotationAngle = Mathf.Rad2Deg *  ((float)Math.Acos(rotationFloat)); //Converts the z component to the angle from the z-axis
-
-        Vector3 currentRotation = transform.eulerAngles;
-        transform.eulerAngles = new Vector3(-rotationAngle, currentRotation.y, currentRotation.z); //Changes the x rotation component to the evaluated angle
-
+    private void Pivot() //Rotates this object a certain amount so it continues to face the camera
+    {
+        Quaternion currentRotation = transform.rotation;
+        float rotationChange = Mathf.Rad2Deg* 2 * Mathf.PI * player.rotationChangeQuotient;
+        Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
+        transform.rotation = modifiedRotation;
     }
 }
