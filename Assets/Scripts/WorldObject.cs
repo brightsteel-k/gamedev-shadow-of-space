@@ -22,4 +22,9 @@ public class WorldObject : MonoBehaviour
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
         LeanTween.rotate(this.gameObject, modifiedRotation.eulerAngles, Player.WorldPlayer.rotationTime).setEase(LeanTweenType.easeOutQuint);
     }
+
+    public void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
+    {
+        gameObject.SetActive(active);
+    }
 }
