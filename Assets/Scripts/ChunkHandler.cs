@@ -5,23 +5,24 @@ using UnityEngine.Tilemaps;
 
 public class ChunkHandler : MonoBehaviour
 {
-    Tilemap tilemap;  
+    public static Tilemap World;  
 
     // Start is called before the first frame update
     void Start()
     {
-        tilemap = GetComponent<Tilemap>();
+        World = GetComponent<Tilemap>();
         InitalizeChunks();
     }
 
     void InitalizeChunks()
     {
-        tilemap.RefreshAllTiles();
+        World.RefreshAllTiles();
         for (int x = -5; x < 5; x++)
         {
             for (int z = -5; z < 5; z++)
             {
-                tilemap.SetTile(new Vector3Int(x, z), new Chunk());
+                Chunk c = Instantiate(new Chunk(x, z));
+                World.SetTile(new Vector3Int(x, z), c);
             }
         }
     }

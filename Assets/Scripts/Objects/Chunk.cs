@@ -6,11 +6,14 @@ using UnityEngine.Tilemaps;
 public class Chunk : Tile
 {
     public bool Active = true;
+    public bool Initialized = false;
     public Biome Biome;
     List<WorldObject> Features = new List<WorldObject>();
+    Vector3Int pos;
 
-    public Chunk()
+    public Chunk(int x, int z)
     {
+        pos = new Vector3Int(x, z, 0);
         InitAppearance();
     }
 
@@ -20,9 +23,25 @@ public class Chunk : Tile
         sprite = Resources.Load<Sprite>("Textures/temp_ground");
     }
 
-    public void GenerateObjects()
+    void InitObjects(int radius)
     {
+        if (Initialized)
+            return;
 
+        InitNeighbors(radius);
+    }
+
+    void InitNeighbors(int radius)
+    {
+        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.right);
+        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.left);
+        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.up);
+        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.down);
+    }
+
+    public void LoadObjects()
+    {
+        
     }
 
     public void SetChunkActive(bool active)
