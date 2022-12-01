@@ -14,12 +14,17 @@ public class ChunkHandler : MonoBehaviour
     {
         Tiles = GetComponent<Tilemap>();
         World = new ChunkMap(Tiles);
+        EventManager.OnTilePosChanged += OnPlayerMove;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
 
+    public void OnPlayerMove()
+    {
+        Debug.Log("Player Changed Chunk!");
     }
 }

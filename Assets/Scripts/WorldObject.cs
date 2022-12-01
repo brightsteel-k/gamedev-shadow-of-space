@@ -15,7 +15,7 @@ public class WorldObject : MonoBehaviour
         EventManager.OnWorldPivot -= Pivot;
     }
 
-    private void Pivot() => Player.Pivot(this.gameObject);
+    private void Pivot() => Player.Pivot(gameObject);
 
     public void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
     {

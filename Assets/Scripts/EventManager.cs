@@ -6,12 +6,17 @@ public class EventManager : MonoBehaviour
 {
     public delegate void WorldEvent();
     public static event WorldEvent OnWorldPivot;
+    public static event WorldEvent OnTilePosChanged;
 
-    public void WorldPivot()
+    public static void WorldPivot()
     {
         if (OnWorldPivot != null)
-        {
             OnWorldPivot.Invoke();
-        }
+    }
+
+    public static void TilePosChanged()
+    {
+        if (OnTilePosChanged != null)
+            OnTilePosChanged.Invoke();
     }
 }

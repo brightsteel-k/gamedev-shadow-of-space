@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class Player : MonoBehaviour
 {
     public static Player WorldPlayer;
-    [SerializeField] private EventManager eventManager;
+    public static Vector3Int TilePosition = Vector3Int.zero;
     [SerializeField] private CharacterController characterController;
     public GameObject mainCamera;
 
@@ -34,11 +34,13 @@ public class Player : MonoBehaviour
         {
             PivotWorld();
         }
+
+        CheckCurrentTile();
     }
 
     private void PivotWorld()
     {
-        eventManager.WorldPivot();
+        EventManager.WorldPivot();
 
         Pivot(this.gameObject);
 
@@ -77,4 +79,13 @@ public class Player : MonoBehaviour
             .setOnComplete(ToggleMove);
     }
 
+    public void CheckCurrentTile()
+    {
+        Vector3Int p = ChunkHandler.Tiles.WorldToCell(transform.position);
+        if (p != TilePosition)
+        {
+            TilePosition = p;
+            EventManager.TilePosChanged();
+        }
+    }
 }
