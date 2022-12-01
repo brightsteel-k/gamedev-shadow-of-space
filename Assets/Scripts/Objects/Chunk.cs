@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Chunk : Tile
+public class Chunk
 {
     public bool Active = true;
     public bool Initialized = false;
@@ -11,10 +11,12 @@ public class Chunk : Tile
     List<WorldObject> Features = new List<WorldObject>();
     Vector3Int pos;
 
+    static Direction[] Directions = { Direction.North, Direction.East, Direction.South, Direction.West };
+
     public Chunk(int x, int z, Tile tile)
     {
         pos = new Vector3Int(x, z);
-        
+
     }
 
     void SetIdentity()
@@ -22,28 +24,44 @@ public class Chunk : Tile
 
     }
 
-    void InitObjects(int radius)
+    void InitObjects()
     {
         if (Initialized)
             return;
 
-        InitNeighbors(radius);
+        ChunkHandler.Tiles.GetTile<Tile>(pos).color = Color.green;
+
+
+        Initialized = true;
+        Active = true;
     }
 
-    void InitNeighbors(int radius)
+    public void LoadChunk(int r, Direction d)
     {
-        if (radius == 0)
+        if (r == 0)
             return;
 
-        ChunkHandler.World.GetChunk(pos + Vector3Int.right).InitObjects(radius - 1);
-        ChunkHandler.World.GetChunk(pos + Vector3Int.left).InitObjects(radius - 1);
-        ChunkHandler.World.GetChunk(pos + Vector3Int.up).InitObjects(radius - 1);
-        ChunkHandler.World.GetChunk(pos + Vector3Int.down).InitObjects(radius - 1);
+        if (!Active)
+        {
+            if (Initialized)
+                LoadObjects();
+            else
+                InitObjects();
+        }
+
+        foreach (Direction dir in Directions)
+        {
+            if (dir != d)
+                ChunkHandler.World.LoadChunk(pos, dir, r - 1, d);
+        }
     }
 
     public void LoadObjects()
     {
-        
+        if (Active)
+            return;
+
+        Active = true;
     }
 
     public void SetChunkActive(bool active)
@@ -69,7 +87,7 @@ public enum Biome
 public enum Direction
 {
     North,
-    South,
     East,
+    South,
     West
 }

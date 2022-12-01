@@ -25,4 +25,26 @@ public class ChunkMap
     {
         return chunks[pos.x, pos.y];
     }
+
+    public void LoadChunk(Vector3Int pos, Direction d, int r, Direction d2)
+    {
+        GetChunk(pos + DirectionShift(d)).LoadChunk(r, d2);
+    }
+
+    public Vector3Int DirectionShift(Direction d)
+    {
+        switch (d)
+        {
+            case Direction.North:
+                return new Vector3Int(0, 1);
+            case Direction.East:
+                return new Vector3Int(1, 0);
+            case Direction.South:
+                return new Vector3Int(0, -1);
+            case Direction.West:
+                return new Vector3Int(-1, 0);
+            default:
+                return new Vector3Int(1, 0);
+        }
+    }
 }

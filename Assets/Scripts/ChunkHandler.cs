@@ -7,6 +7,7 @@ public class ChunkHandler : MonoBehaviour
 {
     public static Tilemap Tiles;
     public static ChunkMap World;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -19,5 +20,6 @@ public class ChunkHandler : MonoBehaviour
     void Update()
     {
         
+
     }
 }
