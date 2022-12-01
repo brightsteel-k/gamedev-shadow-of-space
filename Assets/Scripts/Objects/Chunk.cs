@@ -11,16 +11,15 @@ public class Chunk : Tile
     List<WorldObject> Features = new List<WorldObject>();
     Vector3Int pos;
 
-    public Chunk(int x, int z)
+    public Chunk(int x, int z, Tile tile)
     {
-        pos = new Vector3Int(x, z, 0);
-        InitAppearance();
+        pos = new Vector3Int(x, z);
+        
     }
 
-    void InitAppearance()
+    void SetIdentity()
     {
-        color = new Color(5, 66, 163, 255);
-        sprite = Resources.Load<Sprite>("Textures/temp_ground");
+
     }
 
     void InitObjects(int radius)
@@ -33,10 +32,13 @@ public class Chunk : Tile
 
     void InitNeighbors(int radius)
     {
-        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.right);
-        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.left);
-        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.up);
-        ChunkHandler.World.GetTile<Chunk>(pos + Vector3Int.down);
+        if (radius == 0)
+            return;
+
+        ChunkHandler.World.GetChunk(pos + Vector3Int.right).InitObjects(radius - 1);
+        ChunkHandler.World.GetChunk(pos + Vector3Int.left).InitObjects(radius - 1);
+        ChunkHandler.World.GetChunk(pos + Vector3Int.up).InitObjects(radius - 1);
+        ChunkHandler.World.GetChunk(pos + Vector3Int.down).InitObjects(radius - 1);
     }
 
     public void LoadObjects()
@@ -62,4 +64,12 @@ public enum Biome
     VioletWastes,
     BlackSea,
     MercuryPools
+}
+
+public enum Direction
+{
+    North,
+    South,
+    East,
+    West
 }
