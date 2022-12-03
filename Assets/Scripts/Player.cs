@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
         Move();
     }
 
-    public static void ToggleMove() => Player.canRotate = !Player.canRotate;
+    public static void ToggleMove() => canRotate = !canRotate;
 
     private void Move()
     {
@@ -71,9 +71,9 @@ public class Player : MonoBehaviour
     public static void Pivot(GameObject obj)
     {
         Quaternion currentRotation = obj.transform.rotation;
-        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * Player.WorldPlayer.rotationChangeQuotient;
+        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * WorldPlayer.rotationChangeQuotient;
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
-        LeanTween.rotate(obj, modifiedRotation.eulerAngles, Player.WorldPlayer.rotationTime).setEase(Player.easeType)
+        LeanTween.rotate(obj, modifiedRotation.eulerAngles, WorldPlayer.rotationTime).setEase(easeType)
             .setEase(easeType)
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
