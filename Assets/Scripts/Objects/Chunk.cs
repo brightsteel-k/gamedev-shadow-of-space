@@ -20,7 +20,7 @@ public class Chunk
 
     void InitChunk()
     {
-        
+        Environment.PopulateChunk(WorldPos, "grass");
 
         Initialized = true;
         Active = true;
