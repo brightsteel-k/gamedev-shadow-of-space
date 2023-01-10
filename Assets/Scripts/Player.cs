@@ -6,8 +6,8 @@ using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
-    public static Player WorldPlayer;
-    public static Vector3Int TilePosition = Vector3Int.zero;
+    public static Player WORLD_PLAYER;
+    public static Vector3Int TILE_POSITION = Vector3Int.zero;
     [SerializeField] private CharacterController characterController;
     public GameObject mainCamera;
 
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private const float initialRotation = 3 * Mathf.PI / 2;
     [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1 / 8;
-    [SerializeField] private KeyCode RotateKey;
+    [SerializeField] private KeyCode rotateKey;
     public float rotationTime = 0.33f;
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
@@ -25,12 +25,12 @@ public class Player : MonoBehaviour
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
-        WorldPlayer = GetComponent<Player>();
+        WORLD_PLAYER = GetComponent<Player>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(RotateKey) && canRotate)
+        if (Input.GetKeyDown(rotateKey) && canRotate)
         {
             PivotWorld();
         }
@@ -71,9 +71,9 @@ public class Player : MonoBehaviour
     public static void Pivot(GameObject obj)
     {
         Quaternion currentRotation = obj.transform.rotation;
-        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * WorldPlayer.rotationChangeQuotient;
+        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * WORLD_PLAYER.rotationChangeQuotient;
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
-        LeanTween.rotate(obj, modifiedRotation.eulerAngles, WorldPlayer.rotationTime).setEase(easeType)
+        LeanTween.rotate(obj, modifiedRotation.eulerAngles, WORLD_PLAYER.rotationTime).setEase(easeType)
             .setEase(easeType)
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
@@ -81,10 +81,10 @@ public class Player : MonoBehaviour
 
     public void CheckCurrentTile()
     {
-        Vector3Int p = ChunkHandler.Tiles.WorldToCell(transform.position);
-        if (p != TilePosition)
+        Vector3Int p = ChunkHandler.TILES.WorldToCell(transform.position);
+        if (p != TILE_POSITION)
         {
-            TilePosition = p;
+            TILE_POSITION = p;
             EventManager.TilePosChanged();
         }
     }

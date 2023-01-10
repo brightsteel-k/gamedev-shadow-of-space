@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class WorldObject : MonoBehaviour
 {
+    
+
     private void Start()
     {
         EventManager.OnWorldPivot += Pivot;

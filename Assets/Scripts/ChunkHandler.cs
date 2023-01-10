@@ -6,14 +6,14 @@ using UnityEngine.Tilemaps;
 public class ChunkHandler : MonoBehaviour
 {
     int chunkUpdates = 0;
-    public static Tilemap Tiles;
-    public static Chunk[,] World;
-    static int LoadRadius = 2;
+    public static Tilemap TILES;
+    public static Chunk[,] WORLD;
+    static int LOAD_RADIUS = 2;
 
     // Start is called before the first frame update
     void Start()
     {
-        Tiles = GetComponent<Tilemap>();
+        TILES = GetComponent<Tilemap>();
         BuildWorld();
         EventManager.OnTilePosChanged += OnPlayerMove;
     }
@@ -25,38 +25,38 @@ public class ChunkHandler : MonoBehaviour
     }
     void BuildWorld()
     {
-        int xLen = Tiles.size.x;
-        int yLen = Tiles.size.y;
-        World = new Chunk[xLen, yLen];
+        int xLen = TILES.size.x;
+        int yLen = TILES.size.y;
+        WORLD = new Chunk[xLen, yLen];
         for (int x = 0; x < xLen; x++)
         {
             for (int y = 0; y < yLen; y++)
             {
                 Vector3Int p1 = new Vector3Int(x, y);
-                Chunk c = new Chunk(x, y, Tiles.GetTile<Tile>(p1));
-                c.WorldPos = Tiles.GetCellCenterWorld(p1);
-                World[x, y] = c;
+                Chunk c = new Chunk(x, y, TILES.GetTile<Tile>(p1));
+                c.worldPos = TILES.GetCellCenterWorld(p1);
+                WORLD[x, y] = c;
             }
         }
     }
 
     public Chunk GetChunk(Vector3Int pos)
     {
-        return World[pos.x, pos.y];
+        return WORLD[pos.x, pos.y];
     }
 
     public void Load(Vector3Int pos)
     {
-        int x0 = Mathf.Max(pos.x - LoadRadius, 0);
-        int x1 = Mathf.Min(pos.x + LoadRadius, World.GetUpperBound(0));
-        int y0 = Mathf.Max(pos.y - LoadRadius, 0);
-        int y1 = Mathf.Min(pos.y + LoadRadius, World.GetUpperBound(1));
+        int x0 = Mathf.Max(pos.x - LOAD_RADIUS, 0);
+        int x1 = Mathf.Min(pos.x + LOAD_RADIUS, WORLD.GetUpperBound(0));
+        int y0 = Mathf.Max(pos.y - LOAD_RADIUS, 0);
+        int y1 = Mathf.Min(pos.y + LOAD_RADIUS, WORLD.GetUpperBound(1));
 
         for (int y = y0; y < y1; y++)
         {
             for (int x = x0; x < x1; x++)
             {
-                World[x, y].LoadChunk();
+                WORLD[x, y].LoadChunk();
             }
         }
     }
@@ -65,6 +65,6 @@ public class ChunkHandler : MonoBehaviour
     {
         chunkUpdates++;
         Debug.Log("Chunk Update: " + chunkUpdates);
-        Load(Player.TilePosition);
+        Load(Player.TILE_POSITION);
     }
 }

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    static Environment Instance;
+    static Environment INSTANCE;
     static Quaternion spriteTilt = Quaternion.Euler(45, 0, 0);
 
-    public static Dictionary<string, GameObject> WorldObjects = new Dictionary<string, GameObject>();
+    public static Dictionary<string, GameObject> WORLD_OBJECTS = new Dictionary<string, GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-        Instance = GetComponent<Environment>();
+        INSTANCE = GetComponent<Environment>();
         LoadObjectPrefabs();
     }
 
@@ -20,7 +20,7 @@ public class Environment : MonoBehaviour
     {
         foreach (GameObject g in Resources.LoadAll<GameObject>("Prefabs/WorldObjects"))
         {
-            WorldObjects.Add(g.name, g);
+            WORLD_OBJECTS.Add(g.name, g);
         }
     }
 
@@ -33,6 +33,6 @@ public class Environment : MonoBehaviour
     public static WorldObject PopulateChunk(Vector3 posIn, string obj)
     {
         Vector3 centre = new Vector3(posIn.x, 0.5f, posIn.z);
-        return Instantiate(WorldObjects[obj], centre, spriteTilt, Instance.transform).GetComponent<WorldObject>();
+        return Instantiate(WORLD_OBJECTS[obj], centre, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
     }
 }

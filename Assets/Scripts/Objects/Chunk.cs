@@ -5,47 +5,47 @@ using UnityEngine.Tilemaps;
 
 public class Chunk
 {
-    public bool Active = false;
-    public bool Initialized = false;
-    public Biome Biome;
-    public Vector3 WorldPos;
-    List<WorldObject> Features = new List<WorldObject>();
-    Vector3Int Pos;
+    public bool active = false;
+    public bool initialized = false;
+    public Biome biome;
+    public Vector3 worldPos;
+    List<WorldObject> features = new List<WorldObject>();
+    Vector3Int pos;
 
 
     public Chunk(int x, int z, Tile tile)
     {
-        Pos = new Vector3Int(x, z);
+        pos = new Vector3Int(x, z);
     }
 
     void InitChunk()
     {
-        Environment.PopulateChunk(WorldPos, "grass");
+        Environment.PopulateChunk(worldPos, "grass");
 
-        Initialized = true;
-        Active = true;
+        initialized = true;
+        active = true;
     }
 
     public void LoadChunk()
     {
-        if (Active)
+        if (active)
             return;
-        if (Initialized)
+        if (initialized)
             SetChunkActive(true);
         else
             InitChunk();
     }
 
-    public void SetChunkActive(bool active)
+    public void SetChunkActive(bool activeIn)
     {
-        if (active == Active)
+        if (active == activeIn)
             return;
 
-        foreach (WorldObject w in Features)
+        foreach (WorldObject w in features)
         {
             w.SetActive(active);
         }
-        Active = active;
+        active = activeIn;
     }
 }
 
