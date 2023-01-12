@@ -32,7 +32,25 @@ public class Environment : MonoBehaviour
 
     public static WorldObject PopulateChunk(Vector3 posIn, string obj)
     {
-        Vector3 centre = new Vector3(posIn.x, 0.5f, posIn.z);
-        return Instantiate(WORLD_OBJECTS[obj], centre, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
+        Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z, 25f);
+        return Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
     }
+
+    public static WorldObject[] PopulateSmallFeatures(Vector3 posIn, string obj)
+    {
+        WorldObject[] returnObjs = new WorldObject[8];
+
+        for (int k = 0; k < 8; k++)
+        {
+            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z, 25f);
+            returnObjs[k] = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
+        }
+
+        return returnObjs;
+    }
+}
+
+public enum GenType
+{
+    NaiveRandom
 }

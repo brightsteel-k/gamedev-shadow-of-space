@@ -27,6 +27,7 @@ public class ChunkHandler : MonoBehaviour
     {
         int xLen = TILES.size.x;
         int yLen = TILES.size.y;
+        Debug.Log(xLen + " " + yLen);
         WORLD = new Chunk[xLen, yLen];
         for (int x = 0; x < xLen; x++)
         {
@@ -35,6 +36,7 @@ public class ChunkHandler : MonoBehaviour
                 Vector3Int p1 = new Vector3Int(x, y);
                 Chunk c = new Chunk(x, y, TILES.GetTile<Tile>(p1));
                 c.worldPos = TILES.GetCellCenterWorld(p1);
+                c.biome = Biome.VioletWastes;
                 WORLD[x, y] = c;
             }
         }

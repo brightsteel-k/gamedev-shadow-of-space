@@ -12,7 +12,6 @@ public class Chunk
     List<WorldObject> features = new List<WorldObject>();
     Vector3Int pos;
 
-
     public Chunk(int x, int z, Tile tile)
     {
         pos = new Vector3Int(x, z);
@@ -20,7 +19,10 @@ public class Chunk
 
     void InitChunk()
     {
-        Environment.PopulateChunk(worldPos, "grass");
+        if (biome == Biome.VioletWastes)
+        {
+            features.AddRange(Environment.PopulateSmallFeatures(worldPos, "grass"));
+        }
 
         initialized = true;
         active = true;
@@ -30,6 +32,7 @@ public class Chunk
     {
         if (active)
             return;
+        Debug.Log("Loaded: x=" + pos.x + ", y=" + pos.y);
         if (initialized)
             SetChunkActive(true);
         else
