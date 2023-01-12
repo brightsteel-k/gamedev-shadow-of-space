@@ -32,7 +32,6 @@ public class Chunk
     {
         if (active)
             return;
-        Debug.Log("Loaded: x=" + pos.x + ", y=" + pos.y);
         if (initialized)
             SetChunkActive(true);
         else

@@ -18,6 +18,6 @@ public class RandomGen
                 break;
         }
 
-        return new Vector3(x, 0.5f, y) + relative;
+        return new Vector3(x, 0.0f, y) + relative;
     }
 }
