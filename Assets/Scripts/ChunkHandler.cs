@@ -8,7 +8,7 @@ public class ChunkHandler : MonoBehaviour
     int chunkUpdates = 0;
     public static Tilemap TILES;
     public static Chunk[,] WORLD;
-    static int LOAD_RADIUS = 2;
+    static int LOAD_RADIUS = 4;
 
     // Start is called before the first frame update
     void Start()
@@ -25,17 +25,14 @@ public class ChunkHandler : MonoBehaviour
     }
     void BuildWorld()
     {
-        int xLen = TILES.size.x;
-        int yLen = TILES.size.y;
-        Debug.Log(xLen + " " + yLen);
-        WORLD = new Chunk[xLen, yLen];
-        for (int x = 0; x < xLen; x++)
+        int[] bounds = new int[] { 25, 25 };
+        WORLD = new Chunk[bounds[0], bounds[1]];
+        for (int x = 0; x < bounds[0]; x++)
         {
-            for (int y = 0; y < yLen; y++)
+            for (int y = 0; y < bounds[1]; y++)
             {
                 Vector3Int p1 = new Vector3Int(x, y);
-                Chunk c = new Chunk(x, y, TILES.GetTile<Tile>(p1));
-                c.worldPos = TILES.GetCellCenterWorld(p1);
+                Chunk c = new Chunk(x, y);
                 c.biome = Biome.VioletWastes;
                 WORLD[x, y] = c;
             }

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class RandomGen
 {
-    public static Vector3 GetPos(GenType gen, float x, float y, float scale)
+    public static Vector3 GetPos(GenType gen, float x, float y)
     {
         Vector3 relative;
 
         switch (gen)
         {
             case GenType.NaiveRandom:
-                relative = new Vector3(Random.value * scale, 0.0f, Random.value * scale);
+                relative = new Vector3(Random.value * Chunk.WIDTH, 0.0f, Random.value * Chunk.WIDTH);
                 break;
             default:
                 relative = new Vector3(x, 0.0f, y);

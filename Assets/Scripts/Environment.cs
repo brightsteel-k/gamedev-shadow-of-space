@@ -13,10 +13,10 @@ public class Environment : MonoBehaviour
     void Start()
     {
         INSTANCE = GetComponent<Environment>();
-        LoadObjectPrefabs();
+        InitObjectPrefabs();
     }
 
-    void LoadObjectPrefabs()
+    void InitObjectPrefabs()
     {
         foreach (GameObject g in Resources.LoadAll<GameObject>("Prefabs/WorldObjects"))
         {
@@ -32,7 +32,7 @@ public class Environment : MonoBehaviour
 
     public static WorldObject PopulateChunk(Vector3 posIn, string obj)
     {
-        Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z, 25f);
+        Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
         return Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
     }
 
@@ -40,9 +40,9 @@ public class Environment : MonoBehaviour
     {
         WorldObject[] returnObjs = new WorldObject[8];
 
-        for (int k = 0; k < 8; k++)
+        for (int k = 0; k < 6; k++)
         {
-            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z, 25f);
+            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
             returnObjs[k] = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
         }
 

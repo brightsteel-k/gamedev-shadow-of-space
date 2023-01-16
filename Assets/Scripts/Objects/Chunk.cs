@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Chunk
 {
+    public static float WIDTH = 20f;
     public bool active = false;
     public bool initialized = false;
     public Biome biome;
@@ -12,9 +13,10 @@ public class Chunk
     List<WorldObject> features = new List<WorldObject>();
     Vector3Int pos;
 
-    public Chunk(int x, int z, Tile tile)
+    public Chunk(int x, int z)
     {
         pos = new Vector3Int(x, z);
+        worldPos = new Vector3(x * WIDTH, 0f, z * WIDTH);
     }
 
     void InitChunk()
