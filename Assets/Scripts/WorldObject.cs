@@ -21,6 +21,7 @@ public class WorldObject : MonoBehaviour
         }
 
         transform.position = new Vector3(transform.position.x, baseHeights[i], transform.position.z);
+        Player.PivotInit(gameObject);
     }
 
     private void OnDestroy()

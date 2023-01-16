@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     {
         EventManager.WorldPivot();
 
-        Pivot(this.gameObject);
+        Pivot(gameObject);
 
         float rotationChange = 2 * Mathf.PI * rotationChangeQuotient;
         rotation += rotationChange;
@@ -66,6 +66,12 @@ public class Player : MonoBehaviour
         Quaternion forwardDirection = Quaternion.FromToRotation(Vector3.forward, transform.forward);
         Vector3 modifiedMovement = forwardDirection * movementInput;
         characterController.Move(speed * Time.fixedDeltaTime * modifiedMovement);
+    }
+
+    public static void PivotInit(GameObject obj)
+    {
+        Vector3 currentRotation = obj.transform.eulerAngles;
+        obj.transform.eulerAngles = new Vector3(currentRotation.x, WORLD_PLAYER.transform.eulerAngles.y, currentRotation.z);
     }
 
     public static void Pivot(GameObject obj)
