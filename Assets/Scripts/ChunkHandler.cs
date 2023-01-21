@@ -8,7 +8,7 @@ public class ChunkHandler : MonoBehaviour
     int chunkUpdates = 0;
     public static Tilemap TILES;
     public static Chunk[,] WORLD;
-    static int LOAD_RADIUS = 4;
+    static int LOAD_RADIUS = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -25,37 +25,41 @@ public class ChunkHandler : MonoBehaviour
     }
     void BuildWorld()
     {
-        int[] bounds = new int[] { 25, 25 };
+        int[] bounds = new int[] { 15, 15 };
         WORLD = new Chunk[bounds[0], bounds[1]];
         for (int x = 0; x < bounds[0]; x++)
         {
-            for (int y = 0; y < bounds[1]; y++)
+            for (int z = 0; z < bounds[1]; z++)
             {
-                Vector3Int p1 = new Vector3Int(x, y);
-                Chunk c = new Chunk(x, y);
+                Chunk c = new Chunk(x, z);
                 c.biome = Biome.VioletWastes;
-                WORLD[x, y] = c;
+                WORLD[x, z] = c;
             }
         }
     }
 
     public Chunk GetChunk(Vector3Int pos)
     {
-        return WORLD[pos.x, pos.y];
+        return WORLD[pos.x, pos.z];
     }
 
     public void Load(Vector3Int pos)
     {
         int x0 = Mathf.Max(pos.x - LOAD_RADIUS, 0);
-        int x1 = Mathf.Min(pos.x + LOAD_RADIUS, WORLD.GetUpperBound(0));
-        int y0 = Mathf.Max(pos.y - LOAD_RADIUS, 0);
-        int y1 = Mathf.Min(pos.y + LOAD_RADIUS, WORLD.GetUpperBound(1));
+        int x1 = Mathf.Min(pos.x + LOAD_RADIUS + 1, WORLD.GetUpperBound(0));
+        int z0 = Mathf.Max(pos.z - LOAD_RADIUS, 0);
+        int z1 = Mathf.Min(pos.z + LOAD_RADIUS + 1, WORLD.GetUpperBound(1));
 
-        for (int y = y0; y < y1; y++)
+        Debug.Log(pos);
+
+        for (int z = z0; z < z1; z++)
         {
             for (int x = x0; x < x1; x++)
             {
-                WORLD[x, y].LoadChunk();
+                if (x == x0 || x == x1 || z == z0 || z == z1)
+                    WORLD[x, z].SetChunkActive(false);
+                else
+                    WORLD[x, z].LoadChunk();
             }
         }
     }
@@ -65,5 +69,6 @@ public class ChunkHandler : MonoBehaviour
         chunkUpdates++;
         Debug.Log("Chunk Update: " + chunkUpdates);
         Load(Player.TILE_POSITION);
+
     }
 }
