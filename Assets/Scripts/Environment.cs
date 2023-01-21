@@ -38,7 +38,7 @@ public class Environment : MonoBehaviour
 
     public static WorldObject[] PopulateSmallFeatures(Vector3 posIn, string obj)
     {
-        WorldObject[] returnObjs = new WorldObject[8];
+        WorldObject[] returnObjs = new WorldObject[6];
 
         for (int k = 0; k < 6; k++)
         {

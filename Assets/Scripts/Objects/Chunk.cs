@@ -42,12 +42,9 @@ public class Chunk
 
     public void SetChunkActive(bool activeIn)
     {
-        if (active == activeIn)
-            return;
-
         foreach (WorldObject w in features)
         {
-            w.SetActive(active);
+            w.SetActive(activeIn);
         }
         active = activeIn;
     }
