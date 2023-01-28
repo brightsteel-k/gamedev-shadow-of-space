@@ -27,6 +27,7 @@ public class ChunkHandler : MonoBehaviour
     {
         
     }
+
     void BuildWorld()
     {
         WORLD = new Chunk[X_BOUND, Z_BOUND];
@@ -66,7 +67,6 @@ public class ChunkHandler : MonoBehaviour
     {
         while (CHUNK_HANDLING)
         {
-            Debug.Log("Tanzanite");
             for (int x = 0; x < X_BOUND; x++)
             {
                 for (int z = 0; z < Z_BOUND; z++)
@@ -86,7 +86,6 @@ public class ChunkHandler : MonoBehaviour
     public void OnPlayerMove()
     {
         chunkUpdates++;
-        Debug.Log("Chunk Update: " + chunkUpdates);
         Load(Player.TILE_POSITION);
     }
 }

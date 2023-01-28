@@ -21,10 +21,14 @@ public class Player : MonoBehaviour
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
 
+    private Animator anim;
+    private int[] direction = new int[] { 0, 0 };
+
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         WORLD_PLAYER = GetComponent<Player>();
+        anim = transform.Find("Texture").GetComponent<Animator>();
     }
 
     private void Update()
@@ -33,6 +37,8 @@ public class Player : MonoBehaviour
         {
             PivotWorld();
         }
+
+        PlayerRotation();
 
         CheckCurrentTile();
     }
@@ -83,6 +89,131 @@ public class Player : MonoBehaviour
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
     }
+
+    private void PlayerRotation()
+    {
+        // Horizontal
+        if (direction[0] == 0)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+                SetAnimRotation(3);
+            else if (Input.GetKeyDown(KeyCode.D))
+                SetAnimRotation(1);
+        }
+        else
+        {
+            if (Input.GetKeyUp(KeyCode.A) && direction[0] == -1)
+                CheckRotationChange(3);
+            if (Input.GetKeyUp(KeyCode.D) && direction[0] == 1)
+                CheckRotationChange(1);
+        }
+
+        // Vertical
+        if (direction[1] == 0)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (direction[0] == 0)
+                    SetAnimRotation(0);
+                else
+                    direction[1] = 1;
+            }
+            else if(Input.GetKeyDown(KeyCode.S))
+            {
+                if (direction[0] == 0)
+                    SetAnimRotation(2);
+                else
+                    direction[1] = -1;
+            }
+        }
+        else
+        {
+            if (Input.GetKeyUp(KeyCode.W) && direction[1] == 1)
+                CheckRotationChange(0);
+            if (Input.GetKeyUp(KeyCode.S) && direction[1] == -1)
+                CheckRotationChange(2);
+        }
+    }
+
+    void CheckRotationChange(int currentDir)
+    {
+        bool horizontalLifted = currentDir % 2 == 1;
+        if (horizontalLifted)
+        {
+            direction[0] = 0;
+        }
+        else
+        {
+            direction[1] = 0;
+            if (direction[0] != 0)  // Set direction to corresponding X direction if dir is already decided
+            {
+                SetAnimRotation(2 - direction[0]);
+                return;
+            }
+        }
+        
+        if (direction[0] == 0) // Set direction to corresponding X direction if key is already pressed
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                SetAnimRotation(3);
+                return;
+            }
+            
+            if (Input.GetKey(KeyCode.D))
+            {
+                SetAnimRotation(1);
+                return;
+            }
+        }
+
+        if (horizontalLifted && direction[1] != 0) // Set direction to corresponding Y direction if dir is already decided
+        {
+            SetAnimRotation(1 - direction[1]);
+            return;
+        }
+
+        if (direction[1] == 0) // Set direction to corresponding Y direction if key is already pressed
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                if (direction[0] == 0)
+                    SetAnimRotation(0);
+                else
+                    direction[1] = 1;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                if (direction[0] == 0)
+                    SetAnimRotation(2);
+                else
+                    direction[1] = -1;
+            }
+        }
+    }
+
+    void SetAnimRotation(int dir)
+    {
+        anim.SetInteger("direction", dir);
+        switch (dir)
+        {
+            case 0:
+                direction[1] = 1;
+                break;
+            case 1:
+                direction[0] = 1;
+                break;
+            case 2:
+                direction[1] = -1;
+                break;
+            case 3:
+                direction[0] = -1;
+                break;
+        }
+
+        Debug.Log("Facing: " + dir);
+    }
+
 
     public void CheckCurrentTile()
     {

@@ -33,7 +33,6 @@ public class WorldObject : MonoBehaviour
 
     public void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
     {
-        Debug.Log(name + " should be disappearing");
         gameObject.SetActive(active);
     }
 }
