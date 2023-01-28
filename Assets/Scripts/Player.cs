@@ -194,7 +194,7 @@ public class Player : MonoBehaviour
 
     void SetAnimRotation(int dir)
     {
-        anim.SetInteger("direction", dir);
+        anim.SetInteger("Direction", dir);
         switch (dir)
         {
             case 0:
@@ -202,6 +202,7 @@ public class Player : MonoBehaviour
                 break;
             case 1:
                 direction[0] = 1;
+                transform.localScale = new Vector3(-1, 0, 0);
                 break;
             case 2:
                 direction[1] = -1;
@@ -213,7 +214,6 @@ public class Player : MonoBehaviour
 
         Debug.Log("Facing: " + dir);
     }
-
 
     public void CheckCurrentTile()
     {
