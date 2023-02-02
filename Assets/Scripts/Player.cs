@@ -22,13 +22,17 @@ public class Player : MonoBehaviour
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
 
     private Animator anim;
+    private SpriteRenderer sprite;
+    private bool moving = false;
     private int[] direction = new int[] { 0, 0 };
+    [SerializeField] private bool walkType;
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         WORLD_PLAYER = GetComponent<Player>();
         anim = transform.Find("Texture").GetComponent<Animator>();
+        sprite = transform.Find("Texture").GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -39,6 +43,7 @@ public class Player : MonoBehaviour
         }
 
         PlayerRotation();
+        PlayerAnimation();
 
         CheckCurrentTile();
     }
@@ -202,17 +207,34 @@ public class Player : MonoBehaviour
                 break;
             case 1:
                 direction[0] = 1;
-                transform.localScale = new Vector3(-1, 0, 0);
+                sprite.flipX = false;
                 break;
             case 2:
                 direction[1] = -1;
                 break;
             case 3:
                 direction[0] = -1;
+                sprite.flipX = true;
                 break;
         }
 
         Debug.Log("Facing: " + dir);
+    }
+
+
+
+    void PlayerAnimation()
+    {
+        if (moving && characterController.velocity.magnitude <= 0.01f)
+        {
+            moving = false;
+            anim.SetBool("Running", false);
+        }
+        if (!moving && characterController.velocity.magnitude > 0.01f)
+        {
+            moving = true;
+            anim.SetBool("Running", true);
+        }
     }
 
     public void CheckCurrentTile()
