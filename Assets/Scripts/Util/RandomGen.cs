@@ -20,4 +20,10 @@ public class RandomGen
 
         return new Vector3(x, 0.0f, y) + relative;
     }
+
+
+    public static int Mercury(int a)
+    {
+        return a + (int)(Random.value - 0.5f) * 2;
+    }
 }

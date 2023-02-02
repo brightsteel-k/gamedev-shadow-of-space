@@ -17,6 +17,8 @@ public class ChunkHandler : MonoBehaviour
     void Start()
     {
         TILES = GetComponent<Tilemap>();
+
+        Environment.InitBiomes();
         BuildWorld();
         EventManager.OnTilePosChanged += OnPlayerMove;
         StartCoroutine("UnloadChunks");
@@ -35,8 +37,7 @@ public class ChunkHandler : MonoBehaviour
         {
             for (int z = 0; z < Z_BOUND; z++)
             {
-                Chunk c = new Chunk(x, z);
-                c.biome = Biome.VioletWastes;
+                Chunk c = new Chunk(x, z, Environment.Biomes["violet_wastes"]);
                 WORLD[x, z] = c;
             }
         }

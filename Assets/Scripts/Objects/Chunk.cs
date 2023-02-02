@@ -13,18 +13,16 @@ public class Chunk
     List<WorldObject> features = new List<WorldObject>();
     Vector3Int pos;
 
-    public Chunk(int x, int z)
+    public Chunk(int x, int z, Biome b)
     {
         pos = new Vector3Int(x, z);
         worldPos = new Vector3(x * WIDTH, 0f, z * WIDTH);
+        biome = b;
     }
 
     void InitChunk()
     {
-        if (biome == Biome.VioletWastes)
-        {
-            features.AddRange(Environment.PopulateSmallFeatures(worldPos, "grass"));
-        }
+        features.AddRange(Environment.PopulateChunk(worldPos, biome.Features));
 
         initialized = true;
         active = true;
@@ -48,11 +46,4 @@ public class Chunk
         }
         active = activeIn;
     }
-}
-
-public enum Biome
-{
-    VioletWastes,
-    BlackSea,
-    MercuryPools
 }

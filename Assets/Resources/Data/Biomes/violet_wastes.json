@@ -1,0 +1,7 @@
+{
+	"name":"Violet Wastes",
+	"features":[
+		{ "Item1": "grass", "Item2": 6 },
+		{ "Item1": "diamond", "Item2": 1 }
+	]
+}
