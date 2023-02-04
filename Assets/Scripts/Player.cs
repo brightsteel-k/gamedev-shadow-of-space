@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,8 +14,6 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float speed;
     [SerializeField] private float rotation = Mathf.PI / 2;
-    private const float initialRotation = 3 * Mathf.PI / 2;
-    [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1 / 8;
     [SerializeField] private KeyCode rotateKey;
     public float rotationTime = 0.33f;
@@ -61,9 +60,16 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        Vector3 movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        Quaternion forwardDirection = Quaternion.FromToRotation(Vector3.forward, transform.forward);
-        Vector3 modifiedMovement = forwardDirection * movementInput;
+        Vector3 forwardDirection = transform.forward;
+        Vector3 sideDirection = Vector3.Cross(forwardDirection, Vector3.up);
+
+        Vector3 movementInput = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+        float movementIntoX = Vector3.Dot(movementInput, sideDirection);
+        float movementIntoZ = Vector3.Dot(movementInput, forwardDirection);
+
+        Vector3 modifiedMovement = new Vector3(movementIntoX, 0, movementIntoZ);
+        
         characterController.Move(speed * Time.fixedDeltaTime * modifiedMovement);
     }
 
@@ -79,7 +85,6 @@ public class Player : MonoBehaviour
         float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * WORLD_PLAYER.rotationChangeQuotient;
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
         LeanTween.rotate(obj, modifiedRotation.eulerAngles, WORLD_PLAYER.rotationTime).setEase(easeType)
-            .setEase(easeType)
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
     }
