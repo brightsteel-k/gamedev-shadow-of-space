@@ -21,9 +21,14 @@ public class RandomGen
         return new Vector3(x, 0.0f, y) + relative;
     }
 
-
-    public static int Mercury(int a)
+    public static int GetCountFromRarity(float rarity, int degree)
     {
-        return a + (int)(Random.value - 0.5f) * 2;
+        return Mathf.FloorToInt(rarity * (Mathf.Pow(Random.Range(1, 101), degree)));
+    }
+
+
+    public static int Mercury(float a)
+    {
+        return (int)(a + (Random.value - 0.5f) * 2);
     }
 }

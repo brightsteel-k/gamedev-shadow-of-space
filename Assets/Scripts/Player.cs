@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     public static Player WORLD_PLAYER;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
-    [SerializeField] private CharacterController characterController;
+    private CharacterController characterController;
     public GameObject mainCamera;
 
     [SerializeField] private float speed;

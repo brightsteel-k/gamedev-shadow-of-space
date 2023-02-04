@@ -10,6 +10,10 @@ public class Environment : MonoBehaviour
     public static Dictionary<string, Biome> Biomes = new Dictionary<string, Biome>() { };
     public static Dictionary<string, GameObject> WORLD_OBJECTS = new Dictionary<string, GameObject>();
 
+    private void Awake()
+    {
+        LeanTween.init(800);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -36,31 +40,45 @@ public class Environment : MonoBehaviour
 
     }
 
-    public static WorldObject[] PopulateChunk(Vector3 posIn, List<(string, int)> features)
+    public static WorldObject[] PopulateChunk(Vector3 posIn, List<(string, float)> features)
     {
         List<WorldObject> allFeatures = new List<WorldObject>();
-        foreach ((string, int) f in features)
+        foreach ((string, float) f in features)
         {
             switch (f.Item1)
             {
+                case "diamond":
+                    AddRareFeature(allFeatures, posIn, f.Item1, f.Item2, 3);
+                    break;
                 case "stalagmite":
+                    AddStalagmite(allFeatures, posIn, f.Item1, f.Item2);
                     break;
                 default:
-                    AddSmallFeatures(allFeatures, posIn, f.Item1, f.Item2);
+                    AddSmallFeatures(allFeatures, posIn, f.Item1, RandomGen.Mercury(f.Item2));
                     break;
             }
         }
         return allFeatures.ToArray();
     }
 
-    public static void AddSmallFeatures(List<WorldObject> allFeatures, Vector3 posIn, string obj, int frequency)
+    public static void AddSmallFeatures(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
     {
-        int c = RandomGen.Mercury(frequency);
-        for (int k = 0; k < c; k++)
+        for (int k = 0; k < count; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
             allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>());
         }
+    }
+
+    public static void AddRareFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float rarity, int degree)
+    {
+        int c = RandomGen.GetCountFromRarity(rarity, degree);
+        AddSmallFeatures(allFeatures, posIn, obj, c);
+    }
+
+    public static void AddStalagmite(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    {
+
     }
 }
 

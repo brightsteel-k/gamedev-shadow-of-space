@@ -9,7 +9,7 @@ public class WorldObject : MonoBehaviour
              "Found in Resources/Textures/Features")]
     [SerializeField] float[] baseHeights;
 
-    private void Start()
+    public virtual void Start()
     {
         EventManager.OnWorldPivot += Pivot;
         int i = baseHeights.Length - 1;
