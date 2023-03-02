@@ -8,12 +8,12 @@ public class Player : MonoBehaviour
 {
     public static Player WORLD_PLAYER;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
-    private CharacterController characterController;
+    public static CharacterController CONTROLLER;
     public GameObject mainCamera;
 
     [SerializeField] private float speed;
     [SerializeField] private float rotation = Mathf.PI / 2;
-    private const float initialRotation = 3 * Mathf.PI / 2;
+    private static float pivotCooldown = 0;
     [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1 / 8;
     [SerializeField] private KeyCode rotateKey;
@@ -27,17 +27,26 @@ public class Player : MonoBehaviour
     private int[] direction = new int[] { 0, 0 };
     [SerializeField] private bool walkType;
 
+    private void Awake()
+    {
+        WORLD_PLAYER = GetComponent<Player>();
+    }
+
     private void Start()
     {
-        characterController = GetComponent<CharacterController>();
-        WORLD_PLAYER = GetComponent<Player>();
+        CONTROLLER = GetComponent<CharacterController>();
         anim = transform.Find("Texture").GetComponent<Animator>();
         sprite = transform.Find("Texture").GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(rotateKey) && canRotate)
+        if (pivotCooldown != 0)
+        {
+            TickPivotCooldown();
+        }
+
+        if (Input.GetKeyDown(rotateKey) && canRotate && pivotCooldown == 0)
         {
             PivotWorld();
         }
@@ -46,6 +55,17 @@ public class Player : MonoBehaviour
         PlayerAnimation();
 
         CheckCurrentTile();
+    }
+
+    private void TickPivotCooldown()
+    {
+        if (pivotCooldown < 0)
+        {
+            pivotCooldown = 0;
+            return;
+        }
+
+        pivotCooldown -= Time.deltaTime;
     }
 
     private void PivotWorld()
@@ -61,6 +81,8 @@ public class Player : MonoBehaviour
         {
             rotation -= 2 * Mathf.PI;
         }
+
+        pivotCooldown = 0.5f;
     }
 
     private void FixedUpdate()
@@ -75,7 +97,7 @@ public class Player : MonoBehaviour
         Vector3 movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         Quaternion forwardDirection = Quaternion.FromToRotation(Vector3.forward, transform.forward);
         Vector3 modifiedMovement = forwardDirection * movementInput;
-        characterController.Move(speed * Time.fixedDeltaTime * modifiedMovement);
+        CONTROLLER.Move(speed * Time.fixedDeltaTime * modifiedMovement);
     }
 
     public static void PivotInit(GameObject obj)
@@ -225,12 +247,12 @@ public class Player : MonoBehaviour
 
     void PlayerAnimation()
     {
-        if (moving && characterController.velocity.magnitude <= 0.01f)
+        if (moving && CONTROLLER.velocity.magnitude <= 0.01f)
         {
             moving = false;
             anim.SetBool("Running", false);
         }
-        if (!moving && characterController.velocity.magnitude > 0.01f)
+        if (!moving && CONTROLLER.velocity.magnitude > 0.01f)
         {
             moving = true;
             anim.SetBool("Running", true);

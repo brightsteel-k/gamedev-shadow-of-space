@@ -51,7 +51,7 @@ public class Environment : MonoBehaviour
                     AddRareFeature(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
                 case "stalagmite":
-                    AddStalagmite(allFeatures, posIn, f.Item1, f.Item2);
+                    AddStalagmites(allFeatures, posIn, f.Item1, f.Item2);
                     break;
                 default:
                     AddSmallFeatures(allFeatures, posIn, f.Item1, RandomGen.Mercury(f.Item2));
@@ -76,13 +76,30 @@ public class Environment : MonoBehaviour
         AddSmallFeatures(allFeatures, posIn, obj, c);
     }
 
-    public static void AddStalagmite(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
     {
+        int c = RandomGen.GetCountFiftyPercent(count);
+        for (int k = 0; k < c; k++)
+        {
+            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
+            allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>());
+            AddFeatureCluster(allFeatures, pos, "hematite", 5);
+        }
+    }
 
+    public static void AddFeatureCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    {
+        int c = RandomGen.Mercury(count);
+        for (int k = 0; k < c; k++)
+        {
+            Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
+            allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>());
+        }
     }
 }
 
 public enum GenType
 {
-    NaiveRandom
+    NaiveRandom,
+    Dense
 }

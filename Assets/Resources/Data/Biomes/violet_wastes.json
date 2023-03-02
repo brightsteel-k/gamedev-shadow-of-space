@@ -3,6 +3,6 @@
 	"features":[
 		{ "Item1": "grass", "Item2": 6 },
 		{ "Item1": "diamond", "Item2": 0.000003 },
-		{ "Item1": "stalagmite", "Item2": 2 }
+		{ "Item1": "stalagmite", "Item2": 3 }
 	]
 }

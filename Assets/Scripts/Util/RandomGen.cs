@@ -13,6 +13,10 @@ public class RandomGen
             case GenType.NaiveRandom:
                 relative = new Vector3(Random.value * Chunk.WIDTH, 0.0f, Random.value * Chunk.WIDTH);
                 break;
+            case GenType.Dense:
+                float radians = Random.Range(0, 2 * Mathf.PI);
+                relative = new Vector3(1.6f * Mathf.Cos(radians), 0.0f, 1.6f * Mathf.Sin(radians));
+                break;
             default:
                 relative = new Vector3(x, 0.0f, y);
                 break;
@@ -26,6 +30,10 @@ public class RandomGen
         return Mathf.FloorToInt(rarity * (Mathf.Pow(Random.Range(1, 101), degree)));
     }
 
+    public static int GetCountFiftyPercent(float count)
+    {
+        return Mathf.Max(0, Random.Range((int)count * -1, (int)count + 1));
+    }
 
     public static int Mercury(float a)
     {
