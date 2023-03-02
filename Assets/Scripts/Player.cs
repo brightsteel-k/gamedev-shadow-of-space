@@ -15,8 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float rotation = Mathf.PI / 2;
     private static float pivotCooldown = 0;
     [SerializeField] private float cameraOffsetRadius;
-    public float rotationChangeQuotient = 1 / 8;
-    [SerializeField] private KeyCode rotateKey;
+    public float rotationChangeQuotient = 1f / 8f;
     public float rotationTime = 0.33f;
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
@@ -26,6 +25,10 @@ public class Player : MonoBehaviour
     private bool moving = false;
     private int[] direction = new int[] { 0, 0 };
     [SerializeField] private bool walkType;
+
+    private int mouseThreshold;
+    private int mouseCentrePos;
+    private int mouseInput = 0;
 
     private void Awake()
     {
@@ -37,6 +40,10 @@ public class Player : MonoBehaviour
         CONTROLLER = GetComponent<CharacterController>();
         anim = transform.Find("Texture").GetComponent<Animator>();
         sprite = transform.Find("Texture").GetComponent<SpriteRenderer>();
+        mouseThreshold = Screen.width / 3;
+        mouseCentrePos = Screen.width / 2;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -46,15 +53,45 @@ public class Player : MonoBehaviour
             TickPivotCooldown();
         }
 
-        if (Input.GetKeyDown(rotateKey) && canRotate && pivotCooldown == 0)
-        {
-            PivotWorld();
-        }
-
-        PlayerRotation();
+        PlayerRotateInput();
+        AnimatePlayerRotation();
         PlayerAnimation();
 
         CheckCurrentTile();
+    }
+
+    private void PlayerRotateInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            mouseInput = 0;
+        }
+        else if (mouseCentrePos - Input.mousePosition.x > mouseThreshold)
+        {
+            if (mouseInput != 1 && canRotate && pivotCooldown == 0)
+            {
+                PivotWorld(true);
+                mouseInput = 1;
+            }
+        }
+        else if (mouseCentrePos - Input.mousePosition.x < -mouseThreshold)
+        {
+            if (mouseInput != -1 && canRotate && pivotCooldown == 0)
+            {
+                PivotWorld(false);
+                mouseInput = -1;
+            }
+        }
+        else if (mouseInput != 0)
+        {
+            mouseInput = 0;
+        }
     }
 
     private void TickPivotCooldown()
@@ -68,21 +105,20 @@ public class Player : MonoBehaviour
         pivotCooldown -= Time.deltaTime;
     }
 
-    private void PivotWorld()
+    private void PivotWorld(bool clockwise)
     {
-        EventManager.WorldPivot();
+        pivotCooldown = 0.5f;
+        
+        EventManager.WorldPivot(clockwise);
+        Pivot(gameObject, clockwise);
 
-        Pivot(gameObject);
-
-        float rotationChange = 2 * Mathf.PI * rotationChangeQuotient;
+        float rotationChange = 2 * Mathf.PI * (clockwise ? -rotationChangeQuotient : rotationChangeQuotient);
         rotation += rotationChange;
 
         if (rotation > 2 * Mathf.PI)
         {
             rotation -= 2 * Mathf.PI;
         }
-
-        pivotCooldown = 0.5f;
     }
 
     private void FixedUpdate()
@@ -106,10 +142,10 @@ public class Player : MonoBehaviour
         obj.transform.eulerAngles = new Vector3(currentRotation.x, WORLD_PLAYER.transform.eulerAngles.y, currentRotation.z);
     }
 
-    public static void Pivot(GameObject obj)
+    public static void Pivot(GameObject obj, bool clockwise)
     {
         Quaternion currentRotation = obj.transform.rotation;
-        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * WORLD_PLAYER.rotationChangeQuotient;
+        float rotationChange = Mathf.Rad2Deg * 2 * Mathf.PI * (clockwise ? -WORLD_PLAYER.rotationChangeQuotient : WORLD_PLAYER.rotationChangeQuotient);
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
         LeanTween.rotate(obj, modifiedRotation.eulerAngles, WORLD_PLAYER.rotationTime).setEase(easeType)
             .setEase(easeType)
@@ -117,7 +153,7 @@ public class Player : MonoBehaviour
             .setOnComplete(ToggleMove);
     }
 
-    private void PlayerRotation()
+    private void AnimatePlayerRotation()
     {
         // Horizontal
         if (direction[0] == 0)
@@ -242,8 +278,6 @@ public class Player : MonoBehaviour
 
         Debug.Log("Facing: " + dir);
     }
-
-
 
     void PlayerAnimation()
     {

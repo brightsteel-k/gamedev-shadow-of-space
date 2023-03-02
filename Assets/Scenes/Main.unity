@@ -36985,7 +36985,6 @@ MonoBehaviour:
   rotation: 4.712389
   cameraOffsetRadius: 6
   rotationChangeQuotient: 0.125
-  rotateKey: 109
   rotationTime: 0.33
   walkType: 0
 --- !u!4 &1264698835

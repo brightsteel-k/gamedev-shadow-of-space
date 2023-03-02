@@ -27,16 +27,16 @@ public class WorldObject : Rotatable
         GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + index);
     }
 
-    protected override void Pivot()
+    protected override void Pivot(bool clockwise)
     {
         if (gameObject.activeSelf)
-            Player.Pivot(textureObject);
+            Player.Pivot(textureObject, clockwise);
     }
 
     public void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
     {
         gameObject.SetActive(active);
         if (active)
-            Player.Pivot(textureObject);
+            Player.PivotInit(textureObject);
     }
 }

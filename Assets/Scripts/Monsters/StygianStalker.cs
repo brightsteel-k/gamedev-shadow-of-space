@@ -77,10 +77,10 @@ public class StygianStalker : Rotatable
         StartCoroutine("CirclePlayer");
     }
 
-    protected override void Pivot()
+    protected override void Pivot(bool clockwise)
     {
         if (corporeal)
-            Player.Pivot(textureObject);
+            Player.Pivot(textureObject, clockwise);
     }
 
     private IEnumerator UpdatePlayerLocation()

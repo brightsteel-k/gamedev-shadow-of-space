@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EventManager : MonoBehaviour
 {
     public delegate void WorldEvent();
-    public static event WorldEvent OnWorldPivot;
+    public static event Action<bool> OnWorldPivot;
     public static event WorldEvent OnTilePosChanged;
 
-    public static void WorldPivot()
+    public static void WorldPivot(bool clockwise)
     {
         if (OnWorldPivot != null)
-            OnWorldPivot.Invoke();
+            OnWorldPivot.Invoke(clockwise);
     }
 
     public static void TilePosChanged()

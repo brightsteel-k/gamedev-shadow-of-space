@@ -24,5 +24,5 @@ public class Rotatable : MonoBehaviour
         EventManager.OnWorldPivot -= Pivot;
     }
 
-    protected virtual void Pivot() => Player.Pivot(textureObject);
+    protected virtual void Pivot(bool clockwise) => Player.Pivot(textureObject, clockwise);
 }
