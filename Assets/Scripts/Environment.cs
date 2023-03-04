@@ -66,7 +66,9 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < count; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>());
+            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
+            feature.InitSprite();
+            allFeatures.Add(feature.Place());
         }
     }
 
@@ -82,7 +84,9 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>());
+            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
+            feature.InitSprite();
+            allFeatures.Add(feature.Place());
             AddFeatureCluster(allFeatures, pos, "hematite", 5);
         }
     }
@@ -93,7 +97,9 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            allFeatures.Add(Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>());
+            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
+            feature.InitSprite();
+            allFeatures.Add(feature.Place());
         }
     }
 }

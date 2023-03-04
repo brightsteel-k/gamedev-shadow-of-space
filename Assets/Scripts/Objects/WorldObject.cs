@@ -7,24 +7,35 @@ public class WorldObject : Rotatable
     [SerializeField] protected string id;
     [Tooltip("Length equal to the number of textures for this asset.\n" +
              "Found in Resources/Textures/Features")]
-    [SerializeField] float[] baseHeights;
+    [SerializeField] protected float[] baseHeights;
+    protected int spriteId;
 
     protected override void Start()
     {
-        base.Start();
-        int i = baseHeights.Length - 1;
-        if (i > 0)
-        {
-            i = Random.Range(0, i + 1);
-            InitSprite(i);
-        }
-
-        transform.position = new Vector3(transform.position.x, baseHeights[i], transform.position.z);
+        
     }
 
-    protected virtual void InitSprite(int index)
+    public virtual WorldObject Place()
     {
-        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + index);
+        transform.position = new Vector3(transform.position.x, baseHeights[spriteId], transform.position.z);
+        return this;
+    }
+
+    public virtual void InitSprite()
+    {
+        textureObject = gameObject;
+        InitRotation();
+        spriteId = baseHeights.Length - 1;
+        if (spriteId > 0)
+        {
+            spriteId = Random.Range(0, spriteId + 1);
+            SetSprite();
+        }
+    }
+
+    protected virtual void SetSprite()
+    {
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
     }
 
     protected override void Pivot(bool clockwise)

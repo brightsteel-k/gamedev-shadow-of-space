@@ -10,10 +10,9 @@ public class Rotatable : MonoBehaviour
     protected virtual void Start()
     {
         textureObject = gameObject;
-        InitRotation();
     }
 
-    protected void InitRotation()
+    protected virtual void InitRotation()
     {
         EventManager.OnWorldPivot += Pivot;
         Player.PivotInit(textureObject);
