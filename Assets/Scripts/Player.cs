@@ -30,6 +30,10 @@ public class Player : MonoBehaviour
     private int mouseCentrePos;
     private int mouseInput = 0;
 
+    //Added for crafting UI
+    public bool inMenu = false;
+    
+    
     private void Awake()
     {
         WORLD_PLAYER = GetComponent<Player>();
@@ -64,13 +68,21 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = false;
+            //Added !inMenu to stop the mouse from being locked for this stuff, may need to be removed.
+            //#Crafting System change 
+            if (!inMenu)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
+            }
         }
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            mouseInput = 0;
+            if (!inMenu)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                mouseInput = 0;
+            }
         }
         else if (mouseCentrePos - Input.mousePosition.x > mouseThreshold)
         {
