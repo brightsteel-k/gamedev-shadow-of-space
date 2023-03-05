@@ -13,7 +13,7 @@ public class Inventory : MonoBehaviour
     public void addItem(Item item)
     {
         //Adds to the end of the list (bottom of inventory)
-        items.Append(item); 
+        items.Add(item); 
     }
 
     public Item removeTopItem()
@@ -54,6 +54,8 @@ public class Inventory : MonoBehaviour
             remove(pair.item, pair.amount);
 
         }
+        
+        
         
         addItem(recipe.created);
         
