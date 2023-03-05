@@ -34,5 +34,13 @@ public class EventTester : MonoBehaviour
             Debug.Log(hp.dead);
             en.draining = false;
         }
+        
+        //Just a helpful little bit to change cursor lock for testing;
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
