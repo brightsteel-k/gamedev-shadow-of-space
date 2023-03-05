@@ -57,17 +57,35 @@ public class Energy : MonoBehaviour
     public void setEnergy(float amount)
     {
         value = amount;
+        
+        if (value > maxEnergy)
+        {
+            value = maxEnergy;
+        }
+        
         updateBar();
     }
     public void addEnergy(float amount)
     {
         value += amount;
+        if (value > maxEnergy)
+        {
+            value = maxEnergy;
+        }
+        
         updateBar();
+        
     }
     public void setMaxEnergy(float amount)
     {
         maxEnergy = amount;
         bar.maxValue = amount;
+        if (value > maxEnergy)
+        {
+            value = maxEnergy;
+        }
+        
+        updateBar();
     }
 
     public void updateBar()

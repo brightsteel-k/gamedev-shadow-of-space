@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -46,6 +47,12 @@ public class Health : MonoBehaviour
     public void setHealth(float amount)
     {
         value = amount;
+
+        if (value > maxHealth)
+        {
+            value = maxHealth;
+        }
+        
         updateBar();
 
         if (value <= 0)
@@ -60,17 +67,28 @@ public class Health : MonoBehaviour
     public void addHealth(float amount)
     {
         value += amount;
-        updateBar();
         
         if (amount > 0)
         {
             dead = false;
         }
+        
+        if (value > maxHealth)
+        {
+            value = maxHealth;
+        }
+        
+        updateBar();
     }
     public void setMaxHealth(float amount)
     {
         maxHealth = amount;
         bar.maxValue = amount;
+        if (value > maxHealth)
+        {
+            value = maxHealth;
+        }
+        updateBar();
     }
 
     public void updateBar()
