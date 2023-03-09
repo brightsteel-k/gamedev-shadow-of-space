@@ -2,18 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
     public List<Item> items;
+    public InvBar itemBar;
 
+    //Gets the bar
+    void Start()
+    {
+        updateBar();
+    }
+    
     public void addItem(Item item)
     {
         //Adds to the end of the list (bottom of inventory)
-        items.Add(item); 
+        items.Add(item);
+        updateBar();
     }
 
     public Item removeTopItem()
@@ -25,6 +35,7 @@ public class Inventory : MonoBehaviour
         Item first = items[0];
         items.RemoveAt(0);
         return first;
+        updateBar();
     }
 
     //Checks if recipe is makeable (for use in UI)
@@ -56,6 +67,7 @@ public class Inventory : MonoBehaviour
         }
         
         
+        updateBar();
         
         addItem(recipe.created);
         
@@ -80,6 +92,7 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+        updateBar();
     }
 
     //Counts how many of one item is in the inventory.
@@ -101,6 +114,11 @@ public class Inventory : MonoBehaviour
     public int itemCount()
     {
         return items.Count;
+    }
+
+    public void updateBar()
+    {
+        itemBar.updateBar(items);
     }
     
 }
