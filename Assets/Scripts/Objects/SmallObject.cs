@@ -7,12 +7,11 @@ public class SmallObject : WorldObject
     [SerializeField] protected GameObject sprite;
     private bool isGrounded = false;
     private Rigidbody rb;
-
+    float physHeight;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -22,29 +21,33 @@ public class SmallObject : WorldObject
         {
             if (rb.isKinematic)
                 rb.isKinematic = false;
-            if (transform.position.y <= baseHeights[spriteId])
+            if (transform.position.y <= physHeight)
             {
                 rb.isKinematic = true;
                 isGrounded = true;
-                transform.position = new Vector3(transform.position.x, baseHeights[spriteId], transform.position.z);
+                transform.position = new Vector3(transform.position.x, physHeight, transform.position.z);
             }
         }
+    }
+    public void InitItem(string itemId)
+    {
+        id = itemId;
+        InitSprite();
     }
 
     public override void InitSprite()
     {
         textureObject = sprite;
         InitRotation();
-        spriteId = baseHeights.Length - 1;
-        if (spriteId > 0)
-        {
-            spriteId = Random.Range(0, spriteId + 1);
-            SetSprite();
-        }
+
+        Sprite img = ItemTextures.GetItemTexture(id);
+        physHeight = img.texture.height / img.pixelsPerUnit / 10 / Mathf.Sqrt(2);
+        sprite.GetComponent<SpriteRenderer>().sprite = img;
     }
 
-    protected override void SetSprite()
+    public override WorldObject Place()
     {
-        sprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
+        transform.position = new Vector3(transform.position.x, physHeight, transform.position.z);
+        return this;
     }
 }

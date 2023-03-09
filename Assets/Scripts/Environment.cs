@@ -87,18 +87,18 @@ public class Environment : MonoBehaviour
             WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
             feature.InitSprite();
             allFeatures.Add(feature.Place());
-            AddFeatureCluster(allFeatures, pos, "hematite", 5);
+            AddItemCluster(allFeatures, pos, "hematite_pebble", 3);
         }
     }
 
-    public static void AddFeatureCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    public static void AddItemCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
     {
         int c = RandomGen.Mercury(count);
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
-            feature.InitSprite();
+            SmallObject feature = Instantiate(WORLD_OBJECTS["item"], pos, Quaternion.identity, INSTANCE.transform).GetComponent<SmallObject>();
+            feature.InitItem(obj);
             allFeatures.Add(feature.Place());
         }
     }

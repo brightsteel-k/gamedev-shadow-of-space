@@ -33,11 +33,6 @@ public class LargeObject : WorldObject
         sprite.transform.localPosition = new Vector3(0, size * scaleYPosBy, 0);
     }
 
-    protected override void SetSprite()
-    {
-        sprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
-    }
-
     public void BreakObject()
     {
         

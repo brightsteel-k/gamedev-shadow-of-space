@@ -29,13 +29,8 @@ public class WorldObject : Rotatable
         if (spriteId > 0)
         {
             spriteId = Random.Range(0, spriteId + 1);
-            SetSprite();
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
         }
-    }
-
-    protected virtual void SetSprite()
-    {
-        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
     }
 
     protected override void Pivot(bool clockwise)
