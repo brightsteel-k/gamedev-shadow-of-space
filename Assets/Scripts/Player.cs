@@ -142,9 +142,16 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        Vector3 movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        Quaternion forwardDirection = Quaternion.FromToRotation(Vector3.forward, transform.forward);
-        Vector3 modifiedMovement = forwardDirection * movementInput;
+        Vector3 forwardDirection = transform.forward;
+        Vector3 sideDirection = Vector3.Cross(forwardDirection, Vector3.up);
+
+        Vector3 movementInput = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+        float movementIntoX = Vector3.Dot(movementInput, sideDirection);
+        float movementIntoZ = Vector3.Dot(movementInput, forwardDirection);
+
+        Vector3 modifiedMovement = new Vector3(movementIntoX, 0, movementIntoZ);
+        
         CONTROLLER.Move(speed * Time.fixedDeltaTime * modifiedMovement);
     }
 
