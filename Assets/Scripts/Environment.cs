@@ -48,7 +48,7 @@ public class Environment : MonoBehaviour
             switch (f.Item1)
             {
                 case "diamond":
-                    AddRareFeature(allFeatures, posIn, f.Item1, f.Item2, 3);
+                    AddRareItems(allFeatures, posIn, f.Item1, 0.16f, f.Item2, 3);
                     break;
                 case "stalagmite":
                     AddStalagmites(allFeatures, posIn, f.Item1, f.Item2);
@@ -72,10 +72,14 @@ public class Environment : MonoBehaviour
         }
     }
 
-    public static void AddRareFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float rarity, int degree)
+    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float itemSize, float rarity, int degree)
     {
         int c = RandomGen.GetCountFromRarity(rarity, degree);
-        AddSmallFeatures(allFeatures, posIn, obj, c);
+        for (int k = 0; k < c; k++)
+        {
+            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
+            PlaceItem(allFeatures, pos, obj, itemSize);
+        }
     }
 
     public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
@@ -97,10 +101,15 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            SmallObject feature = Instantiate(WORLD_OBJECTS["item"], pos, Quaternion.identity, INSTANCE.transform).GetComponent<SmallObject>();
-            feature.InitItem(obj);
-            allFeatures.Add(feature.Place());
+            PlaceItem(allFeatures, pos, obj, 0.25f);
         }
+    }
+
+    public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, string id, float size)
+    {
+        ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
+        feature.InitItem(id, size);
+        allFeatures.Add(feature.Place());
     }
 }
 

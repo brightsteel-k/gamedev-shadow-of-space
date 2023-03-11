@@ -99,12 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: stalagmite
-  baseHeights:
-  - 1.075
   sprite: {fileID: 0}
   minSize: 0.24
   maxSize: 0.39
   scaleYPosBy: 4.5
+  breakable: 0
+  smallRock: {fileID: 0}
 --- !u!1 &5554734453603772273
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,12 +151,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: stalagmite
-  baseHeights:
-  - 0
   sprite: {fileID: 2773923254978334382}
   minSize: 0.24
-  maxSize: 0.39
+  maxSize: 0.4
   scaleYPosBy: 4.5
+  breakable: 0
+  smallRock: {fileID: 0}
 --- !u!1 &5771848664465238204
 GameObject:
   m_ObjectHideFlags: 0

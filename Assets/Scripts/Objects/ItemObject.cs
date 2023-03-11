@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmallObject : WorldObject
+public class ItemObject : WorldObject
 {
     [SerializeField] protected GameObject sprite;
+    protected float size = 0.25f;
     private bool isGrounded = false;
     private Rigidbody rb;
     float physHeight;
@@ -12,7 +13,7 @@ public class SmallObject : WorldObject
     // Start is called before the first frame update
     protected override void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        
     }
 
     private void FixedUpdate()
@@ -29,25 +30,25 @@ public class SmallObject : WorldObject
             }
         }
     }
-    public void InitItem(string itemId)
-    {
-        id = itemId;
-        InitSprite();
-    }
 
-    public override void InitSprite()
+    public void InitItem(string itemId, float itemSize)
     {
-        textureObject = sprite;
-        InitRotation();
+        rb = GetComponent<Rigidbody>();
+        id = itemId;
+        size = itemSize;
+        InitSprite();
+        sprite.transform.localScale = new Vector3(size, size, size);
 
         Sprite img = ItemTextures.GetItemTexture(id);
-        physHeight = img.texture.height / img.pixelsPerUnit / 10 / Mathf.Sqrt(2);
+        physHeight = img.texture.height / img.pixelsPerUnit / 12 / Mathf.Sqrt(2);
         sprite.GetComponent<SpriteRenderer>().sprite = img;
     }
 
     public override WorldObject Place()
     {
         transform.position = new Vector3(transform.position.x, physHeight, transform.position.z);
+        isGrounded = true;
+        rb.isKinematic = true;
         return this;
     }
 }

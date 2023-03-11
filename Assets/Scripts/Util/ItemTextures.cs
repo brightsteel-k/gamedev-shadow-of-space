@@ -10,7 +10,6 @@ public class ItemTextures : MonoBehaviour
     void Start()
     {
         TextAsset t = Resources.Load<TextAsset>("Textures/Items/quantities");
-        Debug.Log(t.text);
         QUANTITY = JsonConvert.DeserializeObject<Dictionary<string, int>>(t.text);
         Debug.Log(QUANTITY["hematite_pebble"]);
     }

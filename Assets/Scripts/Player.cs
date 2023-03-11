@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
         {
             if (mouseInput != 1 && canRotate && pivotCooldown == 0)
             {
-                PivotWorld(true);
+                PivotWorld(false);
                 mouseInput = 1;
             }
         }
@@ -96,7 +96,7 @@ public class Player : MonoBehaviour
         {
             if (mouseInput != -1 && canRotate && pivotCooldown == 0)
             {
-                PivotWorld(false);
+                PivotWorld(true);
                 mouseInput = -1;
             }
         }
