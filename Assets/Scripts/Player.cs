@@ -10,20 +10,17 @@ public class Player : MonoBehaviour
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
     public GameObject mainCamera;
+    private PlayerAnimation animations;
 
     [SerializeField] private float speed;
     [SerializeField] private float rotation = Mathf.PI / 2;
-    private static float pivotCooldown = 0;
+    private static float pivotCooldown = 1f;
     [SerializeField] private float cameraOffsetRadius;
     public float rotationChangeQuotient = 1f / 8f;
     public float rotationTime = 0.33f;
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
 
-    private Animator anim;
-    private SpriteRenderer sprite;
-    private bool moving = false;
-    private int[] direction = new int[] { 0, 0 };
     [SerializeField] private bool walkType;
 
     private int mouseThreshold;
@@ -42,8 +39,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         CONTROLLER = GetComponent<CharacterController>();
-        anim = transform.Find("Texture").GetComponent<Animator>();
-        sprite = transform.Find("Texture").GetComponent<SpriteRenderer>();
+        animations = GetComponent<PlayerAnimation>();
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
         Cursor.visible = false;
@@ -58,8 +54,6 @@ public class Player : MonoBehaviour
         }
 
         PlayerRotateInput();
-        AnimatePlayerRotation();
-        PlayerAnimation();
 
         CheckCurrentTile();
     }
@@ -170,146 +164,6 @@ public class Player : MonoBehaviour
             .setEase(easeType)
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
-    }
-
-    private void AnimatePlayerRotation()
-    {
-        // Horizontal
-        if (direction[0] == 0)
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-                SetAnimRotation(3);
-            else if (Input.GetKeyDown(KeyCode.D))
-                SetAnimRotation(1);
-        }
-        else
-        {
-            if (Input.GetKeyUp(KeyCode.A) && direction[0] == -1)
-                CheckRotationChange(3);
-            if (Input.GetKeyUp(KeyCode.D) && direction[0] == 1)
-                CheckRotationChange(1);
-        }
-
-        // Vertical
-        if (direction[1] == 0)
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                if (direction[0] == 0)
-                    SetAnimRotation(0);
-                else
-                    direction[1] = 1;
-            }
-            else if(Input.GetKeyDown(KeyCode.S))
-            {
-                if (direction[0] == 0)
-                    SetAnimRotation(2);
-                else
-                    direction[1] = -1;
-            }
-        }
-        else
-        {
-            if (Input.GetKeyUp(KeyCode.W) && direction[1] == 1)
-                CheckRotationChange(0);
-            if (Input.GetKeyUp(KeyCode.S) && direction[1] == -1)
-                CheckRotationChange(2);
-        }
-    }
-
-    void CheckRotationChange(int currentDir)
-    {
-        bool horizontalLifted = currentDir % 2 == 1;
-        if (horizontalLifted)
-        {
-            direction[0] = 0;
-        }
-        else
-        {
-            direction[1] = 0;
-            if (direction[0] != 0)  // Set direction to corresponding X direction if dir is already decided
-            {
-                SetAnimRotation(2 - direction[0]);
-                return;
-            }
-        }
-        
-        if (direction[0] == 0) // Set direction to corresponding X direction if key is already pressed
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                SetAnimRotation(3);
-                return;
-            }
-            
-            if (Input.GetKey(KeyCode.D))
-            {
-                SetAnimRotation(1);
-                return;
-            }
-        }
-
-        if (horizontalLifted && direction[1] != 0) // Set direction to corresponding Y direction if dir is already decided
-        {
-            SetAnimRotation(1 - direction[1]);
-            return;
-        }
-
-        if (direction[1] == 0) // Set direction to corresponding Y direction if key is already pressed
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                if (direction[0] == 0)
-                    SetAnimRotation(0);
-                else
-                    direction[1] = 1;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                if (direction[0] == 0)
-                    SetAnimRotation(2);
-                else
-                    direction[1] = -1;
-            }
-        }
-    }
-
-    void SetAnimRotation(int dir)
-    {
-        anim.SetInteger("Direction", dir);
-        switch (dir)
-        {
-            case 0:
-                direction[1] = 1;
-                break;
-            case 1:
-                direction[0] = 1;
-                sprite.flipX = false;
-                break;
-            case 2:
-                direction[1] = -1;
-                break;
-            case 3:
-                direction[0] = -1;
-                sprite.flipX = true;
-                break;
-        }
-
-        Debug.Log("Facing: " + dir);
-    }
-
-    void PlayerAnimation()
-    {
-        if (moving && CONTROLLER.velocity.magnitude <= 0.01f)
-        {
-            moving = false;
-            anim.SetBool("Running", false);
-        }
-        if (!moving && CONTROLLER.velocity.magnitude > 0.01f)
-        {
-            moving = true;
-            anim.SetBool("Running", true);
-        }
     }
 
     public void CheckCurrentTile()

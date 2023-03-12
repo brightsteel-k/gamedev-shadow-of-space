@@ -26,6 +26,7 @@ public class StygianStalker : Rotatable
         InitRotation();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.autoBraking = false;
         TARGET = Player.WORLD_PLAYER.transform;
         if (!corporeal)
             StartIncorporeal();

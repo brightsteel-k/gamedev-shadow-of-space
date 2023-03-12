@@ -325,7 +325,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6a16270db74389b4b85a2b47eab0f78e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 384ccbb83055726468a727180f7139ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -37077,6 +37077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1264698835}
   - component: {fileID: 1264698834}
+  - component: {fileID: 1264698837}
   - component: {fileID: 1264698836}
   m_Layer: 0
   m_Name: Player
@@ -37140,6 +37141,19 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1264698837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264698833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3becff28098a1419d5bdca66846bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureObject: {fileID: 249813703}
 --- !u!1 &1293415592
 GameObject:
   m_ObjectHideFlags: 0
