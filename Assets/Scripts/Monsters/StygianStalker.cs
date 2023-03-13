@@ -44,6 +44,8 @@ public class StygianStalker : Rotatable
 
         if (currentMode == StygianMode.Stalking)
             CirclePlayer();
+        else if (currentMode == StygianMode.Attacking)
+            ChargePlayer();
     }
 
     void StartIncorporeal()
@@ -74,6 +76,8 @@ public class StygianStalker : Rotatable
         BeginCircling();
     }
 
+    // STALKING = = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF STALKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = STALKING
+
     void BeginCircling()
     {
         Debug.Log("Stalking!");
@@ -90,7 +94,6 @@ public class StygianStalker : Rotatable
         if (Vector3.Distance(transform.position, targetPos) < circleWaypointThreshold)
         {
             NextCirclePos();
-            Debug.Log("Distance to: " + targetPos);
         }
     }
 
@@ -106,12 +109,45 @@ public class StygianStalker : Rotatable
         }
         targetPos = TARGET.position + new Vector3(circleRadius * Mathf.Cos(stalkingTheta), 0f, circleRadius * Mathf.Sin(stalkingTheta));
         navMeshAgent.SetDestination(targetPos);
-        Debug.Log("Next Circle Waypoint - Traveling to: " + targetPos);
     }
+    // STALKING = = = = = = = = = = = = = = = = = = = = = = = = [END OF STALKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = STALKING
+    // ATTACKING = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = ATTACKING
 
     void BeginAttacking()
     {
         Debug.Log("Attacking!");
+        currentMode = StygianMode.Attacking;
+    }
+
+    void ChargePlayer()
+    {
+        navMeshAgent.SetDestination(TARGET.position + Player.CONTROLLER.velocity);
+    }
+
+    // ATTACKING = = = = = = = = = = = = = = = = = = = = = = = [END OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = ATTACKING
+    // FLEEING = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF FLEEING PHASE] = = = = = = = = = = = = = = = = = = = = = = = FLEEING
+
+    void BeginFleeing(Vector3 source)
+    {
+        float theta = Mathf.Atan2(transform.position.z - source.z, transform.position.x - source.x);
+        theta = RandomGen.MercuryDirection(theta);
+
+        Vector3 direction = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
+        Vector3 destination = ChunkHandler.BoundCoordinate(direction.normalized * RandomGen.GetFleeDistance());
+        navMeshAgent.SetDestination(destination);
+        
+    }
+
+    // FLEEING = = = = = = = = = = = = = = = = = = = = = = = = [END OF FLEEING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = FLEEING
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "MobileFlare")
+        {
+            BeginFleeing(other.transform.position);
+        }
     }
 
     private IEnumerator UpdatePlayerLocation()

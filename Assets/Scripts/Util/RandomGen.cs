@@ -44,4 +44,14 @@ public class RandomGen
     {
         return Random.Range(0, Mathf.Max(0, 6 - circles)) > 1;
     }
+
+    public static float MercuryDirection(float theta)
+    {
+        return theta + Random.Range(-1f, 1f);
+    }
+
+    public static float GetFleeDistance()
+    {
+        return Random.Range(3, 15) * Chunk.WIDTH;
+    }
 }

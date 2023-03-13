@@ -89,4 +89,29 @@ public class ChunkHandler : MonoBehaviour
         chunkUpdates++;
         Load(Player.TILE_POSITION);
     }
+
+    public static float GetMaxXCoord()
+    {
+        return X_BOUND * Chunk.WIDTH;
+    }
+
+    public static float GetMaxZCoord()
+    {
+        return Z_BOUND * Chunk.WIDTH;
+    }
+
+    public static Vector3 BoundCoordinate(Vector3 pos)
+    {
+        float x = Mathf.Min(pos.x, GetMaxXCoord() - 5);
+        float z = Mathf.Min(pos.z, GetMaxZCoord() - 5);
+        
+        return new Vector3(Mathf.Max(x, 5f), pos.y, Mathf.Max(z, 5f));
+    }
+
+    public static float BoundZCoordinate(float z)
+    {
+        z = Mathf.Min(z, GetMaxZCoord() - 5);
+        z = Mathf.Max(z, 5);
+        return z;
+    }
 }
