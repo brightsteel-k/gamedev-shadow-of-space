@@ -11,7 +11,7 @@ public class StygianStalker : Rotatable
     [SerializeField] float circleSpeed;
     [SerializeField] float circleRadius;
     [SerializeField] float circleWaypointThreshold;
-    private StygianMode currentMode;
+    private StygianMode currentMode = StygianMode.Tracking;
     private bool corporeal = false;
     private Vector3 incorporealPos;
     private Vector3 targetPos;
@@ -21,6 +21,8 @@ public class StygianStalker : Rotatable
     private float stalkingTheta;
     private int stalkingCircles;
 
+    private int numTimesFled = 0;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -29,34 +31,39 @@ public class StygianStalker : Rotatable
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.autoBraking = false;
         TARGET = Player.WORLD_PLAYER.transform;
-        if (!corporeal)
-            StartIncorporeal();
+        incorporealPos = spawnPos;
+        StartTracking();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!corporeal)
+        if (Input.GetKeyDown(KeyCode.P)) // TODO: REMOVE DEBUGGING TOOL
         {
-            IncorporealPosition();
-            return;
+            BeginFleeing(TARGET.position);
         }
 
-        if (currentMode == StygianMode.Stalking)
+
+        if (currentMode == StygianMode.Tracking)
+            TrackingPosition();
+        else if (currentMode == StygianMode.Stalking)
             CirclePlayer();
         else if (currentMode == StygianMode.Attacking)
             ChargePlayer();
+        else if (currentMode == StygianMode.Fleeing)
+            DoFleeing();
     }
 
-    void StartIncorporeal()
+    void StartTracking()
     {
+        Debug.Log("Tracking");
         currentMode = StygianMode.Tracking;
-        incorporealPos = spawnPos;
+        corporeal = false;
         targetPos = TARGET.position;
         StartCoroutine("UpdatePlayerLocation");
     }
 
-    void IncorporealPosition()
+    void TrackingPosition()
     {
         Vector3 deltaVec = Vector3.Normalize(targetPos - incorporealPos);
         incorporealPos += deltaVec * Time.deltaTime * 10f;
@@ -67,11 +74,11 @@ public class StygianStalker : Rotatable
 
     void SpawnStalker()
     {
+        corporeal = true;
         transform.position = incorporealPos;
         navMeshAgent.enabled = true;
         InitRotation();
         textureObject.SetActive(true);
-        corporeal = true;
 
         BeginCircling();
     }
@@ -129,17 +136,42 @@ public class StygianStalker : Rotatable
 
     void BeginFleeing(Vector3 source)
     {
+        Debug.Log("Fleeing!");
+        currentMode = StygianMode.Fleeing;
+        numTimesFled++;
         float theta = Mathf.Atan2(transform.position.z - source.z, transform.position.x - source.x);
         theta = RandomGen.MercuryDirection(theta);
 
         Vector3 direction = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
-        Vector3 destination = ChunkHandler.BoundCoordinate(direction.normalized * RandomGen.GetFleeDistance());
-        navMeshAgent.SetDestination(destination);
-        
+        targetPos = ChunkHandler.BoundCoordinate(direction.normalized * 80f);
+        navMeshAgent.SetDestination(targetPos);
+    }
+
+    void DoFleeing()
+    {
+        if (Vector3.Distance(transform.position, targetPos) < 4f)
+        {
+            if (Vector3.Distance(transform.position, TARGET.position) > 40f)
+                BeginRecuperating();
+            else
+                BeginAttacking();
+        }
     }
 
     // FLEEING = = = = = = = = = = = = = = = = = = = = = = = = [END OF FLEEING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = FLEEING
+    // RECUPERATING = = = = = = = = = = = = = = = = = = = [BEGINNING OF RECUPERATING PHASE] = = = = = = = = = = = = = = = = = = = RECUPERATING
 
+    void BeginRecuperating()
+    {
+        Debug.Log("Recuperating!");
+        currentMode = StygianMode.Recuperating;
+        incorporealPos = transform.position;
+        navMeshAgent.enabled = false;
+        corporeal = false;
+        textureObject.SetActive(false);
+
+        StartCoroutine("Recuperate");
+    }
 
 
     private void OnTriggerEnter(Collider other)
@@ -152,10 +184,10 @@ public class StygianStalker : Rotatable
 
     private IEnumerator UpdatePlayerLocation()
     {
-        while (!corporeal)
+        while (currentMode == StygianMode.Tracking)
         {
             yield return new WaitForSeconds(playerPosUpdateTime);
-            if (!corporeal)
+            if (currentMode == StygianMode.Tracking)
             {
                 targetPos = TARGET.position;
                 if (playerPosUpdateTime > 1f)
@@ -164,6 +196,12 @@ public class StygianStalker : Rotatable
                     playerPosUpdateTime = 0.5f;
             }
         }
+    }
+
+    private IEnumerator Recuperate()
+    {
+        yield return new WaitForSeconds(RandomGen.RecuperationTime(numTimesFled));
+        StartTracking();
     }
 
     protected override void Pivot(bool clockwise)
@@ -175,8 +213,9 @@ public class StygianStalker : Rotatable
 
 public enum StygianMode
 {
+    Tracking,
     Stalking,
     Attacking,
     Fleeing,
-    Tracking
+    Recuperating
 }

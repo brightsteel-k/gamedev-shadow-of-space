@@ -50,8 +50,10 @@ public class RandomGen
         return theta + Random.Range(-1f, 1f);
     }
 
-    public static float GetFleeDistance()
+    public static float RecuperationTime(int numTimesFled)
     {
-        return Random.Range(3, 15) * Chunk.WIDTH;
+        float lowerBound = Mathf.Max(7f, 12f - numTimesFled);
+        float upperBound = Mathf.Max(lowerBound, 24f - numTimesFled * 2f);
+        return Random.Range(lowerBound, upperBound);
     }
 }

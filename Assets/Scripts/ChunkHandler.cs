@@ -5,12 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class ChunkHandler : MonoBehaviour
 {
-    int chunkUpdates = 0;
     public static Tilemap TILES;
     public static Chunk[,] WORLD;
     static int LOAD_RADIUS = 3;
-    static int X_BOUND = 15;
-    static int Z_BOUND = 15;
+    static int X_BOUND = 30;
+    static int Z_BOUND = 30;
     static bool CHUNK_HANDLING = true;
 
     // Start is called before the first frame update
@@ -86,7 +85,6 @@ public class ChunkHandler : MonoBehaviour
 
     public void OnPlayerMove()
     {
-        chunkUpdates++;
         Load(Player.TILE_POSITION);
     }
 

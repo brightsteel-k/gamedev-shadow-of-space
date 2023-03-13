@@ -11,7 +11,6 @@ public class ItemTextures : MonoBehaviour
     {
         TextAsset t = Resources.Load<TextAsset>("Textures/Items/quantities");
         QUANTITY = JsonConvert.DeserializeObject<Dictionary<string, int>>(t.text);
-        Debug.Log(QUANTITY["hematite_pebble"]);
     }
 
     // Update is called once per frame

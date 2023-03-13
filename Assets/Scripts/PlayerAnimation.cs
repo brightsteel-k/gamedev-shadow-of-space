@@ -180,13 +180,13 @@ public class PlayerAnimation : MonoBehaviour
         {
             direction = (direction + 3) % 4;
             camDirectionOffset = 0;
-            SetIdleState();
+            SetRotatableState(currentState);
         }
         else if (camDirectionOffset <= -2)
         {
             direction = (direction + 1) % 4;
             camDirectionOffset = 0;
-            SetIdleState();
+            SetRotatableState(currentState);
         }
     }
 
@@ -213,7 +213,7 @@ public class PlayerAnimation : MonoBehaviour
         }
         else
         {
-            SetIdleState();
+            SetRotatableState(AnimationState.Idle.ToString());
         }
     }
 
@@ -238,32 +238,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
         }
         currentState = newState;
-        anim.Play(newState);
-    }
-
-    void SetIdleState()
-    {
-        anim.Play("Idle");
-        anim.enabled = false;
-
-        currentState = "Idle";
-        switch (direction)
-        {
-            case 0:
-                spriteRenderer.sprite = idleSprites[0];
-                break;
-            case 1:
-                spriteRenderer.flipX = false;
-                spriteRenderer.sprite = idleSprites[1];
-                break;
-            case 2:
-                spriteRenderer.sprite = idleSprites[2];
-                break;
-            case 3:
-                spriteRenderer.flipX = true;
-                spriteRenderer.sprite = idleSprites[1];
-                break;
-        }
+        anim.Play(newState, 0);
     }
 }
 
