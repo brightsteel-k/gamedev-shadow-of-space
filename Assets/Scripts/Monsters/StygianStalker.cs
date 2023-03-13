@@ -8,7 +8,9 @@ public class StygianStalker : Rotatable
 {
     private static Transform TARGET;
     [SerializeField] private Vector3 spawnPos;
-    [SerializeField] private Transform marker;
+    [SerializeField] float circleSpeed;
+    [SerializeField] float circleRadius;
+    [SerializeField] float circleWaypointThreshold;
     private StygianMode currentMode;
     private bool corporeal = false;
     private Vector3 incorporealPos;
@@ -16,14 +18,13 @@ public class StygianStalker : Rotatable
     private float playerPosUpdateTime = 12f;
     private NavMeshAgent navMeshAgent;
 
+    private float stalkingTheta;
     private int stalkingCircles;
-    private int stalkingMaxCircles;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         textureObject = transform.Find("Texture").gameObject;
-        InitRotation();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.autoBraking = false;
@@ -40,6 +41,9 @@ public class StygianStalker : Rotatable
             IncorporealPosition();
             return;
         }
+
+        if (currentMode == StygianMode.Stalking)
+            CirclePlayer();
     }
 
     void StartIncorporeal()
@@ -54,7 +58,6 @@ public class StygianStalker : Rotatable
     {
         Vector3 deltaVec = Vector3.Normalize(targetPos - incorporealPos);
         incorporealPos += deltaVec * Time.deltaTime * 10f;
-        marker.position = incorporealPos;
 
         if (Vector3.Distance(incorporealPos, TARGET.position) <= 30f)
             SpawnStalker();
@@ -62,26 +65,53 @@ public class StygianStalker : Rotatable
 
     void SpawnStalker()
     {
+        transform.position = incorporealPos;
         navMeshAgent.enabled = true;
+        InitRotation();
         textureObject.SetActive(true);
         corporeal = true;
 
-        currentMode = StygianMode.Stalking;
-        StalkPlayer();
+        BeginCircling();
     }
 
-    void StalkPlayer()
+    void BeginCircling()
     {
         Debug.Log("Stalking!");
-        stalkingMaxCircles = Random.Range(2, 6);
-        stalkingCircles = 0;
-        StartCoroutine("CirclePlayer");
+        currentMode = StygianMode.Stalking;
+        navMeshAgent.speed = circleSpeed;
+
+        stalkingTheta = Mathf.Atan2(transform.position.z - TARGET.position.z, transform.position.x - TARGET.position.x);
+        NextCirclePos();
     }
 
-    protected override void Pivot(bool clockwise)
+
+    private void CirclePlayer()
     {
-        if (corporeal)
-            Player.Pivot(textureObject, clockwise);
+        if (Vector3.Distance(transform.position, targetPos) < circleWaypointThreshold)
+        {
+            NextCirclePos();
+            Debug.Log("Distance to: " + targetPos);
+        }
+    }
+
+    private void NextCirclePos()
+    {
+        stalkingTheta += 1f;
+        if (stalkingTheta > 2 * Mathf.PI)
+        {
+            if (!RandomGen.ShouldContinueCircling(stalkingCircles))
+            {
+                BeginAttacking();
+            }
+        }
+        targetPos = TARGET.position + new Vector3(circleRadius * Mathf.Cos(stalkingTheta), 0f, circleRadius * Mathf.Sin(stalkingTheta));
+        navMeshAgent.SetDestination(targetPos);
+        Debug.Log("Next Circle Waypoint - Traveling to: " + targetPos);
+    }
+
+    void BeginAttacking()
+    {
+        Debug.Log("Attacking!");
     }
 
     private IEnumerator UpdatePlayerLocation()
@@ -89,31 +119,21 @@ public class StygianStalker : Rotatable
         while (!corporeal)
         {
             yield return new WaitForSeconds(playerPosUpdateTime);
-            targetPos = TARGET.position;
-            if (playerPosUpdateTime > 1f)
-                playerPosUpdateTime--;
-            else if (playerPosUpdateTime == 1f)
-                playerPosUpdateTime = 0.5f;
+            if (!corporeal)
+            {
+                targetPos = TARGET.position;
+                if (playerPosUpdateTime > 1f)
+                    playerPosUpdateTime--;
+                else if (playerPosUpdateTime == 1f)
+                    playerPosUpdateTime = 0.5f;
+            }
         }
     }
 
-    private IEnumerator CirclePlayer()
+    protected override void Pivot(bool clockwise)
     {
-        float theta = 0;
-        while (theta < 6.3f)
-        {
-            Vector3 newPos = TARGET.position + new Vector3(8f * Mathf.Cos(theta), 0f, 8f * Mathf.Sin(theta));
-            float newSpeed = Player.CONTROLLER.velocity.magnitude * 4f + 3f;
-            LeanTween.value(navMeshAgent.speed, newSpeed, 0.2f).setEaseOutQuad();
-            navMeshAgent.SetDestination(newPos);
-            theta += 0.3f;
-            yield return new WaitForSeconds(0.6f);
-        }
-
-        if (++stalkingCircles < stalkingMaxCircles)
-        {
-            StartCoroutine("CirclePlayer");
-        }
+        if (corporeal)
+            Player.Pivot(textureObject, clockwise);
     }
 }
 

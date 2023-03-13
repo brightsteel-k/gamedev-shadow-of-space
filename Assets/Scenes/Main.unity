@@ -37216,7 +37216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1359990395
 Transform:
   m_ObjectHideFlags: 0
@@ -37268,7 +37268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPos: {x: 0, y: 0, z: 0}
-  marker: {fileID: 32741428}
+  circleSpeed: 15
+  circleRadius: 15
+  circleWaypointThreshold: 5
 --- !u!1 &1737803232
 GameObject:
   m_ObjectHideFlags: 0
@@ -37346,7 +37348,7 @@ MeshCollider:
   m_GameObject: {fileID: 1843623501}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

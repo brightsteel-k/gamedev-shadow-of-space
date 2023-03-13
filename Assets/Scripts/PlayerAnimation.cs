@@ -11,6 +11,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool moving = false;
     private int[] inputs = new int[] { 0, 0 };
     private int direction = 2;
+    private int camDirectionOffset = 0;
     private string currentState = "Idle";
 
 
@@ -27,6 +28,7 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ManageCameraOffset();
         ManageDirection();
         ManageVelocity();
     }
@@ -157,17 +159,49 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case 1:
                 inputs[0] = 1;
-                spriteRenderer.flipX = false;
                 break;
             case 2:
                 inputs[1] = -1;
                 break;
             case 3:
                 inputs[0] = -1;
-                spriteRenderer.flipX = true;
                 break;
         }
         UpdateAnimationState();
+    }
+
+    public void RotateCamera(bool clockwise)
+    {
+        if (!IsInUnmovingAnimationState())
+            return;
+
+        camDirectionOffset += clockwise ? 1 : -1;
+        if (camDirectionOffset >= 2)
+        {
+            direction = (direction + 3) % 4;
+            camDirectionOffset = 0;
+            SetIdleState();
+        }
+        else if (camDirectionOffset <= -2)
+        {
+            direction = (direction + 1) % 4;
+            camDirectionOffset = 0;
+            SetIdleState();
+        }
+    }
+
+    void ManageCameraOffset()
+    {
+        if (camDirectionOffset == 0)
+            return;
+
+        if (!IsInUnmovingAnimationState())
+            camDirectionOffset = 0;
+    }
+
+    bool IsInUnmovingAnimationState()
+    {
+        return currentState == "Idle";
     }
 
     void UpdateAnimationState()
@@ -192,11 +226,15 @@ public class PlayerAnimation : MonoBehaviour
                 newState = state + " (UP)";
                 break;
             case 1:
-            case 3:
+                spriteRenderer.flipX = false;
                 newState = state + " (SIDE)";
                 break;
             case 2:
                 newState = state + " (DOWN)";
+                break;
+            case 3:
+                spriteRenderer.flipX = true;
+                newState = state + " (SIDE)";
                 break;
         }
         currentState = newState;
@@ -215,11 +253,15 @@ public class PlayerAnimation : MonoBehaviour
                 spriteRenderer.sprite = idleSprites[0];
                 break;
             case 1:
-            case 3:
+                spriteRenderer.flipX = false;
                 spriteRenderer.sprite = idleSprites[1];
                 break;
             case 2:
                 spriteRenderer.sprite = idleSprites[2];
+                break;
+            case 3:
+                spriteRenderer.flipX = true;
+                spriteRenderer.sprite = idleSprites[1];
                 break;
         }
     }

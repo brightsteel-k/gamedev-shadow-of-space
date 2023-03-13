@@ -39,4 +39,9 @@ public class RandomGen
     {
         return (int)(a + (Random.value - 0.5f) * 2);
     }
+
+    public static bool ShouldContinueCircling(int circles)
+    {
+        return Random.Range(0, Mathf.Max(0, 6 - circles)) > 1;
+    }
 }

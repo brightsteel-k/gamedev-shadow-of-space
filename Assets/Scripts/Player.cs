@@ -117,6 +117,7 @@ public class Player : MonoBehaviour
         
         EventManager.WorldPivot(clockwise);
         Pivot(gameObject, clockwise);
+        animations.RotateCamera(clockwise);
 
         float rotationChange = 2 * Mathf.PI * (clockwise ? -rotationChangeQuotient : rotationChangeQuotient);
         rotation += rotationChange;
