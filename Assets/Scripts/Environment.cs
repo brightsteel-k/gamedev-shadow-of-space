@@ -111,6 +111,16 @@ public class Environment : MonoBehaviour
         feature.InitItem(id, size);
         allFeatures.Add(feature.Place());
     }
+
+    public static void DropItem(string item, Vector3 posIn)
+    {
+        // TODO: Instantiate item of the given type with random velocity
+    }
+
+    public static void AddItem(ItemObject item, Vector3 posIn)
+    {
+        ChunkHandler.GetChunk(posIn).AddFeature(item);
+    }
 }
 
 public enum GenType

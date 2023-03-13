@@ -13,7 +13,7 @@ public class LargeObject : WorldObject
 
     [Header("Breakability")]
     [SerializeField] private bool breakable;
-    [SerializeField] private GameObject smallRock;
+    [SerializeField] private string smallRock;
 
     protected float size;
 
@@ -35,6 +35,9 @@ public class LargeObject : WorldObject
 
     public void BreakObject()
     {
-        
+        Environment.DropItem(smallRock, transform.position);
+        Environment.DropItem(smallRock, transform.position);
+        Environment.DropItem(smallRock, transform.position);
+        // TODO: break
     }
 }

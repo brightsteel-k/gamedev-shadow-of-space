@@ -36,7 +36,7 @@ public class StygianStalker : Rotatable
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.P)) // TODO: REMOVE DEBUGGING TOOL
         {

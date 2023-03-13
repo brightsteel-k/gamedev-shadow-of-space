@@ -42,11 +42,6 @@ public class ChunkHandler : MonoBehaviour
         }
     }
 
-    public Chunk GetChunk(Vector3Int pos)
-    {
-        return WORLD[pos.x, pos.z];
-    }
-
     public void Load(Vector3Int pos)
     {
         int x0 = Mathf.Max(pos.x - LOAD_RADIUS, 0);
@@ -111,5 +106,20 @@ public class ChunkHandler : MonoBehaviour
         z = Mathf.Min(z, GetMaxZCoord() - 5);
         z = Mathf.Max(z, 5);
         return z;
+    }
+
+    public static Vector3Int WorldPosToTile(Vector3 worldPos)
+    {
+        return new Vector3Int((int)(worldPos.x / Chunk.WIDTH), 0, (int)(worldPos.z / Chunk.WIDTH));
+    }
+
+    public static Chunk GetChunk(Vector3 worldPos)
+    {
+        return GetChunk(WorldPosToTile(worldPos));
+    }
+
+    public static Chunk GetChunk(Vector3Int pos)
+    {
+        return WORLD[pos.x, pos.z];
     }
 }

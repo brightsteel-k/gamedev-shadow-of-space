@@ -46,4 +46,9 @@ public class Chunk
         }
         active = activeIn;
     }
+
+    public void AddFeature(WorldObject feature)
+    {
+        features.Add(feature);
+    }
 }

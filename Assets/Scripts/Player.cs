@@ -169,16 +169,11 @@ public class Player : MonoBehaviour
 
     public void CheckCurrentTile()
     {
-        Vector3Int currentPos = WorldPosToTile(transform.position);
+        Vector3Int currentPos = ChunkHandler.WorldPosToTile(transform.position);
         if (!currentPos.Equals(TILE_POSITION))
         {
             TILE_POSITION = currentPos;
             EventManager.TilePosChanged();
         }
-    }
-
-    Vector3Int WorldPosToTile(Vector3 v)
-    {
-        return new Vector3Int((int)(v.x / 20f), (int)(v.y / 20f), (int)(v.z / 20f));
     }
 }
