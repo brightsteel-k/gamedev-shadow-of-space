@@ -23,6 +23,12 @@ public abstract class WorldObject : Rotatable
             Player.Pivot(textureObject, clockwise);
     }
 
+    public virtual void Remove()
+    {
+        RemoveRotation();
+        Destroy(gameObject);
+    }
+
     public virtual void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
     {
         gameObject.SetActive(active);

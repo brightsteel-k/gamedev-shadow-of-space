@@ -40,6 +40,11 @@ public class RandomGen
         return (int)(a + (Random.value - 0.5f) * 2);
     }
 
+    public static int MaybeMinusOne(int a)
+    {
+        return Mathf.Max(0, a - Random.Range(0, 2));
+    }
+
     public static bool ShouldContinueCircling(int circles)
     {
         return Random.Range(0, Mathf.Max(0, 6 - circles)) > 1;
@@ -55,5 +60,17 @@ public class RandomGen
         float lowerBound = Mathf.Max(7f, 12f - numTimesFled);
         float upperBound = Mathf.Max(lowerBound, 24f - numTimesFled * 2f);
         return Random.Range(lowerBound, upperBound);
+    }
+
+    public static float Range(float a, float b)
+    {
+        return Random.Range(a, b);
+    }
+
+    public static Vector3 DropItemMomentum()    
+    {
+        float theta = Random.Range(0, 2 * Mathf.PI);
+        float magnitude = 1.5f;
+        return new Vector3(Mathf.Cos(theta) * magnitude, Random.Range(2.5f, 3.5f), Mathf.Sin(theta) * magnitude);
     }
 }

@@ -12,7 +12,7 @@ public class PlayerAnimation : MonoBehaviour
     private int[] inputs = new int[] { 0, 0 };
     private int direction = 2;
     private int camDirectionOffset = 0;
-    private string currentState = "Idle";
+    private AnimationState currentState = AnimationState.Idle;
 
 
     // Start is called before the first frame update
@@ -201,7 +201,7 @@ public class PlayerAnimation : MonoBehaviour
 
     bool IsInUnmovingAnimationState()
     {
-        return currentState == "Idle";
+        return currentState == AnimationState.Idle;
     }
 
     void UpdateAnimationState()
@@ -209,35 +209,35 @@ public class PlayerAnimation : MonoBehaviour
         if (!anim.enabled) { anim.enabled = true; }
         if (moving)
         {
-            SetRotatableState(AnimationState.Running.ToString());
+            SetRotatableState(AnimationState.Running);
         }
         else
         {
-            SetRotatableState(AnimationState.Idle.ToString());
+            SetRotatableState(AnimationState.Idle);
         }
     }
 
-    void SetRotatableState(string state)
+    void SetRotatableState(AnimationState state)
     {
-        string newState = "";
+        string newState = state.ToString();
         switch (direction)
         {
             case 0:
-                newState = state + " (UP)";
+                newState += " (UP)";
                 break;
             case 1:
                 spriteRenderer.flipX = false;
-                newState = state + " (SIDE)";
+                newState += " (SIDE)";
                 break;
             case 2:
-                newState = state + " (DOWN)";
+                newState += " (DOWN)";
                 break;
             case 3:
                 spriteRenderer.flipX = true;
-                newState = state + " (SIDE)";
+                newState += " (SIDE)";
                 break;
         }
-        currentState = newState;
+        currentState = state;
         anim.Play(newState, 0);
     }
 }

@@ -9,14 +9,14 @@ public class Player : MonoBehaviour
     public static Player WORLD_PLAYER;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
+    public static int CAMERA_ROTATION = 2;
     public GameObject mainCamera;
     private PlayerAnimation animations;
 
     [SerializeField] private float speed;
-    [SerializeField] private float rotation = Mathf.PI / 2;
     private static float pivotCooldown = 1f;
     [SerializeField] private float cameraOffsetRadius;
-    public float rotationChangeQuotient = 1f / 8f;
+    private float rotationChangeQuotient = 1f / 8f;
     public float rotationTime = 0.33f;
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
@@ -54,8 +54,26 @@ public class Player : MonoBehaviour
         }
 
         PlayerRotateInput();
-
         CheckCurrentTile();
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Collider[] results = new Collider[5];
+            int num = Physics.OverlapSphereNonAlloc(transform.position, 3f, results);
+            for (int i = 0; i < num; i++)
+            {
+                Debug.Log(results[i].transform.name);
+                if (results[i].tag == "Breakable")
+                {
+                    results[i].transform.GetComponent<LargeObject>().BreakObject();
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Environment.DropItem("hematite_pebble", transform.position + new Vector3(0, 0.5f, 0));
+        }
     }
 
     private void PlayerRotateInput()
@@ -119,12 +137,13 @@ public class Player : MonoBehaviour
         Pivot(gameObject, clockwise);
         animations.RotateCamera(clockwise);
 
-        float rotationChange = 2 * Mathf.PI * (clockwise ? -rotationChangeQuotient : rotationChangeQuotient);
-        rotation += rotationChange;
-
-        if (rotation > 2 * Mathf.PI)
+        if (clockwise)
         {
-            rotation -= 2 * Mathf.PI;
+            CAMERA_ROTATION = CAMERA_ROTATION == 0 ? 7 : CAMERA_ROTATION - 1;
+        }
+        else
+        {
+            CAMERA_ROTATION = CAMERA_ROTATION == 7 ? 0 : CAMERA_ROTATION + 1;
         }
     }
 

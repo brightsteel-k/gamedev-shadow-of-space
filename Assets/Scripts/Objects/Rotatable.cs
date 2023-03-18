@@ -18,6 +18,11 @@ public class Rotatable : MonoBehaviour
         Player.PivotInit(textureObject);
     }
 
+    protected virtual void RemoveRotation()
+    {
+        EventManager.OnWorldPivot -= Pivot;
+    }
+
     private void OnDestroy()
     {
         EventManager.OnWorldPivot -= Pivot;

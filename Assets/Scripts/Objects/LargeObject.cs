@@ -12,11 +12,9 @@ public class LargeObject : WorldObject
     [SerializeField] protected float scaleYPosBy;
 
     [Header("Breakability")]
-    [SerializeField] private bool breakable;
     [SerializeField] private string smallRock;
 
     protected float size;
-
 
     // Start is called before the first frame update
     protected override void Start()
@@ -30,14 +28,17 @@ public class LargeObject : WorldObject
         InitRotation();
         size = Random.Range(minSize, maxSize);
         sprite.transform.localScale = new Vector3(size, size, size);
-        sprite.transform.localPosition = new Vector3(0, size * scaleYPosBy, 0);
+        sprite.transform.localPosition = new Vector3(sprite.transform.localPosition.x, size * scaleYPosBy, size * scaleYPosBy);
     }
 
-    public void BreakObject()
+    public virtual void BreakObject()
     {
-        Environment.DropItem(smallRock, transform.position);
-        Environment.DropItem(smallRock, transform.position);
-        Environment.DropItem(smallRock, transform.position);
-        // TODO: break
+        Vector3 dropPos;
+        int count = RandomGen.Mercury(3);
+        for (int k = 0; k < count; k++) {
+            dropPos = transform.position + new Vector3(0, RandomGen.Range(0.2f, 0.7f), 0);
+            Environment.DropItem(smallRock, dropPos);
+        }
+        Remove();
     }
 }

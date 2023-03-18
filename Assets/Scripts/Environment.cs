@@ -48,10 +48,13 @@ public class Environment : MonoBehaviour
             switch (f.Item1)
             {
                 case "diamond":
-                    AddRareItems(allFeatures, posIn, f.Item1, 0.16f, f.Item2, 3);
+                    AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
                 case "stalagmite":
-                    AddStalagmites(allFeatures, posIn, f.Item1, f.Item2);
+                    AddStalagmites(allFeatures, posIn, "hematite_stalagmite", f.Item2, "hematite_pebble", 3);
+                    break;
+                case "tyranite":
+                    AddStalagmites(allFeatures, posIn, "tyranite", f.Item2, "tyranite_pebble", 1);
                     break;
                 default:
                     AddSmallFeatures(allFeatures, posIn, f.Item1, RandomGen.Mercury(f.Item2));
@@ -72,17 +75,17 @@ public class Environment : MonoBehaviour
         }
     }
 
-    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float itemSize, float rarity, int degree)
+    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float rarity, int degree)
     {
         int c = RandomGen.GetCountFromRarity(rarity, degree);
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, obj, itemSize);
+            PlaceItem(allFeatures, pos, obj);
         }
     }
 
-    public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count, string pebbleId, int pebbleCount)
     {
         int c = RandomGen.GetCountFiftyPercent(count);
         for (int k = 0; k < c; k++)
@@ -91,30 +94,33 @@ public class Environment : MonoBehaviour
             WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
             feature.InitSprite();
             allFeatures.Add(feature.Place());
-            AddItemCluster(allFeatures, pos, "hematite_pebble", 3);
+            AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
         }
     }
 
-    public static void AddItemCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
+    public static void AddItemCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, int count)
     {
-        int c = RandomGen.Mercury(count);
+        int c = RandomGen.MaybeMinusOne(count);
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, obj, 0.25f);
+            PlaceItem(allFeatures, pos, obj);
         }
     }
 
-    public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, string id, float size)
+    public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, string id)
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
-        feature.InitItem(id, size);
+        feature.InitItem(id, ItemTextures.GetItemSize(id));
         allFeatures.Add(feature.Place());
     }
 
     public static void DropItem(string item, Vector3 posIn)
     {
-        // TODO: Instantiate item of the given type with random velocity
+        ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
+        feature.InitItem(item, ItemTextures.GetItemSize(item));
+        feature.GetComponent<Rigidbody>().AddForce(RandomGen.DropItemMomentum(), ForceMode.Impulse);
+        AddItem(feature, posIn);
     }
 
     public static void AddItem(ItemObject item, Vector3 posIn)
