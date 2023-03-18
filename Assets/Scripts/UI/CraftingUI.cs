@@ -49,6 +49,11 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    void OnDisable()
+    {
+        hover.GetComponent<HoverBox>().disable();
+    }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
         //Debug.Log("Clicked: " + eventData.pointerCurrentRaycast.gameObject.name);

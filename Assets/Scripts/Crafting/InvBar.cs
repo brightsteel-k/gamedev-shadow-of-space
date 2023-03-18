@@ -6,6 +6,8 @@ public class InvBar : MonoBehaviour
 {
     public List<Image> images;
 
+    public ItemSelector selector;
+    //This sprite should be what an empty inventory slot looks like (maybe just transparent?)
     public Sprite empty;
     // Start is called before the first frame update
     public void updateBar(List<Item> items)

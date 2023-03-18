@@ -5,7 +5,7 @@ using UnityEngine;
 public class MenuManager : MonoBehaviour
 {
     public GameObject CraftingMenu;
-
+    public CraftingUI craft;
     public GameObject HoverBox;
     //For the "inMenu" thing.
     public Player player;
@@ -20,6 +20,7 @@ public class MenuManager : MonoBehaviour
     //I think
     void Update()
     {
+        //@TODO change this to the key to open the crafting
         if (Input.GetKeyDown(KeyCode.C))
         {
             CraftingMenu.SetActive(true);
@@ -38,6 +39,13 @@ public class MenuManager : MonoBehaviour
             Cursor.visible = false;
         }
 
+        //@TODO change this to key that drops or uses items (for crafting menu)
+        if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.U))
+        {
+            craft.show();
+        }
+        //Alternatively, could just do this every fram
+        //craft.show();
  
     }
  

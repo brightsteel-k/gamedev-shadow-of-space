@@ -366,8 +366,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 6394509055390268827}
   text: {fileID: 1540810085407983300}
-  amount: {fileID: 1643507455759463945}
-  held: {fileID: 6717153884456538192}
+  amount: {fileID: 6717153884456538192}
+  held: {fileID: 1643507455759463945}
 --- !u!1 &7115195623107174368
 GameObject:
   m_ObjectHideFlags: 0

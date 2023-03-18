@@ -10,34 +10,83 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    //List of currently held items.
     public List<Item> items;
+    
+    //To work with the UI, it must be connected to an inventory bar.
     public InvBar itemBar;
-
+    
+    //To see which items are selected.
+    private ItemSelector select;
+    //The bar lenght determines how many items can be held.
+    private int barLength;
+    public Item noItem;
     //Gets the bar
     void Start()
     {
+        select = itemBar.selector;
+        barLength = select.invSize;
         updateBar();
     }
     
-    public void addItem(Item item)
+    public bool addItem(Item item)
     {
+        if (items.Count >= barLength)
+        {
+            return false;
+        }
         //Adds to the end of the list (bottom of inventory)
         items.Add(item);
         updateBar();
-    }
 
-    public Item removeTopItem()
+        return true;
+    }
+    
+    //Returns which item is selected
+    public Item getSelectedItem()
     {
-        if (items.Count <= 0)
+        if (select.pos > items.Count)
+        {
+            return noItem;
+        }
+        
+        return items[select.pos];
+
+    }
+    
+    //Removes item selected by the selector
+    public Item removeSelectedItem()
+    {
+        if (select.pos > items.Count)
+        {
+            return noItem;
+        }
+        
+        Item toRemove = items[select.pos];
+        items.RemoveAt(select.pos);
+        
+        updateBar();
+        
+        return toRemove;
+    }
+    
+    //Removes item at given position;
+    public Item removeItemAt(int position)
+    {
+        if (items.Count <= position)
         {
             return null;
         }
-        Item first = items[0];
-        items.RemoveAt(0);
-        return first;
+        Item toRemove = items[position];
+        items.RemoveAt(position);
+        
         updateBar();
+        return toRemove;
     }
 
+
+    
+    
     //Checks if recipe is makeable (for use in UI)
     public bool canMakeRecipe(Recipe recipe)
     {

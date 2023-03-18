@@ -12,6 +12,8 @@ public class HoverBox : MonoBehaviour
     private RectTransform hover;
 
     public Canvas canvas;
+
+    public Vector2 offset;
     //@TODO Setup as a co-routine
 
     void Start()
@@ -41,6 +43,11 @@ public class HoverBox : MonoBehaviour
             compUI.setValues(item.item.sprite, item.item.type, item.amount.ToString(), inv.countIn(item.item).ToString()); 
         }
             
+    }
+
+    public void move()
+    {
+        hover.position = new Vector2(Input.mousePosition.x + offset.x, Input.mousePosition.y + offset.y);
     }
     
     public void disable()

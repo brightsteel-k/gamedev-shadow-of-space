@@ -13,6 +13,22 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     public Image icon;
     public HoverBox hover;
     private Inventory inv;
+
+    private bool inBox;
+
+    public void Start()
+    {
+        inBox = false;
+    }
+    
+    //Having this in update, maybe not good idea @TODO
+    public void Update()
+    {
+        if (inBox)
+        {
+            hover.move();
+        }
+    }
     public void prepareDisplay(Recipe newRecipe, Inventory _inv)
     {
         recipe = newRecipe;
@@ -32,6 +48,7 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        inBox = true;
         if (eventData.pointerCurrentRaycast.gameObject.name == "ItemName")
         {
             return;
@@ -41,6 +58,7 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        inBox = false;
         hover.disable();
     }
 

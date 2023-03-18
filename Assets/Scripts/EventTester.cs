@@ -10,6 +10,8 @@ public class EventTester : MonoBehaviour
     public Health hp;
     public Energy en;
 
+    public Inventory inv;
+
     void Update()
     {
         //Press K to start the tests
@@ -42,5 +44,18 @@ public class EventTester : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
+        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log(inv.getSelectedItem().type);
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            Debug.Log(inv.removeSelectedItem());
+        }
+
+        
     }
 }
