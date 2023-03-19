@@ -67,8 +67,10 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
             PrintChunk();
 
+        // DEBUG KEY FUNCTIONALITY WITH B
         if (Input.GetKeyDown(KeyCode.B))
         {
+            ENERGY.SetDrilling(true);
             Collider[] results = new Collider[5];
             int num = Physics.OverlapSphereNonAlloc(transform.position, 3f, results);
             for (int i = 0; i < num; i++)
@@ -79,6 +81,8 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        if (Input.GetKeyUp(KeyCode.B))
+            ENERGY.SetDrilling(false);
     }
 
     // @TODO: Debug method to check chunks

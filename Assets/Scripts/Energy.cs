@@ -15,13 +15,17 @@ public class Energy : MonoBehaviour
     
     //Perhaps we only drain during certain times
     public bool draining = true;
+    private bool isDrilling = false;
+    [SerializeField] Color normalColor;
+    [SerializeField] Color drillingColor;
 
-    public float drainSpeed = 1;
+    float drainSpeed = 0.5f;
 
     //Starting off by initializing the bar (just in case)
     void Start()
     {
         bar.maxValue = maxEnergy;
+        bar.setColor(normalColor);
         bar.setValue(value);
     }
     
@@ -86,6 +90,24 @@ public class Energy : MonoBehaviour
         }
         
         updateBar();
+    }
+
+    public void SetDrilling(bool drilling)
+    {
+        if (isDrilling == drilling)
+            return;
+
+        if (drilling)
+        {
+            drainSpeed = 2f;
+            bar.setColor(drillingColor);
+        }
+        else
+        {
+            drainSpeed = 0.5f;
+            bar.setColor(normalColor);
+        }
+        isDrilling = drilling;
     }
 
     public void updateBar()

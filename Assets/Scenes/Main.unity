@@ -145687,7 +145687,8 @@ MonoBehaviour:
   bar: {fileID: 470296304}
   hasBar: 1
   draining: 1
-  drainSpeed: 1
+  normalColor: {r: 0, g: 0.7924528, b: 0.59398174, a: 1}
+  drillingColor: {r: 0.9056604, g: 0.36942863, b: 0, a: 1}
 --- !u!114 &1264698840
 MonoBehaviour:
   m_ObjectHideFlags: 0
