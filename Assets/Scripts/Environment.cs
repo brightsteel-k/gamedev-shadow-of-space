@@ -46,7 +46,7 @@ public class Environment : MonoBehaviour
         {
             switch (f.Item1)
             {
-                case "gold":
+                case "gold_piece":
                 case "diamond":
                     AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
@@ -82,7 +82,7 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, obj);
+            PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
         }
     }
     public static void AddClusteredFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance)
@@ -116,7 +116,7 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, obj);
+            PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
         }
     }
 
@@ -126,17 +126,22 @@ public class Environment : MonoBehaviour
         feature.InitSprite();
         feature.Place(allFeatures);
     }
-    public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, string id)
+    public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, Item item)
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
-        feature.InitItem(id, ItemTextures.GetItemSize(id));
+        feature.InitItem(item, ItemTextures.GetItemSize(item.id));
         feature.Place(allFeatures);
     }
 
     public static void DropItem(string item, Vector3 posIn)
     {
+        DropItem(Inventory.ALL_ITEMS[item], posIn);
+    }
+
+    public static void DropItem(Item item, Vector3 posIn)
+    {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
-        feature.InitItem(item, ItemTextures.GetItemSize(item));
+        feature.InitItem(item, ItemTextures.GetItemSize(item.id));
         feature.GetComponent<Rigidbody>().AddForce(RandomGen.DropItemMomentum(), ForceMode.Impulse);
         AddItem(feature, posIn);
     }

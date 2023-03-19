@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
     public static Player WORLD_PLAYER;
     public static Inventory INVENTORY;
+    public static Energy ENERGY;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
@@ -28,9 +29,9 @@ public class Player : MonoBehaviour
     private int mouseCentrePos;
     private int mouseInput = 0;
 
-    //Added for crafting UI
+    // Inventory
     public bool inMenu = false;
-    
+    private Vector3 itemDropOffset = new Vector3(0f, 0.5f, 0f);
     
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
     {
         CONTROLLER = GetComponent<CharacterController>();
         INVENTORY = GetComponent<Inventory>();
+        ENERGY = GetComponent<Energy>();
         animations = GetComponent<PlayerAnimation>();
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
@@ -56,6 +58,8 @@ public class Player : MonoBehaviour
             PlayerRotateInput();
         CheckCurrentTile();
 
+        if (Input.GetMouseButtonDown(1) && !inMenu)
+            UseSelectedItem();
         if (Input.GetKeyDown(KeyCode.Space))
             TryPickupItem();
         if (Input.GetKeyDown(KeyCode.Q))
@@ -83,6 +87,17 @@ public class Player : MonoBehaviour
         ChunkHandler.GetChunk(transform.position).PrintFeatures();
     }
 
+    private void UseSelectedItem()
+    {
+        Item selectedItem = INVENTORY.getSelectedItem();
+        switch(selectedItem.id)
+        {
+            case "battery":
+                SwitchBatteries(selectedItem);
+                break;
+        }
+    }
+
     private void TryPickupItem()
     {
         Collider[] results = new Collider[5];
@@ -103,12 +118,14 @@ public class Player : MonoBehaviour
         if (feature.tag == "Item")
         {
             ItemObject item = feature.GetComponent<ItemObject>();
-            if (INVENTORY.addItem(item.GetID()))
+            if (INVENTORY.addItem(item.GetItem()))
                 item.Pickup(transform.position + new Vector3(0, 1f, 0));
         }
         else
         {
-            feature.GetComponent<WorldObject>().Harvest();
+            WorldObject worldObject = feature.GetComponent<WorldObject>();
+            if (INVENTORY.addItem(worldObject.GetID()))
+                worldObject.Harvest();
         }
     }
 
@@ -117,10 +134,17 @@ public class Player : MonoBehaviour
         Item currentItem = INVENTORY.getSelectedItem();
         if (currentItem != null)
         {
-            Environment.DropItem(currentItem.id, transform.position + new Vector3(0, 0.5f, 0));
+            Environment.DropItem(currentItem, transform.position + itemDropOffset);
             INVENTORY.removeSelectedItem();
         }
 
+    }
+
+    private void SwitchBatteries(Item battery)
+    {
+        Item newBattery = ENERGY.SwitchBatteries(battery);
+        INVENTORY.removeSelectedItem();
+        Environment.DropItem(newBattery, transform.position + itemDropOffset);
     }
 
     private void PlayerRotateInput()

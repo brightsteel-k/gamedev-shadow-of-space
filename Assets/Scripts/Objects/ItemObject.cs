@@ -9,6 +9,7 @@ public class ItemObject : WorldObject
     private Rigidbody rb;
     private SphereCollider sphereCollider;
     float physHeight;
+    Item item;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -31,11 +32,12 @@ public class ItemObject : WorldObject
         }
     }
 
-    public void InitItem(string itemId, float itemSize)
+    public void InitItem(Item itemIn, float itemSize)
     {
         rb = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
-        id = itemId;
+        id = itemIn.id;
+        item = itemIn;
         size = itemSize;
         InitSprite();
         sprite.transform.localScale = new Vector3(size, size, size);
@@ -50,6 +52,11 @@ public class ItemObject : WorldObject
         sphereCollider.enabled = false;
         tag = "Untagged";
         transform.LeanMove(playerPos, 0.1f).setOnComplete(e => Remove());
+    }
+
+    public Item GetItem()
+    {
+        return item;
     }
 
     public override WorldObject Place(List<WorldObject> registry)

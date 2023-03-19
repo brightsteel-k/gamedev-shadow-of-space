@@ -61,7 +61,7 @@ public class Inventory : MonoBehaviour
     {
         return addItem(ALL_ITEMS[item]);
     }
-    
+
     //Returns which item is selected
     public Item getSelectedItem()
     {

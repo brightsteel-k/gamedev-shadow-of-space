@@ -96,8 +96,16 @@ public class Energy : MonoBehaviour
         }
         else if (hasBar)
         {
-            Debug.Log("Error with a resource bar, resource should have health bar set. To disable this, uncheck 'hasBar' for health, energy, ect");
+            Debug.Log("Error with a resource bar, resource should have health bar set. To disable this, uncheck 'hasBar' for health, energy, etc");
         }
+    }
+
+    public Item SwitchBatteries(Item newBattery)
+    {
+        Item oldBattery = new Item(Inventory.ALL_ITEMS["battery"], ("power", value));
+        setEnergy(newBattery.GetTag("power"));
+        updateBar();
+        return oldBattery;
     }
     
     void energyEmpty()

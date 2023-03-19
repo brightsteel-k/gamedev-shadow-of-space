@@ -3,6 +3,7 @@
 	"gold_crystal": 0.2,
 	"diamond": 0.16,
 	"tyranite_pebble": 0.26,
-	"gold_piece": 0.2,
-	"mushroom": 0.2
+	"gold_piece": 0.1,
+	"mushroom": 0.2,
+	"battery": 0.2
 }

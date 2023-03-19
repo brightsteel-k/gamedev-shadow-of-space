@@ -44,16 +44,11 @@ public class EventTester : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
-        
+
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Debug.Log(inv.getSelectedItem().id);
-            
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            Debug.Log(inv.removeSelectedItem());
+            Item battery = new Item(Inventory.ALL_ITEMS["battery"], ("power", 80));
+            Player.INVENTORY.addItem(battery);
         }
 
         

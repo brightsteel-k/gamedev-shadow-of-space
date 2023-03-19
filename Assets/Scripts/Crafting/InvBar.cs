@@ -39,6 +39,6 @@ public class InvBar : MonoBehaviour
                 images[i].sprite = null;
             }
         }
-        selector.displayIdentifier();
+        selector.updateIdentifiers();
     }
 }

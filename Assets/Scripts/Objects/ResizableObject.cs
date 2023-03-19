@@ -29,7 +29,8 @@ public class ResizableObject : WorldObject
     public override void Harvest()
     {
         tag = "Untagged";
-        sprite.transform.LeanMoveLocalY(-1.5f, 0.3f).setOnComplete(e => Remove());
+        // @TODO: Particles
+        Remove();
     }
 
     private void OnDrawGizmos()

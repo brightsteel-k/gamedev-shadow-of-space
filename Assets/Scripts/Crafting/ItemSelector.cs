@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Newtonsoft.Json;
 
 public class ItemSelector : MonoBehaviour
 {
-    // Inevntory to which this is attached
+    // Inventory to which this is attached
     [SerializeField] Inventory inventory;
+
+    // Instructions to appear at the bottom of the screen for right-clickable items
+    private Dictionary<string, string> allInstructions;
+    private string currentInstructions = "";
+    [SerializeField] TextMeshProUGUI instructionsText;
 
     //The current position of the selector
     public int pos;
@@ -25,7 +31,13 @@ public class ItemSelector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        LoadInstructions();
+    }
+
+    void LoadInstructions()
+    {
+        TextAsset ta = Resources.Load<TextAsset>("Data/item_instructions");
+        allInstructions = JsonConvert.DeserializeObject<Dictionary<string, string>>(ta.text);
     }
 
     // Update is called once per frame
@@ -58,20 +70,61 @@ public class ItemSelector : MonoBehaviour
         pos = newPos;
 
         transform.localPosition = new Vector2(transform.localPosition.x, pos0 - pos * offset);
-        displayIdentifier();
+        updateIdentifiers();
     }
 
-    public void displayIdentifier()
+    public void updateIdentifiers()
     {
+        // Name of item
         Item selectedItem = inventory.getSelectedItem();
         if (selectedItem == null)
         {
             if (identifier.text != "")
                 identifier.SetText("");
+            if (currentInstructions != "")
+            {
+                setInstructionsText("", "");
+            }
             return;
         }
-        identifier.SetText(selectedItem.displayName);
+        identifier.SetText(formatDisplayName(selectedItem));
         identifierAlpha = 255f;
+
+        // Instructions at bottom of screen
+        if (allInstructions.TryGetValue(selectedItem.id, out string output))
+        {
+            if (selectedItem.id != currentInstructions)
+            {
+                setInstructionsText(selectedItem.id, output);
+            }
+        }
+        else if (currentInstructions != "")
+        {
+            setInstructionsText("", "");
+        }
+    }
+
+    private void setInstructionsText(string id, string text)
+    {
+        if (id == "")
+        {
+            instructionsText.gameObject.SetActive(false);
+        }
+        else
+        {
+            instructionsText.SetText(text);
+            if (currentInstructions == "")
+                instructionsText.gameObject.SetActive(true);
+        }
+        currentInstructions = id;
+    }
+
+    private string formatDisplayName(Item item)
+    {
+        string output = item.displayName;
+        if (output.Contains("@p"))
+            output = output.Replace("@p", item.GetTag("power").ToString("0"));
+        return output;
     }
 
     private void updateIdentifierAlpha()
