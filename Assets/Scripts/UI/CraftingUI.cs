@@ -12,12 +12,19 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     public TMP_Text recipeName;
     public Image icon;
 
+    //Recipe prefab
     public GameObject recipePrefab;
+    
+    //The view to insert the recipes into.
     public RectTransform recipeView;
 
+    //For liquid resources
+    public ResourceCrafter liquids;
+    
     //The tooltip hoverbox
     public GameObject hover;
-    
+
+    //Private fields
     private Recipe selectedRecipe;
 
     public RecipeUI craftButton;
@@ -44,7 +51,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         {
             GameObject obj = Instantiate(recipePrefab, recipeView);
             var ui = obj.GetComponent<RecipeUI>();
-            ui.prepareDisplay(rec, inv);
+            ui.prepareDisplay(rec, inv, liquids);
             ui.hover = hover.GetComponent<HoverBox>();
         }
     }
@@ -85,12 +92,13 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
             buttonImage.color = Color.gray;
         }
         
-        craftButton.prepareDisplay(recipe, inv); 
+        craftButton.prepareDisplay(recipe, inv, liquids); 
     }
     
     public void craft()
     {
         inv.makeRecipe(selectedRecipe);
+        liquids.makeRecipe(selectedRecipe);
         show();
     }
 

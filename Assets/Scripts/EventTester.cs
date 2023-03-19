@@ -12,6 +12,8 @@ public class EventTester : MonoBehaviour
 
     public Inventory inv;
 
+    public ResourceCrafter res;
+
     void Update()
     {
         //Press K to start the tests
@@ -51,6 +53,14 @@ public class EventTester : MonoBehaviour
             Player.INVENTORY.addItem(battery);
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Debug.Log(res.changeAmount("Carbon", 20));
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log(res.changeAmount("Carbon", -10));
+        }
         
     }
 }

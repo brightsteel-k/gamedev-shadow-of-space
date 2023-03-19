@@ -38,8 +38,9 @@ public class MenuManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-
+        
         //@TODO change this to key that drops or uses items (for crafting menu)
+        //@TODO maybe instead have it automatically update thru the inventory.
         if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.U))
         {
             craft.show();
