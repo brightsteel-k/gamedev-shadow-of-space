@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     //To work with the UI, it must be connected to an inventory bar.
     public InvBar itemBar;
     
+
     //To see which items are selected.
     private ItemSelector select;
     //The bar lenght determines how many items can be held.
@@ -91,13 +92,14 @@ public class Inventory : MonoBehaviour
     public bool canMakeRecipe(Recipe recipe)
     {
 
-        foreach (Recipe.Pair pair in recipe.needed)
+        foreach (Recipe.Pair1 pair in recipe.needed)
         {
             if (countIn(pair.item) < pair.amount)
             {
                 return false;
             }
         }
+      
 
         return true;
     }
@@ -109,11 +111,13 @@ public class Inventory : MonoBehaviour
             return false;
         }
         
-        foreach (Recipe.Pair pair in recipe.needed)
+        foreach (Recipe.Pair1 pair in recipe.needed)
         {
             remove(pair.item, pair.amount);
 
         }
+        
+       
         
         
         updateBar();

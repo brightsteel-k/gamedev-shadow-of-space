@@ -29,13 +29,13 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
             hover.move();
         }
     }
-    public void prepareDisplay(Recipe newRecipe, Inventory _inv)
+    public void prepareDisplay(Recipe newRecipe, Inventory _inv, ResourceCrafter rec)
     {
         recipe = newRecipe;
         result = recipe.created;
         icon.sprite = result.sprite;
         inv = _inv;
-        if (inv.canMakeRecipe(newRecipe))
+        if (inv.canMakeRecipe(newRecipe) && rec.canMake(newRecipe))
         {
             icon.color = Color.white;
         }
@@ -53,7 +53,7 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         {
             return;
         }
-        hover.create(recipe.needed, eventData, inv);
+        hover.create(recipe.needed, recipe.liquids, eventData, inv);
     }
 
     public void OnPointerExit(PointerEventData eventData)
