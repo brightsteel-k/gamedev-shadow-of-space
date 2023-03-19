@@ -34,6 +34,7 @@ public class ItemObject : WorldObject
 
     public void InitItem(Item itemIn, float itemSize)
     {
+        textureObject = gameObject;
         rb = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
         id = itemIn.id;

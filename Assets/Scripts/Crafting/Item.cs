@@ -15,15 +15,16 @@ public class Item : ScriptableObject
 
     public Dictionary<string, float> tags = new Dictionary<string, float>();
 
-    public Item(Item item, params (string, float)[] tags)
+    public Item Initialize(Item template, params (string, float)[] tags)
     {
-        displayName = item.displayName;
-        id = item.id;
-        sprite = item.sprite;
-        initializeTags(tags);
+        displayName = template.displayName;
+        id = template.id;
+        sprite = template.sprite;
+        SetTags(tags);
+        return this;
     }
 
-    private void initializeTags((string, float)[] tags)
+    public void SetTags(params (string, float)[] tags)
     {
         foreach ((string, float) pair in tags)
         {

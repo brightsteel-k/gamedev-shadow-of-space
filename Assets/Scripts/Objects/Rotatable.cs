@@ -25,8 +25,11 @@ public class Rotatable : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.OnWorldPivot -= Pivot;
+        RemoveRotation();
     }
 
-    protected virtual void Pivot(bool clockwise) => Player.Pivot(textureObject, clockwise);
+    protected virtual void Pivot(bool clockwise) {
+        if (gameObject.activeSelf)
+            Player.Pivot(textureObject, clockwise);
+    }
 }

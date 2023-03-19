@@ -4,25 +4,50 @@ using UnityEngine;
 
 public class RandomGen
 {
-    public static Vector3 GetPos(GenType gen, float x, float y)
+    static HashSet<Vector3> currentChunkObjects = new HashSet<Vector3>();
+
+    public static void NewChunk()
+    {
+        currentChunkObjects.Clear();
+    }
+
+    public static Vector3 GetPosInChunk(GenType gen, float x, float z)
     {
         Vector3 relative;
 
         switch (gen)
         {
             case GenType.NaiveRandom:
-                relative = new Vector3(Random.value * Chunk.WIDTH, 0.0f, Random.value * Chunk.WIDTH);
+                relative = ChunkPos(Random.value * Chunk.WIDTH, Random.value * Chunk.WIDTH, true);
                 break;
             case GenType.Dense:
                 float radians = Random.Range(0, 2 * Mathf.PI);
-                relative = new Vector3(1.6f * Mathf.Cos(radians), 0.0f, 1.6f * Mathf.Sin(radians));
+                relative = ChunkPos(1.6f * Mathf.Cos(radians), 1.6f * Mathf.Sin(radians), false);
                 break;
             default:
-                relative = new Vector3(x, 0.0f, y);
+                relative = ChunkPos(x, z, true);
                 break;
         }
 
-        return new Vector3(x, 0.0f, y) + relative;
+        if (currentChunkObjects.Add(relative))
+            return ChunkPos(x, z, false) + relative;
+        else
+            throw new CancelledChunkPosException();
+    }
+
+    public static bool ShouldChunkFeatureGenerate(Vector3Int chunk, int multiplier, int increment, int modulus)
+    {
+        bool b = (multiplier * chunk.x * chunk.z + increment) % modulus == 0;
+        Debug.Log("(" + chunk.x + ", " + chunk.z + "): " + b);
+        return b;
+    }
+
+    public static Vector3 ChunkPos(float x, float z, bool round)
+    {
+        if (round)
+            return new Vector3(x, 0.0f, z);
+        else
+            return new Vector3(Mathf.Round(x), 0.0f, Mathf.Round(z));
     }
 
     public static int GetCountFromAbundance(float abundance, int degree)
@@ -73,4 +98,9 @@ public class RandomGen
         float magnitude = 1.5f;
         return new Vector3(Mathf.Cos(theta) * magnitude, Random.Range(2.5f, 3.5f), Mathf.Sin(theta) * magnitude);
     }
+}
+
+public class CancelledChunkPosException : System.SystemException
+{
+
 }

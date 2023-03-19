@@ -9,6 +9,11 @@ public abstract class WorldObject : Rotatable
     [SerializeField] protected GameObject sprite;
     [SerializeField] protected bool harvestable;
 
+    protected override void Start()
+    {
+        
+    }
+
     public virtual WorldObject Place(List<WorldObject> registry)
     {
         registry.Add(this);
@@ -23,14 +28,8 @@ public abstract class WorldObject : Rotatable
 
     public virtual void InitSprite()
     {
-        textureObject = sprite;
+        base.Start();
         InitRotation();
-    }
-
-    protected override void Pivot(bool clockwise)
-    {
-        if (gameObject.activeSelf)
-            Player.Pivot(textureObject, clockwise);
     }
 
     public virtual void Remove()

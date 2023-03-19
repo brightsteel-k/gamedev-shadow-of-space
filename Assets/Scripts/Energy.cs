@@ -124,7 +124,7 @@ public class Energy : MonoBehaviour
 
     public Item SwitchBatteries(Item newBattery)
     {
-        Item oldBattery = new Item(Inventory.ALL_ITEMS["battery"], ("power", value));
+        Item oldBattery = ScriptableObject.CreateInstance<Item>().Initialize(Inventory.ALL_ITEMS["battery"], ("power", value));
         setEnergy(newBattery.GetTag("power"));
         updateBar();
         return oldBattery;

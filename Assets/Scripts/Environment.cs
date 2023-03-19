@@ -40,24 +40,25 @@ public class Environment : MonoBehaviour
 
     }
 
-    public static void PopulateChunk(Vector3 posIn, List<(string, float)> toAdd, List<WorldObject> allFeatures)
+    public static void PopulateChunk(Vector3 posIn, List<(string, float)> toAdd, List<WorldObject> allFeatures, Vector3Int tilePos)
     {
+        RandomGen.NewChunk();
         foreach ((string, float) f in toAdd)
         {
             switch (f.Item1)
             {
-                case "gold_piece":
-                case "diamond":
-                    AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
-                    break;
-                case "mushroom":
-                    AddClusteredFeature(allFeatures, posIn, f.Item1, f.Item2);
+                case "tyranite":
+                    AddTyraniteChunk(allFeatures, f.Item2, posIn, tilePos);
                     break;
                 case "stalagmite":
                     AddStalagmites(allFeatures, posIn, "hematite_stalagmite", f.Item2, "hematite_pebble", 3);
                     break;
-                case "tyranite":
-                    AddStalagmites(allFeatures, posIn, "tyranite", f.Item2, "tyranite_pebble", 1);
+                case "mushroom":
+                    AddClusteredFeature(allFeatures, posIn, f.Item1, f.Item2);
+                    break;
+                case "gold_piece":
+                case "diamond":
+                    AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
                 default:
                     AddSmallFeatures(allFeatures, posIn, f.Item1, RandomGen.Mercury(f.Item2));
@@ -66,13 +67,28 @@ public class Environment : MonoBehaviour
         }
     }
 
+    public static void AddTyraniteChunk(List<WorldObject> allFeatures, float count, Vector3 posIn, Vector3Int tilePos)
+    {
+        if (!RandomGen.ShouldChunkFeatureGenerate(tilePos, 17, 14, 23))
+            return;
+        AddStalagmites(allFeatures, posIn, "tyranite", count, "tyranite_pebble", 0);
+        AddSmallItems(allFeatures, posIn, "tyranite_pebble", 8);
+        
+    }
     
     public static void AddSmallFeatures(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
     {
         for (int k = 0; k < count; k++)
         {
-            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            PlaceFeature(allFeatures, pos, obj);
+            try
+            {
+                Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
+                PlaceFeature(allFeatures, pos, obj);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                continue;
+            }
         }
     }
 
@@ -81,20 +97,43 @@ public class Environment : MonoBehaviour
         int c = RandomGen.GetCountFromAbundance(abundance, degree);
         for (int k = 0; k < c; k++)
         {
-            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
+            try
+            {
+                Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
+                PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                continue;
+            }
         }
     }
     public static void AddClusteredFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance)
     {
         if (RandomGen.Range(0f, 1f) > abundance)
         {
-            Vector3 centre = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
+            Vector3 centre;
+            try
+            {
+                centre = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                return;
+            }
+            
             int c = RandomGen.Mercury(3);
             for (int k = 0; k < c; k++)
             {
-                Vector3 pos = RandomGen.GetPos(GenType.Dense, centre.x, centre.z);
-                PlaceFeature(allFeatures, pos, obj);
+                try
+                {
+                    Vector3 pos = RandomGen.GetPosInChunk(GenType.Dense, centre.x, centre.z);
+                    PlaceFeature(allFeatures, pos, obj);
+                }
+                catch (CancelledChunkPosException e)
+                {
+                    continue;
+                }
             }
         }
     }
@@ -104,19 +143,49 @@ public class Environment : MonoBehaviour
         int c = RandomGen.GetCountFiftyPercent(count);
         for (int k = 0; k < c; k++)
         {
-            Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            PlaceFeature(allFeatures, pos, obj);
-            AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
+            try
+            {
+                Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
+                PlaceFeature(allFeatures, pos, obj);
+                AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                continue;
+            }
         }
     }
 
-    public static void AddItemCluster(List<WorldObject> allFeatures, Vector3 posIn, string obj, int count)
+    public static void AddItemCluster(List<WorldObject> allFeatures, Vector3 posIn, string item, int count)
     {
         int c = RandomGen.MaybeMinusOne(count);
         for (int k = 0; k < c; k++)
         {
-            Vector3 pos = RandomGen.GetPos(GenType.Dense, posIn.x, posIn.z);
-            PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
+            try
+            {
+                Vector3 pos = RandomGen.GetPosInChunk(GenType.Dense, posIn.x, posIn.z);
+                PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[item]);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                continue;
+            }
+        }
+    }
+
+    public static void AddSmallItems(List<WorldObject> allFeatures, Vector3 posIn, string item, int count)
+    {
+        for (int k = 0; k < count; k++)
+        {
+            try
+            {
+                Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
+                PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[item]);
+            }
+            catch (CancelledChunkPosException e)
+            {
+                continue;
+            }
         }
     }
 

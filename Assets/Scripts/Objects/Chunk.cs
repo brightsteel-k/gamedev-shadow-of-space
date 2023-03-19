@@ -15,14 +15,14 @@ public class Chunk
 
     public Chunk(int x, int z, Biome b)
     {
-        pos = new Vector3Int(x, z);
+        pos = new Vector3Int(x, 0, z);
         worldPos = new Vector3(x * WIDTH, 0f, z * WIDTH);
         biome = b;
     }
 
     void InitChunk()
     {
-        Environment.PopulateChunk(worldPos, biome.Features, features);
+        Environment.PopulateChunk(worldPos, biome.Features, features, pos);
 
         initialized = true;
         active = true;

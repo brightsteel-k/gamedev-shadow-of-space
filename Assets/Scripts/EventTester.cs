@@ -47,7 +47,7 @@ public class EventTester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Item battery = new Item(Inventory.ALL_ITEMS["battery"], ("power", 80));
+            Item battery = ScriptableObject.CreateInstance<Item>().Initialize(Inventory.ALL_ITEMS["battery"], ("power", 80));
             Player.INVENTORY.addItem(battery);
         }
 
