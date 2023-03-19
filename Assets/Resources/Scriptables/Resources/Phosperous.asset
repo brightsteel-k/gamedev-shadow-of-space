@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Phosperous
   m_EditorClassIdentifier: 
   id: Phosperous
-  color: {r: 0.08319683, g: 0.2662856, b: 0.5377358, a: 0}
+  color: {r: 0.08319683, g: 0.2662856, b: 0.5377358, a: 1}
   maximum: 100

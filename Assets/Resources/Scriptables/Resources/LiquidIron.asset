@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LiquidIron
   m_EditorClassIdentifier: 
   id: Iron
-  color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
+  color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
   maximum: 100

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Nitrogen
   m_EditorClassIdentifier: 
   id: Nitrogen
-  color: {r: 0.38974723, g: 0.6415094, b: 0.6346031, a: 0}
+  color: {r: 0.38974723, g: 0.6415094, b: 0.6346031, a: 1}
   maximum: 100

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Carbon
   m_EditorClassIdentifier: 
   id: Carbon
-  color: {r: 0.0754717, g: 0.073620506, b: 0.073620506, a: 0}
+  color: {r: 0.0754717, g: 0.073620506, b: 0.073620506, a: 1}
   maximum: 100
