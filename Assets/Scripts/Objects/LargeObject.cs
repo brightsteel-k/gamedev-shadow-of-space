@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LargeObject : WorldObject
 {
-    [SerializeField] protected GameObject sprite;
-
     [SerializeField] protected float minSize;
     [SerializeField] protected float maxSize;
     [Tooltip("The constant by which the scale is multiplied to get the appropriate y position of the object.")]

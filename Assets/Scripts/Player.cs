@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
             TryDropItem();
         if (Input.GetKeyDown(KeyCode.I))
-            AllItems();
+            PrintChunk();
 
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
     }
 
     // @TODO: Debug method to check chunks
-    private void AllItems()
+    private void PrintChunk()
     {
         ChunkHandler.GetChunk(transform.position).PrintFeatures();
     }
@@ -86,22 +86,29 @@ public class Player : MonoBehaviour
     private void TryPickupItem()
     {
         Collider[] results = new Collider[5];
-        ItemObject item = null;
+        Collider feature = null;
         int num = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, results);
         for (int i = 0; i < num; i++)
         {
-            if (results[i].tag == "Item")
+            if (results[i].tag == "Item" || results[i].tag == "Harvestable")
             {
-                item = results[i].GetComponent<ItemObject>();
+                feature = results[i];
                 break;
             }
         }
-        if (item == null)
+        if (feature == null)
             return;
 
-        if (INVENTORY.addItem(item.getId()))
+
+        if (feature.tag == "Item")
         {
-            item.Pickup(transform.position + new Vector3(0, 1f, 0));
+            ItemObject item = feature.GetComponent<ItemObject>();
+            if (INVENTORY.addItem(item.GetID()))
+                item.Pickup(transform.position + new Vector3(0, 1f, 0));
+        }
+        else
+        {
+            feature.GetComponent<WorldObject>().Harvest();
         }
     }
 

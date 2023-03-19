@@ -5,6 +5,7 @@
 		{ "Item1": "diamond", "Item2": 0.000003 },
 		{ "Item1": "stalagmite", "Item2": 3 },
 		{ "Item1": "tyranite", "Item2": 3 },
-		{ "Item1": "gold_piece", "Item2": 0.000002 }
+		{ "Item1": "gold_piece", "Item2": 0.000002 },
+		{ "Item1": "mushroom", "Item2": 0.3 }
 	]
 }

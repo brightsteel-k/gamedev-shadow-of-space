@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class ResizableObject : WorldObject
 {
-
     [Tooltip("Length equal to the number of textures for this asset.\n" +
              "Found in Resources/Textures/Features")]
-    [SerializeField] protected float[] baseHeights;
+    [SerializeField] protected Vector3[] texturePositions;
     protected int spriteId;
 
     public override WorldObject Place(List<WorldObject> registry)
     {
-        transform.position = new Vector3(transform.position.x, baseHeights[spriteId], transform.position.z);
+        sprite.transform.localPosition = texturePositions[spriteId];
         return base.Place(registry);
     }
 
     public override void InitSprite()
     {
         base.InitSprite();
-        spriteId = baseHeights.Length - 1;
+        spriteId = texturePositions.Length - 1;
         if (spriteId > 0)
         {
             spriteId = Random.Range(0, spriteId + 1);
-            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
+            sprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/Features/" + id + "_" + spriteId);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Harvest()
     {
-        
+        tag = "Untagged";
+        sprite.transform.LeanMoveLocalY(-1.5f, 0.3f).setOnComplete(e => Remove());
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawIcon(transform.position, "Rigidbody Gizmo.tiff", false);
     }
 }

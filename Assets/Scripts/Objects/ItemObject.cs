@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ItemObject : WorldObject
 {
-    [SerializeField] protected GameObject sprite;
     protected float size = 0.25f;
     private bool isGrounded = false;
     private Rigidbody rb;

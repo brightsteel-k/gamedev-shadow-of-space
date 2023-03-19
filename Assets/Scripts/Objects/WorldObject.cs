@@ -6,6 +6,8 @@ public abstract class WorldObject : Rotatable
 {
     protected List<WorldObject> chunkRegistry;
     [SerializeField] protected string id;
+    [SerializeField] protected GameObject sprite;
+    [SerializeField] protected bool harvestable;
 
     public virtual WorldObject Place(List<WorldObject> registry)
     {
@@ -21,7 +23,7 @@ public abstract class WorldObject : Rotatable
 
     public virtual void InitSprite()
     {
-        textureObject = gameObject;
+        textureObject = sprite;
         InitRotation();
     }
 
@@ -39,9 +41,14 @@ public abstract class WorldObject : Rotatable
         Destroy(gameObject);
     }
     
-    public virtual string getId()
+    public virtual string GetID()
     {
         return id;
+    }
+
+    public virtual void Harvest()
+    {
+        Remove();
     }
 
     public virtual void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first

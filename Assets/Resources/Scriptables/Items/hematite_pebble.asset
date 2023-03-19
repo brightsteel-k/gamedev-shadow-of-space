@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Hematite
   id: hematite_pebble
-  sprite: {fileID: 21300000, guid: a674f94bcb65f8b49be45bca808f7deb, type: 3}
+  sprite: {fileID: 21300000, guid: f05e7e7f1b2663048bed456883d00ece, type: 3}

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Diamond
   id: diamond
-  sprite: {fileID: 21300000, guid: 08c91a7677e66844281a99aaf6ea36f1, type: 3}
+  sprite: {fileID: 21300000, guid: 9f84ee62956989e4f839fa7dbdd88730, type: 3}

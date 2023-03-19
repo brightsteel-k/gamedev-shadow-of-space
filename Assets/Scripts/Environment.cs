@@ -50,6 +50,9 @@ public class Environment : MonoBehaviour
                 case "diamond":
                     AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
+                case "mushroom":
+                    AddClusteredFeature(allFeatures, posIn, f.Item1, f.Item2);
+                    break;
                 case "stalagmite":
                     AddStalagmites(allFeatures, posIn, "hematite_stalagmite", f.Item2, "hematite_pebble", 3);
                     break;
@@ -63,14 +66,13 @@ public class Environment : MonoBehaviour
         }
     }
 
+    
     public static void AddSmallFeatures(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
     {
         for (int k = 0; k < count; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
-            feature.InitSprite();
-            feature.Place(allFeatures);
+            PlaceFeature(allFeatures, pos, obj);
         }
     }
 
@@ -83,6 +85,19 @@ public class Environment : MonoBehaviour
             PlaceItem(allFeatures, pos, obj);
         }
     }
+    public static void AddClusteredFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance)
+    {
+        if (RandomGen.Range(0f, 1f) > abundance)
+        {
+            Vector3 centre = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
+            int c = RandomGen.Mercury(3);
+            for (int k = 0; k < c; k++)
+            {
+                Vector3 pos = RandomGen.GetPos(GenType.Dense, centre.x, centre.z);
+                PlaceFeature(allFeatures, pos, obj);
+            }
+        }
+    }
 
     public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count, string pebbleId, int pebbleCount)
     {
@@ -90,9 +105,7 @@ public class Environment : MonoBehaviour
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
-            WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
-            feature.InitSprite();
-            feature.Place(allFeatures);
+            PlaceFeature(allFeatures, pos, obj);
             AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
         }
     }
@@ -107,6 +120,12 @@ public class Environment : MonoBehaviour
         }
     }
 
+    public static void PlaceFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj)
+    {
+        WorldObject feature = Instantiate(WORLD_OBJECTS[obj], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
+        feature.InitSprite();
+        feature.Place(allFeatures);
+    }
     public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, string id)
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();

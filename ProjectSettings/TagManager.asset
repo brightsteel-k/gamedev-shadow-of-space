@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Breakable
   - Item
+  - Harvestable
   layers:
   - Default
   - TransparentFX
