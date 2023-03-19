@@ -10,8 +10,10 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    // All item objects in the game
+    public static Dictionary<string, Item> ALL_ITEMS;
     //List of currently held items.
-    public List<Item> items;
+    public List<Item> items = new List<Item>();
     
     //To work with the UI, it must be connected to an inventory bar.
     public InvBar itemBar;
@@ -19,35 +21,53 @@ public class Inventory : MonoBehaviour
     //To see which items are selected.
     private ItemSelector select;
     //The bar lenght determines how many items can be held.
-    private int barLength;
-    public Item noItem;
+    public int barLength;
     //Gets the bar
     void Start()
     {
         select = itemBar.selector;
-        barLength = select.invSize;
         updateBar();
+        initializeItems();
+    }
+
+    // Maps all item objects in the Scriptables/Items folder to their IDs
+    private void initializeItems()
+    {
+        if (ALL_ITEMS != null)
+            return;
+        Item[] itemsArray = Resources.LoadAll<Item>("Scriptables/Items");
+        ALL_ITEMS = new Dictionary<string, Item>();
+        foreach (Item i in itemsArray)
+        {
+            ALL_ITEMS.Add(i.id, i);
+        }
     }
     
+    // Adds given item object to inventory
     public bool addItem(Item item)
     {
         if (items.Count >= barLength)
-        {
             return false;
-        }
+
         //Adds to the end of the list (bottom of inventory)
         items.Add(item);
         updateBar();
 
         return true;
     }
+
+    // Adds item to inventory by ID
+    public bool addItem(string item)
+    {
+        return addItem(ALL_ITEMS[item]);
+    }
     
     //Returns which item is selected
     public Item getSelectedItem()
     {
-        if (select.pos > items.Count)
+        if (select.pos >= items.Count)
         {
-            return noItem;
+            return null;
         }
         
         return items[select.pos];
@@ -57,9 +77,9 @@ public class Inventory : MonoBehaviour
     //Removes item selected by the selector
     public Item removeSelectedItem()
     {
-        if (select.pos > items.Count)
+        if (select.pos >= items.Count)
         {
-            return noItem;
+            return null;
         }
         
         Item toRemove = items[select.pos];
@@ -73,7 +93,7 @@ public class Inventory : MonoBehaviour
     //Removes item at given position;
     public Item removeItemAt(int position)
     {
-        if (items.Count <= position)
+        if (position >= items.Count)
         {
             return null;
         }
@@ -129,7 +149,7 @@ public class Inventory : MonoBehaviour
         int count = num;
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].type == toRemove.type)
+            if (items[i].id == toRemove.id)
             {
                 num--;
                 items.RemoveAt(i);
@@ -150,7 +170,7 @@ public class Inventory : MonoBehaviour
         int count = 0;
         foreach (Item held in items)
         {
-            if (held.type == item.type)
+            if (held.id == item.id)
             {
                 count += 1;
             }

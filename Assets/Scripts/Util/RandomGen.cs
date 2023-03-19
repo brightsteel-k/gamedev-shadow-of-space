@@ -25,9 +25,9 @@ public class RandomGen
         return new Vector3(x, 0.0f, y) + relative;
     }
 
-    public static int GetCountFromRarity(float rarity, int degree)
+    public static int GetCountFromAbundance(float abundance, int degree)
     {
-        return Mathf.FloorToInt(rarity * (Mathf.Pow(Random.Range(1, 101), degree)));
+        return Mathf.FloorToInt(abundance * (Mathf.Pow(Random.Range(1, 101), degree)));
     }
 
     public static int GetCountFiftyPercent(float count)

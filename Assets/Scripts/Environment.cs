@@ -12,7 +12,7 @@ public class Environment : MonoBehaviour
 
     private void Awake()
     {
-        LeanTween.init(800);
+        
     }
 
     // Start is called before the first frame update
@@ -40,13 +40,13 @@ public class Environment : MonoBehaviour
 
     }
 
-    public static WorldObject[] PopulateChunk(Vector3 posIn, List<(string, float)> features)
+    public static void PopulateChunk(Vector3 posIn, List<(string, float)> toAdd, List<WorldObject> allFeatures)
     {
-        List<WorldObject> allFeatures = new List<WorldObject>();
-        foreach ((string, float) f in features)
+        foreach ((string, float) f in toAdd)
         {
             switch (f.Item1)
             {
+                case "gold":
                 case "diamond":
                     AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
                     break;
@@ -61,7 +61,6 @@ public class Environment : MonoBehaviour
                     break;
             }
         }
-        return allFeatures.ToArray();
     }
 
     public static void AddSmallFeatures(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count)
@@ -71,13 +70,13 @@ public class Environment : MonoBehaviour
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
             WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, spriteTilt, INSTANCE.transform).GetComponent<WorldObject>();
             feature.InitSprite();
-            allFeatures.Add(feature.Place());
+            feature.Place(allFeatures);
         }
     }
 
-    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float rarity, int degree)
+    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance, int degree)
     {
-        int c = RandomGen.GetCountFromRarity(rarity, degree);
+        int c = RandomGen.GetCountFromAbundance(abundance, degree);
         for (int k = 0; k < c; k++)
         {
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
@@ -93,7 +92,7 @@ public class Environment : MonoBehaviour
             Vector3 pos = RandomGen.GetPos(GenType.NaiveRandom, posIn.x, posIn.z);
             WorldObject feature = Instantiate(WORLD_OBJECTS[obj], pos, Quaternion.identity, INSTANCE.transform).GetComponent<WorldObject>();
             feature.InitSprite();
-            allFeatures.Add(feature.Place());
+            feature.Place(allFeatures);
             AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
         }
     }
@@ -112,7 +111,7 @@ public class Environment : MonoBehaviour
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
         feature.InitItem(id, ItemTextures.GetItemSize(id));
-        allFeatures.Add(feature.Place());
+        feature.Place(allFeatures);
     }
 
     public static void DropItem(string item, Vector3 posIn)

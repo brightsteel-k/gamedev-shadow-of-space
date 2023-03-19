@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class Player : MonoBehaviour
 {
     public static Player WORLD_PLAYER;
+    public static Inventory INVENTORY;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         CONTROLLER = GetComponent<CharacterController>();
+        INVENTORY = GetComponent<Inventory>();
         animations = GetComponent<PlayerAnimation>();
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
@@ -49,12 +51,17 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (pivotCooldown != 0)
-        {
             TickPivotCooldown();
-        }
-
-        PlayerRotateInput();
+        if (!inMenu)
+            PlayerRotateInput();
         CheckCurrentTile();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            TryPickupItem();
+        if (Input.GetKeyDown(KeyCode.Q))
+            TryDropItem();
+        if (Input.GetKeyDown(KeyCode.I))
+            AllItems();
 
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -62,39 +69,64 @@ public class Player : MonoBehaviour
             int num = Physics.OverlapSphereNonAlloc(transform.position, 3f, results);
             for (int i = 0; i < num; i++)
             {
-                Debug.Log(results[i].transform.name);
                 if (results[i].tag == "Breakable")
                 {
                     results[i].transform.GetComponent<LargeObject>().BreakObject();
                 }
             }
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+    // @TODO: Debug method to check chunks
+    private void AllItems()
+    {
+        ChunkHandler.GetChunk(transform.position).PrintFeatures();
+    }
+
+    private void TryPickupItem()
+    {
+        Collider[] results = new Collider[5];
+        ItemObject item = null;
+        int num = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, results);
+        for (int i = 0; i < num; i++)
         {
-            Environment.DropItem("hematite_pebble", transform.position + new Vector3(0, 0.5f, 0));
+            if (results[i].tag == "Item")
+            {
+                item = results[i].GetComponent<ItemObject>();
+                break;
+            }
         }
+        if (item == null)
+            return;
+
+        if (INVENTORY.addItem(item.getId()))
+        {
+            item.Pickup(transform.position + new Vector3(0, 1f, 0));
+        }
+    }
+
+    private void TryDropItem()
+    {
+        Item currentItem = INVENTORY.getSelectedItem();
+        if (currentItem != null)
+        {
+            Environment.DropItem(currentItem.id, transform.position + new Vector3(0, 0.5f, 0));
+            INVENTORY.removeSelectedItem();
+        }
+
     }
 
     private void PlayerRotateInput()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Added !inMenu to stop the mouse from being locked for this stuff, may need to be removed.
-            //#Crafting System change 
-            if (!inMenu)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = false;
-            }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
         }
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            if (!inMenu)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                mouseInput = 0;
-            }
+            Cursor.lockState = CursorLockMode.Locked;
+            mouseInput = 0;
         }
         else if (mouseCentrePos - Input.mousePosition.x > mouseThreshold)
         {
@@ -138,13 +170,9 @@ public class Player : MonoBehaviour
         animations.RotateCamera(clockwise);
 
         if (clockwise)
-        {
             CAMERA_ROTATION = CAMERA_ROTATION == 0 ? 7 : CAMERA_ROTATION - 1;
-        }
         else
-        {
             CAMERA_ROTATION = CAMERA_ROTATION == 7 ? 0 : CAMERA_ROTATION + 1;
-        }
     }
 
     private void FixedUpdate()

@@ -7,8 +7,9 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New Item", menuName = "Crafting/Item")]
 public class Item : ScriptableObject
 {
-    //Maybe better to use enums?
-    public string type;
+    public string displayName;
+
+    public string id;
 
     public Sprite sprite;
     

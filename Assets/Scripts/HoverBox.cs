@@ -40,7 +40,7 @@ public class HoverBox : MonoBehaviour
             comp = Instantiate(componentPrefab, hover);
             ComponentUI compUI = comp.GetComponent<ComponentUI>();
 
-            compUI.setValues(item.item.sprite, item.item.type, item.amount.ToString(), inv.countIn(item.item).ToString()); 
+            compUI.setValues(item.item.sprite, item.item.id, item.amount.ToString(), inv.countIn(item.item).ToString()); 
         }
             
     }

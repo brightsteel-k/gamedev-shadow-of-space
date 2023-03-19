@@ -8,6 +8,7 @@ public class ItemObject : WorldObject
     protected float size = 0.25f;
     private bool isGrounded = false;
     private Rigidbody rb;
+    private SphereCollider sphereCollider;
     float physHeight;
 
     // Start is called before the first frame update
@@ -34,6 +35,7 @@ public class ItemObject : WorldObject
     public void InitItem(string itemId, float itemSize)
     {
         rb = GetComponent<Rigidbody>();
+        sphereCollider = GetComponent<SphereCollider>();
         id = itemId;
         size = itemSize;
         InitSprite();
@@ -44,11 +46,18 @@ public class ItemObject : WorldObject
         sprite.GetComponent<SpriteRenderer>().sprite = img;
     }
 
-    public override WorldObject Place()
+    public void Pickup(Vector3 playerPos)
+    {
+        sphereCollider.enabled = false;
+        tag = "Untagged";
+        transform.LeanMove(playerPos, 0.1f).setOnComplete(e => Remove());
+    }
+
+    public override WorldObject Place(List<WorldObject> registry)
     {
         transform.position = new Vector3(transform.position.x, physHeight, transform.position.z);
         isGrounded = true;
         rb.isKinematic = true;
-        return this;
+        return base.Place(registry);
     }
 }

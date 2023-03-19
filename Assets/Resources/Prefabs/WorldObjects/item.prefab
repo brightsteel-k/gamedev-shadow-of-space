@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 767937704850736143}
   - component: {fileID: 767937704850736142}
   - component: {fileID: 767937704850736136}
+  - component: {fileID: 7348200877821089034}
   m_Layer: 0
   m_Name: item
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,6 +65,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: item
   sprite: {fileID: 6910473108946479428}
+--- !u!135 &7348200877821089034
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767937704850736141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6910473108946479428
 GameObject:
   m_ObjectHideFlags: 0

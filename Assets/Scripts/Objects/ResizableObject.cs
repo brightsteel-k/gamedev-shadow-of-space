@@ -10,10 +10,10 @@ public class ResizableObject : WorldObject
     [SerializeField] protected float[] baseHeights;
     protected int spriteId;
 
-    public override WorldObject Place()
+    public override WorldObject Place(List<WorldObject> registry)
     {
         transform.position = new Vector3(transform.position.x, baseHeights[spriteId], transform.position.z);
-        return this;
+        return base.Place(registry);
     }
 
     public override void InitSprite()

@@ -4,11 +4,19 @@ using UnityEngine;
 
 public abstract class WorldObject : Rotatable
 {
+    protected List<WorldObject> chunkRegistry;
     [SerializeField] protected string id;
 
-    public virtual WorldObject Place()
+    public virtual WorldObject Place(List<WorldObject> registry)
     {
+        registry.Add(this);
+        SetChunkRegistry(registry);
         return this;
+    }
+
+    public virtual void SetChunkRegistry(List<WorldObject> registry)
+    {
+        chunkRegistry = registry;
     }
 
     public virtual void InitSprite()
@@ -26,7 +34,14 @@ public abstract class WorldObject : Rotatable
     public virtual void Remove()
     {
         RemoveRotation();
+        if (!chunkRegistry.Remove(this))
+            Debug.LogWarning("Unregistered WorldObject trying to be removed from its ChunkRegistry: " + name);
         Destroy(gameObject);
+    }
+    
+    public virtual string getId()
+    {
+        return id;
     }
 
     public virtual void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first

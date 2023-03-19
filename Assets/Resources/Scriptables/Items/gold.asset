@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3709e85632523224ba62fd0e45d69926, type: 3}
-  m_Name: noItem
+  m_Name: gold
   m_EditorClassIdentifier: 
-  type: noItem
-  sprite: {fileID: 0}
+  displayName: Diamond
+  id: diamond
+  sprite: {fileID: 21300000, guid: 08c91a7677e66844281a99aaf6ea36f1, type: 3}

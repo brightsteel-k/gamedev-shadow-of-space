@@ -83,6 +83,36 @@ public class StygianStalker : Rotatable
         BeginCircling();
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!corporeal)
+            return;
+
+        switch (other.tag)
+        {
+            case "Breakable":
+                BreakThroughObject(other.GetComponent<LargeObject>());
+                break;
+            case "Player":
+                AttackPlayer(other.GetComponent<Player>());
+                break;
+            case "MobileFlare":
+                BeginFleeing(other.transform.position);
+                break;
+        }
+    }
+
+    void BreakThroughObject(LargeObject largeObject)
+    {
+        largeObject.BreakObject();
+    }
+
+    void AttackPlayer(Player player)
+    {
+
+    }
+
     // STALKING = = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF STALKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = STALKING
 
     void BeginCircling()
@@ -173,14 +203,6 @@ public class StygianStalker : Rotatable
         StartCoroutine("Recuperate");
     }
 
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "MobileFlare")
-        {
-            BeginFleeing(other.transform.position);
-        }
-    }
 
     private IEnumerator UpdatePlayerLocation()
     {

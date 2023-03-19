@@ -22,7 +22,7 @@ public class Chunk
 
     void InitChunk()
     {
-        features.AddRange(Environment.PopulateChunk(worldPos, biome.Features));
+        Environment.PopulateChunk(worldPos, biome.Features, features);
 
         initialized = true;
         active = true;
@@ -50,5 +50,18 @@ public class Chunk
     public void AddFeature(WorldObject feature)
     {
         features.Add(feature);
+        feature.SetChunkRegistry(features);
+    }
+
+    // @TODO: Debug method to check chunks
+    public void PrintFeatures()
+    {
+        string s = "Features:";
+        foreach (WorldObject f in features)
+        {
+            s += "\n" + f.name;
+        }
+        s += "\nCount: " + features.Count;
+        Debug.Log(s);
     }
 }

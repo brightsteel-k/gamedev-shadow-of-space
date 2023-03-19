@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3709e85632523224ba62fd0e45d69926, type: 3}
-  m_Name: Glow Worm
+  m_Name: tyranite_pebble
   m_EditorClassIdentifier: 
-  type: Glow Worm
-  sprite: {fileID: 21300000, guid: dc6007dead3389844a173e6284826693, type: 3}
+  displayName: Tyranite
+  id: tyranite_pebble
+  sprite: {fileID: 21300000, guid: a674f94bcb65f8b49be45bca808f7deb, type: 3}

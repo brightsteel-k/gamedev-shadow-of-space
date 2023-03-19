@@ -74,7 +74,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         selectedRecipe = recipe;
         Item result = selectedRecipe.created;
         icon.sprite = result.sprite;
-        recipeName.text = result.name;
+        recipeName.text = result.displayName;
 
         if (inv.canMakeRecipe(recipe))
         {

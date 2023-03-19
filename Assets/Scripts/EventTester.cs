@@ -47,7 +47,7 @@ public class EventTester : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Debug.Log(inv.getSelectedItem().type);
+            Debug.Log(inv.getSelectedItem().id);
             
         }
 

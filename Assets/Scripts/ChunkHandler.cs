@@ -7,7 +7,7 @@ public class ChunkHandler : MonoBehaviour
 {
     public static Tilemap TILES;
     public static Chunk[,] WORLD;
-    static int LOAD_RADIUS = 3;
+    static int LOAD_RADIUS = 2;
     static int X_BOUND = 30;
     static int Z_BOUND = 30;
     static bool CHUNK_HANDLING = true;
@@ -16,6 +16,7 @@ public class ChunkHandler : MonoBehaviour
     void Start()
     {
         TILES = GetComponent<Tilemap>();
+        LeanTween.init(1000);
 
         Environment.InitBiomes();
         BuildWorld();
