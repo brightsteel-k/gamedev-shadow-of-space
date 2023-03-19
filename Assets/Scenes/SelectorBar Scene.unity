@@ -39059,7 +39059,7 @@ MonoBehaviour:
   resourceBarPrefab: {fileID: 750490353877387418, guid: d1972e5ce445e314287e4538ebf8a138,
     type: 3}
   canvas: {fileID: 880849070}
-  offset: {x: 140, y: -20}
+  offset: {x: -140, y: 20}
 --- !u!1 &1072503248
 GameObject:
   m_ObjectHideFlags: 0
