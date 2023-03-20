@@ -51,7 +51,7 @@ public class Environment : MonoBehaviour
                     AddTyraniteChunk(allFeatures, f.Item2, posIn, tilePos);
                     break;
                 case "stalagmite":
-                    AddStalagmites(allFeatures, posIn, "hematite_stalagmite", f.Item2, "hematite_pebble", 3);
+                    AddStalagmites(allFeatures, posIn, "hematite_stalagmite", RandomGen.GetCountFiftyPercent(f.Item2), "hematite_pebble", 3);
                     break;
                 case "mushroom":
                     AddClusteredFeature(allFeatures, posIn, f.Item1, f.Item2);
@@ -71,8 +71,8 @@ public class Environment : MonoBehaviour
     {
         if (!RandomGen.ShouldChunkFeatureGenerate(tilePos, 17, 14, 23))
             return;
-        AddStalagmites(allFeatures, posIn, "tyranite", count, "tyranite_pebble", 0);
-        AddSmallItems(allFeatures, posIn, "tyranite_pebble", 8);
+        AddStalagmites(allFeatures, posIn, "tyranite", RandomGen.Range(2, (int)count), "tyranite_pebble", 0);
+        AddSmallItems(allFeatures, posIn, "tyranite_pebble", RandomGen.Mercury(8)); 
         
     }
     
@@ -138,9 +138,8 @@ public class Environment : MonoBehaviour
         }
     }
 
-    public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, float count, string pebbleId, int pebbleCount)
+    public static void AddStalagmites(List<WorldObject> allFeatures, Vector3 posIn, string obj, int c, string pebbleId, int pebbleCount)
     {
-        int c = RandomGen.GetCountFiftyPercent(count);
         for (int k = 0; k < c; k++)
         {
             try
@@ -173,9 +172,9 @@ public class Environment : MonoBehaviour
         }
     }
 
-    public static void AddSmallItems(List<WorldObject> allFeatures, Vector3 posIn, string item, int count)
+    public static void AddSmallItems(List<WorldObject> allFeatures, Vector3 posIn, string item, int c)
     {
-        for (int k = 0; k < count; k++)
+        for (int k = 0; k < c; k++)
         {
             try
             {

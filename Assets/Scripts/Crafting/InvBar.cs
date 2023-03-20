@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class InvBar : MonoBehaviour
 {
+    private static float SCALE;
     public List<Image> images;
 
     public ItemSelector selector;
@@ -11,7 +12,7 @@ public class InvBar : MonoBehaviour
     public Sprite empty;
     
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         adjustSize();
     }
@@ -19,10 +20,15 @@ public class InvBar : MonoBehaviour
     // Deals with logic for resizing to fit screen
     void adjustSize()
     {
-        float barHeight = Screen.height - 60;
-        float scale = barHeight / 545f;
+        float barHeight = Screen.height - 20;
+        SCALE = barHeight / 545f;
 
-        transform.localScale = new Vector3(scale, scale, scale);
+        transform.localScale = new Vector3(SCALE, SCALE, SCALE);
+    }
+
+    public static float GetScale()
+    {
+        return SCALE;
     }
 
 

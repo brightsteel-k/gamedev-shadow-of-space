@@ -40,19 +40,19 @@ public class MassiveObject : LargeObject
 
         if ((initDirection + camRotation) % 8 == 0)
         {
-            spriteRenderer.sprite = textures[0];
+            LeanTween.delayedCall(0.05f, e => spriteRenderer.sprite = textures[0]);
         }
         else if ((initDirection + camRotation) % 8 < 4 && (initDirection + camRotation) % 8 > 0)
         {
-            spriteRenderer.sprite = textures[1];
+            LeanTween.delayedCall(0.05f, e => spriteRenderer.sprite = textures[1]);
         }
         else if ((initDirection + camRotation) == 4)
         {
-            spriteRenderer.sprite = textures[2];
+            LeanTween.delayedCall(0.05f, e => spriteRenderer.sprite = textures[2]);
         }
         else
         {
-            spriteRenderer.sprite = textures[3];
+            LeanTween.delayedCall(0.05f, e => spriteRenderer.sprite = textures[3]);
         }
         // Debug.Log("CAMERA_ROTATION: " + camRotation + ", Direction Offset: " + directionOffset + ", New Direction: " + newDirection);
     }

@@ -7,7 +7,6 @@ public abstract class WorldObject : Rotatable
     protected List<WorldObject> chunkRegistry;
     [SerializeField] protected string id;
     [SerializeField] protected GameObject sprite;
-    [SerializeField] protected bool harvestable;
 
     protected override void Start()
     {

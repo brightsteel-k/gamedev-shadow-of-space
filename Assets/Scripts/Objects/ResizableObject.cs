@@ -26,11 +26,13 @@ public class ResizableObject : WorldObject
         }
     }
 
+    // Only called if the object has the Harvestable tag and a ParticleSystem
     public override void Harvest()
     {
         tag = "Untagged";
-        // @TODO: Particles
-        Remove();
+        sprite.SetActive(false);
+        GetComponent<ParticleSystem>().Play();
+        LeanTween.delayedCall(2f, Remove);
     }
 
     private void OnDrawGizmos()

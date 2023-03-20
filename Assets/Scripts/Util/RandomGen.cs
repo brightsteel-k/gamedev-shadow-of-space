@@ -37,9 +37,7 @@ public class RandomGen
 
     public static bool ShouldChunkFeatureGenerate(Vector3Int chunk, int multiplier, int increment, int modulus)
     {
-        bool b = (multiplier * chunk.x * chunk.z + increment) % modulus == 0;
-        Debug.Log("(" + chunk.x + ", " + chunk.z + "): " + b);
-        return b;
+        return (multiplier * chunk.x * chunk.z + increment) % modulus == 0;
     }
 
     public static Vector3 ChunkPos(float x, float z, bool round)
@@ -90,6 +88,11 @@ public class RandomGen
     public static float Range(float a, float b)
     {
         return Random.Range(a, b);
+    }
+
+    public static int Range(int a, int b)
+    {
+        return Random.Range(a, b + 1);
     }
 
     public static Vector3 DropItemMomentum()    

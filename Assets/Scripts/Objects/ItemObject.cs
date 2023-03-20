@@ -52,7 +52,7 @@ public class ItemObject : WorldObject
     {
         sphereCollider.enabled = false;
         tag = "Untagged";
-        transform.LeanMove(playerPos, 0.1f).setOnComplete(e => Remove());
+        transform.LeanMove(playerPos, 0.1f).setOnComplete(Remove);
     }
 
     public Item GetItem()
