@@ -26,9 +26,7 @@ public class EventTester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            
-            hp.addHealth(30);
-            en.draining = true;
+            Debug.Log(Player.WORLD_PLAYER.inMenu);
         }
 
         //Test should print "true"

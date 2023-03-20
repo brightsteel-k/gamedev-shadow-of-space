@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5554734453603772275}
   - component: {fileID: 5554734453603772272}
   - component: {fileID: 1972462502666963233}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: hematite_stalagmite
   m_TagString: Breakable
   m_Icon: {fileID: 0}

@@ -34,8 +34,6 @@ public class Inventory : MonoBehaviour
     // Maps all item objects in the Scriptables/Items folder to their IDs
     private void initializeItems()
     {
-        if (ALL_ITEMS != null)
-            return;
         Item[] itemsArray = Resources.LoadAll<Item>("Scriptables/Items");
         ALL_ITEMS = new Dictionary<string, Item>();
         foreach (Item i in itemsArray)

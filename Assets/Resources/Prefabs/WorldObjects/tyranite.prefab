@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 9057451874785621597}
   - component: {fileID: 9057451874785621550}
   - component: {fileID: 9057451874785621537}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tyranite
   m_TagString: Breakable
   m_Icon: {fileID: 0}

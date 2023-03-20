@@ -182,7 +182,7 @@ public class Environment : MonoBehaviour
                 PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[item]);
             }
             catch (CancelledChunkPosException e)
-            {
+            {   
                 continue;
             }
         }

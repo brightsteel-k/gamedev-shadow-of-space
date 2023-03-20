@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
-    public GameObject mainCamera;
+    public static GameObject MAIN_CAMERA;
     private PlayerAnimation animations;
 
     [SerializeField] private float speed;
@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
         INVENTORY = GetComponent<Inventory>();
         ENERGY = GetComponent<Energy>();
         animations = GetComponent<PlayerAnimation>();
+        MAIN_CAMERA = transform.Find("Main Camera").gameObject;
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
         Cursor.visible = false;
@@ -208,6 +209,25 @@ public class Player : MonoBehaviour
             CAMERA_ROTATION = CAMERA_ROTATION == 0 ? 7 : CAMERA_ROTATION - 1;
         else
             CAMERA_ROTATION = CAMERA_ROTATION == 7 ? 0 : CAMERA_ROTATION + 1;
+    }
+
+    public Vector3 GetDirection()
+    {
+        //Debug.Log("Anim: " + animations.direction + ", Rotation: " + CAMERA_ROTATION + ", Combined: " + );
+        //return Vector3.zero;
+        
+        int dir = (animations.direction * 2 - CAMERA_ROTATION + 8) % 8;
+        Vector3 finalDirection = Vector3.zero;
+        if (0 <= dir && dir <= 1 || dir == 7)
+            finalDirection = finalDirection + Vector3.right;
+        if (1 <= dir && dir <= 3)
+            finalDirection = finalDirection + Vector3.back;
+        if (3 <= dir && dir <= 5)
+            finalDirection = finalDirection + Vector3.left;
+        if (5 <= dir && dir <= 7)
+            finalDirection = finalDirection + Vector3.forward;
+        
+        return finalDirection.normalized;
     }
 
     private void FixedUpdate()

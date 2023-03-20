@@ -10,7 +10,7 @@ public class PlayerAnimation : MonoBehaviour
     Sprite[] idleSprites = new Sprite[3];
     private bool moving = false;
     private int[] inputs = new int[] { 0, 0 };
-    private int direction = 2;
+    public int direction = 2;
     private int camDirectionOffset = 0;
     private AnimationState currentState = AnimationState.Idle;
 
