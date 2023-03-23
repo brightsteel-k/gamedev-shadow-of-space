@@ -30,11 +30,15 @@ public class Inventory : MonoBehaviour
     //The bar lenght determines how many items can be held.
     public int barLength;
     //Gets the bar
+
+    private void Awake()
+    {
+        initializeItems();
+    }
     void Start()
     {
         select = itemBar.selector;
         updateBar();
-        initializeItems();
     }
 
     // Maps all item objects in the Scriptables/Items folder to their IDs
@@ -157,7 +161,6 @@ public class Inventory : MonoBehaviour
         foreach (Recipe.Pair1 pair in recipe.needed)
         {
             remove(pair.item, pair.amount);
-
         }
         
        
@@ -220,7 +223,8 @@ public class Inventory : MonoBehaviour
     public void updateBar()
     {
         itemBar.updateBar(items);
-        craftUI.show();
+        //craftUI.show();
+        Player.WORLD_PLAYER.UpdateSelectedItem();
     }
     
 }

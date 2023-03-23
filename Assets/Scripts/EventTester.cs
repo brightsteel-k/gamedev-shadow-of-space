@@ -28,7 +28,7 @@ public class EventTester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            Debug.Log(Player.WORLD_PLAYER.inMenu);
+            Debug.Log(Player.IN_MENU);
         }
 
         //Test should print "true"
@@ -47,10 +47,15 @@ public class EventTester : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
             Item battery = ScriptableObject.CreateInstance<Item>().Initialize(Inventory.ALL_ITEMS["battery"], ("power", 80));
             Player.INVENTORY.addItem(battery);
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            Player.INVENTORY.addItem(Inventory.ALL_ITEMS["drill"]);
         }
 
         if (Input.GetKeyDown(KeyCode.O))

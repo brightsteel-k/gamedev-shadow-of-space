@@ -11,6 +11,8 @@ public class LargeObject : WorldObject
 
     [Header("Breakability")]
     [SerializeField] private string smallRock;
+    [SerializeField] private GameObject breakParticles;
+    public float breakTime;
 
     protected float size;
 
@@ -38,5 +40,10 @@ public class LargeObject : WorldObject
             Environment.DropItem(smallRock, dropPos);
         }
         Remove();
+    }
+
+    public GameObject GetBreakParticles()
+    {
+        return breakParticles;
     }
 }

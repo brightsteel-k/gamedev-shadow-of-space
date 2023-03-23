@@ -102,6 +102,8 @@ public class ItemSelector : MonoBehaviour
         {
             setInstructionsText("", "");
         }
+
+        Player.WORLD_PLAYER.UpdateSelectedItem();
     }
 
     private void setInstructionsText(string id, string text)

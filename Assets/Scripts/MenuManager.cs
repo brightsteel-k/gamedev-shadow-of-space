@@ -24,7 +24,7 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             CraftingMenu.SetActive(true);
-            player.inMenu = true;
+            Player.IN_MENU = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -34,7 +34,7 @@ public class MenuManager : MonoBehaviour
         {
             CraftingMenu.SetActive(false);
             HoverBox.SetActive(false);
-            player.inMenu = false;
+            Player.IN_MENU = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }

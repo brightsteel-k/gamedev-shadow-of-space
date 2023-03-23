@@ -1315,6 +1315,7 @@ MonoBehaviour:
   en: {fileID: 1264698839}
   inv: {fileID: 1264698841}
   res: {fileID: 0}
+  toAdd: {fileID: 0}
 --- !u!4 &552406723
 Transform:
   m_ObjectHideFlags: 0
@@ -145672,7 +145673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4492771, g: 0.3724101, b: 0.6226415, a: 0.38431373}
+  m_Color: {r: 0.87169814, g: 1, b: 0.9717328, a: 0.38431373}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -146028,6 +146029,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948631085}
   m_CullTransparentMesh: 1
+--- !u!1001 &1053431216
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5554734453603772273, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_Name
+      value: hematite_stalagmite
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.904
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.457
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5554734453603772275, guid: 2748e4f503aac724e953ad4c14402da5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2748e4f503aac724e953ad4c14402da5, type: 3}
 --- !u!1 &1073818577
 GameObject:
   m_ObjectHideFlags: 0
@@ -146150,6 +146220,7 @@ GameObject:
   - component: {fileID: 1264698840}
   - component: {fileID: 1264698841}
   - component: {fileID: 1264698842}
+  - component: {fileID: 1264698843}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -146173,7 +146244,6 @@ MonoBehaviour:
   cameraOffsetRadius: 6
   rotationTime: 0.33
   walkType: 0
-  inMenu: 0
 --- !u!4 &1264698835
 Transform:
   m_ObjectHideFlags: 0
@@ -146289,6 +146359,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+  discovered: []
+  craftUI: {fileID: 0}
   itemBar: {fileID: 2120944558}
   barLength: 12
 --- !u!114 &1264698842
@@ -146307,6 +146379,19 @@ MonoBehaviour:
   museSliderTransform: {fileID: 688009240}
   museText: {fileID: 1587402937}
   iconObject: {fileID: 140589680}
+--- !u!114 &1264698843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264698833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b705df0301ff14c8ff90ceee76f5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedItem: {fileID: 0}
 --- !u!1 &1293415592
 GameObject:
   m_ObjectHideFlags: 0

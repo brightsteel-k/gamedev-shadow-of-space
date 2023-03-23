@@ -91,6 +91,7 @@ public class StygianStalker : Rotatable
 
         switch (other.tag)
         {
+            case "Breaking":
             case "Breakable":
                 BreakThroughObject(other.GetComponent<LargeObject>());
                 break;

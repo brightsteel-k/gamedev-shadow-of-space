@@ -13,7 +13,9 @@ public class Player : MonoBehaviour
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
     public static GameObject MAIN_CAMERA;
+    public static bool IN_MENU = false;
     private PlayerAnimation animations;
+    private ItemOperator itemOperator;
 
     [SerializeField] private float speed;
     private static float pivotCooldown = 1f;
@@ -30,8 +32,6 @@ public class Player : MonoBehaviour
     private int mouseInput = 0;
 
     // Inventory
-    public bool inMenu = false;
-    private Vector3 itemDropOffset = new Vector3(0f, 0.5f, 0f);
     
     private void Awake()
     {
@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
         ENERGY = GetComponent<Energy>();
         animations = GetComponent<PlayerAnimation>();
         MAIN_CAMERA = transform.Find("Main Camera").gameObject;
+        itemOperator = GetComponent<ItemOperator>();
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
         Cursor.visible = false;
@@ -55,52 +56,24 @@ public class Player : MonoBehaviour
     {
         if (pivotCooldown != 0)
             TickPivotCooldown();
-        if (!inMenu)
+        if (!IN_MENU)
             PlayerRotateInput();
         CheckCurrentTile();
 
-        if (Input.GetMouseButtonDown(1) && !inMenu)
-            UseSelectedItem();
+        if (Input.GetMouseButtonDown(1) && !IN_MENU)
+            itemOperator.UseSelectedItem();
         if (Input.GetKeyDown(KeyCode.Space))
             TryPickupItem();
         if (Input.GetKeyDown(KeyCode.Q))
             TryDropItem();
         if (Input.GetKeyDown(KeyCode.I))
             PrintChunk();
-
-        // DEBUG KEY FUNCTIONALITY WITH B
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            ENERGY.SetDrilling(true);
-            Collider[] results = new Collider[5];
-            int num = Physics.OverlapSphereNonAlloc(transform.position, 3f, results);
-            for (int i = 0; i < num; i++)
-            {
-                if (results[i].tag == "Breakable")
-                {
-                    results[i].transform.GetComponent<LargeObject>().BreakObject();
-                }
-            }
-        }
-        if (Input.GetKeyUp(KeyCode.B))
-            ENERGY.SetDrilling(false);
     }
 
     // @TODO: Debug method to check chunks
     private void PrintChunk()
     {
         ChunkHandler.GetChunk(transform.position).PrintFeatures();
-    }
-
-    private void UseSelectedItem()
-    {
-        Item selectedItem = INVENTORY.getSelectedItem();
-        switch(selectedItem.id)
-        {
-            case "battery":
-                SwitchBatteries(selectedItem);
-                break;
-        }
     }
 
     private void TryPickupItem()
@@ -139,17 +112,14 @@ public class Player : MonoBehaviour
         Item currentItem = INVENTORY.getSelectedItem();
         if (currentItem != null)
         {
-            Environment.DropItem(currentItem, transform.position + itemDropOffset);
+            Environment.DropItem(currentItem, transform.position + itemOperator.CentrePos());
             INVENTORY.removeSelectedItem();
         }
-
     }
 
-    private void SwitchBatteries(Item battery)
+    public void UpdateSelectedItem()
     {
-        Item newBattery = ENERGY.SwitchBatteries(battery);
-        INVENTORY.removeSelectedItem();
-        Environment.DropItem(newBattery, transform.position + itemDropOffset);
+        itemOperator.selectedItem = INVENTORY.getSelectedItem();
     }
 
     private void PlayerRotateInput()
