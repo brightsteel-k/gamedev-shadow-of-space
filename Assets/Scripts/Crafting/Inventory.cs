@@ -52,18 +52,29 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (!Player.IN_MENU)
+        {
+            if (Input.mouseScrollDelta.y > 0)
+                itemBar.ShiftSelector(true);
+            else if (Input.mouseScrollDelta.y < 0)
+                itemBar.ShiftSelector(false);
+        }
+    }
+
+    // Returns true if the player knows what this item is
     public bool isDiscovered(Item item)
     {
-        bool known = false;
         foreach (Item desc in discovered)
         {
             if (desc.id == item.id)
             {
-                known = true;
+                return true;
             }
         }
 
-        return known;
+        return false;
     }
     
     // Adds given item object to inventory
@@ -162,9 +173,6 @@ public class Inventory : MonoBehaviour
         {
             remove(pair.item, pair.amount);
         }
-        
-       
-        
         
         updateBar();
         if (!recipe.created.isLiquid)

@@ -18,19 +18,6 @@ public class EventTester : MonoBehaviour
 
     void Update()
     {
-        //Press K to start the tests
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            hp.setHealth(10);
-            en.draining = false;
-            en.setEnergy(80);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Debug.Log(Player.IN_MENU);
-        }
-
         //Test should print "true"
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -58,15 +45,6 @@ public class EventTester : MonoBehaviour
             Player.INVENTORY.addItem(Inventory.ALL_ITEMS["drill"]);
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Debug.Log(res.changeAmount("Carbon", 20));
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log(res.changeAmount("Carbon", -10));
-        }
-        
         if (Input.GetKeyDown(KeyCode.G))
         {
             inv.addItem(toAdd);

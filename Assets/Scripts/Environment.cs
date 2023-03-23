@@ -211,6 +211,7 @@ public class Environment : MonoBehaviour
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
         feature.InitItem(item, ItemTextures.GetItemSize(item.id));
         feature.GetComponent<Rigidbody>().AddForce(RandomGen.DropItemMomentum(), ForceMode.Impulse);
+        Debug.Log("Dropping item at: (" + posIn.x + ", " + posIn.z);
         AddItem(feature, posIn);
     }
 

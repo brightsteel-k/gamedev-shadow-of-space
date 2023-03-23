@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject CraftingMenu;
     public CraftingUI craft;
     public GameObject HoverBox;
     //For the "inMenu" thing.
@@ -23,41 +22,23 @@ public class MenuManager : MonoBehaviour
         //@TODO change this to the key to open the crafting
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if (!CraftingMenu.activeSelf)
-            {
-                CraftingMenu.SetActive(true);
-                Player.IN_MENU = true;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+            if (Player.IN_MENU)
+                SetCraftingMenuActive(false);
             else
-            {
-                CraftingMenu.SetActive(false);
-                Player.IN_MENU = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+                SetCraftingMenuActive(true);
         }
 
         //@TODO use the unity input manager to make this a "cancel". Maybe make it a toggle menu?
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            CraftingMenu.SetActive(false);
-            HoverBox.SetActive(false);
-            Player.IN_MENU = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            craft.SetMenuActive(false);
         }
-        
-        //@TODO change this to key that drops or uses items (for crafting menu)
-        //@TODO maybe instead have it automatically update thru the inventory.
-        if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.U))
-        {
-            craft.show();
-        }
-        //Alternatively, could just do this every fram
-        //craft.show();
- 
     }
  
+    public void SetCraftingMenuActive(bool active)
+    {
+        craft.SetMenuActive(active);
+        MuseSystem.SetMusable(!active);
+        Player.WORLD_PLAYER.SetInMenu(active);
+    }
 }

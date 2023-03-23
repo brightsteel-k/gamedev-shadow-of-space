@@ -56,18 +56,25 @@ public class Player : MonoBehaviour
     {
         if (pivotCooldown != 0)
             TickPivotCooldown();
+
         if (!IN_MENU)
+        {
             PlayerRotateInput();
+            if (Input.GetMouseButtonDown(1))
+                itemOperator.UseSelectedItem();
+            if (Input.GetKeyDown(KeyCode.Space))
+                TryPickupItem();
+            if (Input.GetKeyDown(KeyCode.Q))
+                itemOperator.TryDropSelectedItem();
+        }
+
         CheckCurrentTile();
 
-        if (Input.GetMouseButtonDown(1) && !IN_MENU)
-            itemOperator.UseSelectedItem();
-        if (Input.GetKeyDown(KeyCode.Space))
-            TryPickupItem();
-        if (Input.GetKeyDown(KeyCode.Q))
-            TryDropItem();
+
+        // @TODO: Debug method to check chunks
         if (Input.GetKeyDown(KeyCode.I))
             PrintChunk();
+
     }
 
     // @TODO: Debug method to check chunks
@@ -104,16 +111,6 @@ public class Player : MonoBehaviour
             WorldObject worldObject = feature.GetComponent<WorldObject>();
             if (INVENTORY.addItem(worldObject.GetID()))
                 worldObject.Harvest();
-        }
-    }
-
-    private void TryDropItem()
-    {
-        Item currentItem = INVENTORY.getSelectedItem();
-        if (currentItem != null)
-        {
-            Environment.DropItem(currentItem, transform.position + itemOperator.CentrePos());
-            INVENTORY.removeSelectedItem();
         }
     }
 
@@ -183,9 +180,6 @@ public class Player : MonoBehaviour
 
     public Vector3 GetDirection()
     {
-        //Debug.Log("Anim: " + animations.direction + ", Rotation: " + CAMERA_ROTATION + ", Combined: " + );
-        //return Vector3.zero;
-        
         int dir = (animations.direction * 2 - CAMERA_ROTATION + 8) % 8;
         Vector3 finalDirection = Vector3.zero;
         if (0 <= dir && dir <= 1 || dir == 7)
@@ -202,7 +196,8 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if (!IN_MENU)
+            Move();
     }
 
     public static void ToggleMove() => canRotate = !canRotate;
@@ -220,6 +215,12 @@ public class Player : MonoBehaviour
         Vector3 modifiedMovement = new Vector3(movementIntoX, 0, movementIntoZ);
         
         CONTROLLER.Move(speed * Time.fixedDeltaTime * modifiedMovement);
+    }
+
+    public void SetInMenu(bool inMenu)
+    {
+        IN_MENU = inMenu;
+        animations.SetInMenu(inMenu);
     }
 
     public static void PivotInit(GameObject obj)

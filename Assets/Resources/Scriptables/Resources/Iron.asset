@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Iron
   m_EditorClassIdentifier: 
   id: Iron
-  color: {r: 0.5754717, g: 0.43106088, b: 0.43106088, a: 1}
+  color: {r: 0.5283019, g: 0.3508722, b: 0.3508722, a: 1}
   maximum: 100

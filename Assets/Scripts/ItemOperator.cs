@@ -27,6 +27,15 @@ public class ItemOperator : MonoBehaviour
             UpdateDrilling();
     }
 
+    public void TryDropSelectedItem()
+    {
+        if (selectedItem != null)
+        {
+            Environment.DropItem(selectedItem, CentrePos());
+            inventory.removeSelectedItem();
+        }
+    }
+
 
     public void UseSelectedItem()
     {
@@ -48,7 +57,7 @@ public class ItemOperator : MonoBehaviour
     {
         Item newBattery = energy.SwitchBatteries(battery);
         inventory.removeSelectedItem();
-        Environment.DropItem(newBattery, transform.position + CentrePos());
+        Environment.DropItem(newBattery, CentrePos());
     }
 
     private void StartDrilling()
@@ -103,7 +112,6 @@ public class ItemOperator : MonoBehaviour
     private void BreakDrillingSubject()
     {
         currentlyDrilling.BreakObject();
-        Destroy(currentDrillParticles.gameObject);
         currentlyDrilling = null;
         drillingTimer = 0;
     }

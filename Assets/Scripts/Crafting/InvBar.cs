@@ -45,6 +45,11 @@ public class InvBar : MonoBehaviour
                 images[i].sprite = null;
             }
         }
-        selector.updateIdentifiers();
+        selector.UpdateIdentifiers();
+    }
+    
+    public void ShiftSelector(bool up)
+    {
+        selector.ShiftPosition(up);
     }
 }

@@ -28,9 +28,12 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ManageCameraOffset();
         ManageDirection();
-        ManageVelocity();
+        if (!Player.IN_MENU)
+        {
+            ManageCameraOffset();
+            ManageVelocity();
+        }
     }
 
     private void ManageDirection()
@@ -204,9 +207,19 @@ public class PlayerAnimation : MonoBehaviour
         return currentState == AnimationState.Idle;
     }
 
+    public void SetInMenu(bool inMenu)
+    {
+        if (inMenu)
+            SetRotatableState(AnimationState.Idle);
+        else
+            UpdateAnimationState();
+    }
+
     void UpdateAnimationState()
     {
-        if (!anim.enabled) { anim.enabled = true; }
+        if (Player.IN_MENU)
+            return;
+
         if (moving)
         {
             SetRotatableState(AnimationState.Running);

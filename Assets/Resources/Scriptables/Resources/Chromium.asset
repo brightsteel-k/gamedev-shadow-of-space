@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Chromium
   m_EditorClassIdentifier: 
   id: Chromium
-  color: {r: 0.7321111, g: 0.8490566, b: 0.84545827, a: 1}
+  color: {r: 0.68330365, g: 0.7924528, b: 0.7888145, a: 1}
   maximum: 100

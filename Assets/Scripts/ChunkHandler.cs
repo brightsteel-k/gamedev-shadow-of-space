@@ -8,8 +8,8 @@ public class ChunkHandler : MonoBehaviour
     public static Tilemap TILES;
     public static Chunk[,] WORLD;
     static int LOAD_RADIUS = 2;
-    static int X_BOUND = 30;
-    static int Z_BOUND = 30;
+    static int X_BOUND = 50;
+    static int Z_BOUND = 50;
     static bool CHUNK_HANDLING = true;
 
     // Start is called before the first frame update

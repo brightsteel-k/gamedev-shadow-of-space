@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 using TMPro;
 public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
-    
+    // Color modifier for unavailable recipes
+    [SerializeField] private Color unavailableColor;
     public Recipe recipe;
     public TMP_Text recipeName;
     private Item result;
@@ -14,17 +15,17 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     public HoverBox hover;
     private Inventory inv;
 
-    private bool inBox;
+    private bool pointerInBox;
 
     public void Start()
     {
-        inBox = false;
+        pointerInBox = false;
     }
     
     //Having this in update, maybe not good idea @TODO
     public void Update()
     {
-        if (inBox && hover.gameObject.activeSelf)
+        if (pointerInBox && hover.gameObject.activeSelf)
         {
             hover.move();
         }
@@ -34,24 +35,20 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         recipe = newRecipe;
         result = recipe.created;
         inv = _inv;
-        if (inv.canMakeRecipe(newRecipe) && rec.canMake(newRecipe))
-        {
+        if (inv.canMakeRecipe(newRecipe) && rec.canMakeRecipe(newRecipe))
             icon.color = Color.white;
-        }
         else
-        {
-            icon.color = Color.gray;
-        }
+            icon.color = unavailableColor;
 
 
         icon.sprite = result.sprite; 
-        recipeName.text = newRecipe.created.id;
+        recipeName.text = newRecipe.created.displayName;
         
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        inBox = true;
+        pointerInBox = true;
         if (eventData.pointerCurrentRaycast.gameObject.name == "ItemName")
         {
             return;
@@ -61,7 +58,7 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        inBox = false;
+        pointerInBox = false;
         hover.disable();
     }
 

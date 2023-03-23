@@ -10,10 +10,11 @@ public class MuseSystem : MonoBehaviour
     public static Dictionary<string, string[]> allMusings;
     public static bool MUSABLE = true;
     private static Slider MUSE_SLIDER;
+    private static MuseSystem INSTANCE;
     private int musableLayerMask;
-    [SerializeField] KeyCode museButton;
-    [SerializeField] RectTransform museSliderTransform;
-    [SerializeField] TextMeshProUGUI museText;
+    [SerializeField] private KeyCode museButton;
+    [SerializeField] private RectTransform museSliderTransform;
+    [SerializeField] private TextMeshProUGUI museText;
     private Sprite skyIcon;
 
     [SerializeField] private SpriteRenderer iconObject;
@@ -27,6 +28,7 @@ public class MuseSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        INSTANCE = this;
         MUSE_SLIDER = museSliderTransform.transform.GetComponent<Slider>();
         iconEnvironment = museSliderTransform.Find("Icon").GetComponent<Image>();
         skyIcon = Resources.Load<Sprite>("Textures/UI/muse_sky");
@@ -141,9 +143,10 @@ public class MuseSystem : MonoBehaviour
         isSpeaking = false;
     }
 
-    private static void SetMusable(bool musable)
+    public static void SetMusable(bool musable)
     {
         MUSABLE = musable;
+        INSTANCE.StopMusing();
         MUSE_SLIDER.gameObject.SetActive(musable);
     }
 }

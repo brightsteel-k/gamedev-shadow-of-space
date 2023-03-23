@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Gold
   m_EditorClassIdentifier: 
   id: Gold
-  color: {r: 0.7830189, g: 0.6391302, b: 0.054663554, a: 1}
+  color: {r: 0.9245283, g: 0.75625706, b: 0.07326444, a: 1}
   maximum: 100

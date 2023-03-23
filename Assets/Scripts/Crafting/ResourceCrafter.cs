@@ -32,7 +32,7 @@ public class ResourceCrafter : MonoBehaviour
         return 0;
     }
 
-    public bool canMake(Recipe rec)
+    public bool canMakeRecipe(Recipe rec)
     {
         foreach(Recipe.Pair2 pair in rec.liquids)
         {
