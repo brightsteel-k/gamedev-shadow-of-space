@@ -136,7 +136,7 @@ MonoBehaviour:
   maxSize: 0.46
   scaleYPosBy: 1.7
   smallRock: tyranite_pebble
-  breakParticles: {fileID: 357167225272357831, guid: 33e545cbe9ace0c4e80dd475ccafc837,
+  breakParticles: {fileID: 8396238091676107313, guid: 33e545cbe9ace0c4e80dd475ccafc837,
     type: 3}
   breakTime: 5
 --- !u!65 &9057451874785621537

@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 1280063385629092154}
   - component: {fileID: 1280063385629092133}
   - component: {fileID: 1280063385629092132}
+  - component: {fileID: -1148567048057875221}
   m_Layer: 6
   m_Name: mushroom
   m_TagString: Harvestable
@@ -5105,3 +5106,17 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &-1148567048057875221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280063385629092135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d02e01ec10bca95449c989856ce8a872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  destroyDelay: 5

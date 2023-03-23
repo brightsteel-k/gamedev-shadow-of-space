@@ -67,6 +67,8 @@ public class ItemOperator : MonoBehaviour
                 currentlyDrilling = hit.transform.GetComponent<LargeObject>();
                 hit.transform.tag = "Breaking";
                 drillingTimer = 0;
+                currentDrillParticles = Instantiate(currentlyDrilling.GetBreakParticles(), hit.point, Quaternion.identity).transform;
+                currentDrillParticles.LookAt(transform.position + new Vector3(0, 3, 0));
             }
 
             if (hit.transform.tag != "Breaking")
@@ -75,8 +77,6 @@ public class ItemOperator : MonoBehaviour
             if (currentlyDrilling != null)
             {
                 drillingTimer += Time.deltaTime;
-                currentDrillParticles = Instantiate(currentlyDrilling.GetBreakParticles(), hit.transform.position, Quaternion.identity).transform;
-                currentDrillParticles.LookAt(transform.position + new Vector3(0, 3, 0));
                 if (drillingTimer >= currentlyDrilling.breakTime)
                     BreakDrillingSubject();
             }
@@ -87,7 +87,6 @@ public class ItemOperator : MonoBehaviour
         }
 
         
-
         if (Input.GetMouseButtonUp(1) || selectedItem.id != "drill")
             StopDrilling();
     }
@@ -97,25 +96,33 @@ public class ItemOperator : MonoBehaviour
         if (currentlyDrilling != null)
             currentlyDrilling.tag = "Breakable";
         currentlyDrilling = null;
+        currentDrillParticles.GetComponent<CollidingParticles>().active = false;
         drillingTimer = 0;
     }
 
     private void BreakDrillingSubject()
     {
         currentlyDrilling.BreakObject();
+        Destroy(currentDrillParticles.gameObject);
         currentlyDrilling = null;
         drillingTimer = 0;
     }
 
     private void StopDrilling()
     {
+        LoseDrillingSubject();
         isDrilling = false;
         energy.SetDrilling(false);
-        drillingTimer = 0;
     }
 
     public Vector3 CentrePos()
     {
         return transform.position + Vector3.up;
+    }
+
+    public void OnDrawGizmos()
+    {
+        /*Vector3 centre = CentrePos();
+        Gizmos.DrawLine(centre, centre + Player.WORLD_PLAYER.GetDirection() * 2);*/
     }
 }

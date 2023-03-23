@@ -136,7 +136,7 @@ MonoBehaviour:
   maxSize: 0.4
   scaleYPosBy: 4.5
   smallRock: hematite_pebble
-  breakParticles: {fileID: 357167225272357831, guid: db6af92acede00b4dbef8435cccf37c3,
+  breakParticles: {fileID: 6337879963794549651, guid: 35555e6ba5024a94c8b8cb5f84e9e584,
     type: 3}
   breakTime: 3
 --- !u!136 &1972462502666963233
