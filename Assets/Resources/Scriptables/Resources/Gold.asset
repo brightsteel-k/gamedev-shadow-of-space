@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cd66d256d31e454490127dc03b5062b, type: 3}
-  m_Name: LiquidIron
+  m_Name: Gold
   m_EditorClassIdentifier: 
-  id: Iron
-  color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
+  id: Gold
+  color: {r: 0.7830189, g: 0.6391302, b: 0.054663554, a: 1}
   maximum: 100

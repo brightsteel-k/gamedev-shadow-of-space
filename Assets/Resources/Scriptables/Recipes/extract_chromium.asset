@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ff0b4ee909afc448b24aacf222a48f6, type: 3}
-  m_Name: TestRecipe3
+  m_Name: extract_chromium
   m_EditorClassIdentifier: 
   needed:
-  - amount: 2
-    item: {fileID: 11400000, guid: 2ea0cd3279fcf7b4485426e9d1e2cd1c, type: 2}
   - amount: 1
-    item: {fileID: 11400000, guid: 0e1e534f5dfff5e49bc310d0ae6c077a, type: 2}
+    item: {fileID: 11400000, guid: 5ddf15a50ceaf8c4c8a6147068c488c3, type: 2}
   liquids: []
-  created: {fileID: 11400000, guid: 32e2b0e89cb9fa2409de8469e3608af4, type: 2}
-  amount: 16
+  created: {fileID: 11400000, guid: 49a00ef4a8cd5744dbd65dd9229f2caf, type: 2}
+  amount: 10

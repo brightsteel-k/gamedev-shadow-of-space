@@ -7,8 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class CraftingUI : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField]
-    public List<Recipe> recipes;
+    private List<Recipe> recipes;
     public TMP_Text recipeName;
     public Image icon;
 
@@ -32,12 +31,24 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     
     public Inventory inv;
 
+    void Awake()
+    {
+        Debug.Log("Awake");
+        initializeRecipes();
+    }
+
     void Start()
     {
-        
+        Debug.Log("Start");
         show();
     }
     
+    void initializeRecipes()
+    {
+        recipes = new List<Recipe>();
+        recipes.AddRange(Resources.LoadAll<Recipe>("Scriptables/Recipes"));
+    }
+
     public void show()
     {
         foreach (Transform child in recipeView.transform)
@@ -45,8 +56,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
             GameObject.Destroy(child.gameObject);
         }
         hover.SetActive(false);
-        
-        
         
         foreach (Recipe rec in recipes)
         {
@@ -59,6 +68,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
 
     void OnEnable()
     {
+        Debug.Log("OnEnable");
         selectRecipe(recipes[0]);
     }
     void OnDisable()

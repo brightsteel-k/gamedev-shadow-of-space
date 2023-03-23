@@ -223,7 +223,8 @@ public class Inventory : MonoBehaviour
     public void updateBar()
     {
         itemBar.updateBar(items);
-        //craftUI.show();
+        if (craftUI.gameObject.activeSelf)
+            craftUI.show();
         Player.WORLD_PLAYER.UpdateSelectedItem();
     }
     

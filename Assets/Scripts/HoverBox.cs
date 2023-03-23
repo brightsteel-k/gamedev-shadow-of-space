@@ -4,15 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HoverBox : MonoBehaviour
-{
-    public GameObject hoverObj;
-    
+{   
     public GameObject componentPrefab;
 
     public GameObject resourceBarPrefab;
     
-    private RectTransform hover;
-    public Canvas canvas;
+    [SerializeField] private RectTransform hover;
+    private Canvas canvas;
 
     public Sprite unknown;
     public Vector2 offset;
@@ -20,19 +18,19 @@ public class HoverBox : MonoBehaviour
 
     void Start()
     {
-       
+        
     }
     
     //@TODO instead of passing in inventory, maybe add it through the editor
     public void create(List<Recipe.Pair1> items, List<Recipe.Pair2> liquids, PointerEventData eventData, Inventory inv) 
     {
-        hoverObj.SetActive(true);
+        gameObject.SetActive(true);
+        canvas = transform.parent.GetComponent<Canvas>();
         Vector2 position;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             (RectTransform)canvas.transform, eventData.position, canvas.worldCamera, 
             out position);
         Vector2 output = new Vector2(position.x + 100, position.y - 50);
-        hover = hoverObj.GetComponent<RectTransform>();
         hover.position = canvas.transform.TransformPoint(output);
             
         GameObject comp;
@@ -44,7 +42,7 @@ public class HoverBox : MonoBehaviour
             ComponentUI compUI = comp.GetComponent<ComponentUI>();
 
             if(inv.isDiscovered(item.item)){
-                compUI.setValues(item.item.sprite, item.item.id, item.amount.ToString(),
+                compUI.setValues(item.item.sprite, item.item.displayName, item.amount.ToString(),
                     inv.countIn(item.item).ToString());
             }
             else
@@ -56,7 +54,6 @@ public class HoverBox : MonoBehaviour
         
         foreach(Recipe.Pair2 resource in liquids)
         {
-            Instantiate(resourceBarPrefab, canvas.transform);
             rec = Instantiate(resourceBarPrefab, hover);
             BarManager bar = rec.GetComponent<BarManager>();
 
@@ -74,8 +71,7 @@ public class HoverBox : MonoBehaviour
     
     public void disable()
     {
-            
-        hoverObj.SetActive(false);
+        gameObject.SetActive(false);
         foreach (Transform child in hover.transform)
         {
             GameObject.Destroy(child.gameObject);

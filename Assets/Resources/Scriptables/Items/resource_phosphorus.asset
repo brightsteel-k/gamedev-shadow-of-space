@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3709e85632523224ba62fd0e45d69926, type: 3}
+  m_Name: resource_phosphorus
+  m_EditorClassIdentifier: 
+  displayName: Phosphorus
+  id: res_phosphorus
+  sprite: {fileID: 21300000, guid: f82dfc5fc3c5a8f4080a3550427019c8, type: 3}
+  isLiquid: 1
+  madeLiq: {fileID: 11400000, guid: 60ee23a911af78446b2a3b2aebd5e3cd, type: 2}

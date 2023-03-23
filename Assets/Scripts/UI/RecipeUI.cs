@@ -24,7 +24,7 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     //Having this in update, maybe not good idea @TODO
     public void Update()
     {
-        if (inBox)
+        if (inBox && hover.gameObject.activeSelf)
         {
             hover.move();
         }

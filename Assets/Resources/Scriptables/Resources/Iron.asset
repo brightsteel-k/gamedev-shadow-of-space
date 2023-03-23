@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cd66d256d31e454490127dc03b5062b, type: 3}
-  m_Name: Phosperous
+  m_Name: Iron
   m_EditorClassIdentifier: 
-  id: Phosperous
-  color: {r: 0.08319683, g: 0.2662856, b: 0.5377358, a: 1}
+  id: Iron
+  color: {r: 0.5754717, g: 0.43106088, b: 0.43106088, a: 1}
   maximum: 100

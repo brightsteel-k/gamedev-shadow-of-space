@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cd66d256d31e454490127dc03b5062b, type: 3}
-  m_Name: Nitrogen
+  m_Name: Chromium
   m_EditorClassIdentifier: 
-  id: Nitrogen
-  color: {r: 0.38974723, g: 0.6415094, b: 0.6346031, a: 1}
+  id: Chromium
+  color: {r: 0.7321111, g: 0.8490566, b: 0.84545827, a: 1}
   maximum: 100

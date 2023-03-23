@@ -23,14 +23,24 @@ public class MenuManager : MonoBehaviour
         //@TODO change this to the key to open the crafting
         if (Input.GetKeyDown(KeyCode.C))
         {
-            CraftingMenu.SetActive(true);
-            Player.IN_MENU = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (!CraftingMenu.activeSelf)
+            {
+                CraftingMenu.SetActive(true);
+                Player.IN_MENU = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                CraftingMenu.SetActive(false);
+                Player.IN_MENU = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         //@TODO use the unity input manager to make this a "cancel". Maybe make it a toggle menu?
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             CraftingMenu.SetActive(false);
             HoverBox.SetActive(false);
