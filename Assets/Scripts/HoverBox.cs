@@ -14,6 +14,7 @@ public class HoverBox : MonoBehaviour
     private RectTransform hover;
     public Canvas canvas;
 
+    public Sprite unknown;
     public Vector2 offset;
     //@TODO Setup as a co-routine
 
@@ -42,7 +43,15 @@ public class HoverBox : MonoBehaviour
             comp = Instantiate(componentPrefab, hover);
             ComponentUI compUI = comp.GetComponent<ComponentUI>();
 
-            compUI.setValues(item.item.sprite, item.item.id, item.amount.ToString(), inv.countIn(item.item).ToString()); 
+            if(inv.isDiscovered(item.item)){
+                compUI.setValues(item.item.sprite, item.item.id, item.amount.ToString(),
+                    inv.countIn(item.item).ToString());
+            }
+            else
+            {
+                compUI.setValues(unknown, "???", item.amount.ToString(),
+                    inv.countIn(item.item).ToString());
+            }
         }
         
         foreach(Recipe.Pair2 resource in liquids)

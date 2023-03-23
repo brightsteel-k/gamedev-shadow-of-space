@@ -14,6 +14,8 @@ public class EventTester : MonoBehaviour
 
     public ResourceCrafter res;
 
+    public Item toAdd;
+
     void Update()
     {
         //Press K to start the tests
@@ -59,6 +61,12 @@ public class EventTester : MonoBehaviour
         {
             Debug.Log(res.changeAmount("Carbon", -10));
         }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            inv.addItem(toAdd);
+        }
+
         
     }
 }

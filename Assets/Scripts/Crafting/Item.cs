@@ -13,6 +13,8 @@ public class Item : ScriptableObject
 
     public Sprite sprite;
 
+    public bool isLiquid;
+    public ResourceType madeLiq;
     public Dictionary<string, float> tags = new Dictionary<string, float>();
 
     public Item Initialize(Item template, params (string, float)[] tags)

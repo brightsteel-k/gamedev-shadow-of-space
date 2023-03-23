@@ -15,6 +15,12 @@ public class Inventory : MonoBehaviour
     //List of currently held items.
     public List<Item> items = new List<Item>();
     
+    //Discovered items
+    public List<Item> discovered = new List<Item>();
+
+    //For updating the window
+    public CraftingUI craftUI;
+        
     //To work with the UI, it must be connected to an inventory bar.
     public InvBar itemBar;
     
@@ -41,6 +47,20 @@ public class Inventory : MonoBehaviour
             ALL_ITEMS.Add(i.id, i);
         }
     }
+
+    public bool isDiscovered(Item item)
+    {
+        bool known = false;
+        foreach (Item desc in discovered)
+        {
+            if (desc.id == item.id)
+            {
+                known = true;
+            }
+        }
+
+        return known;
+    }
     
     // Adds given item object to inventory
     public bool addItem(Item item)
@@ -48,6 +68,11 @@ public class Inventory : MonoBehaviour
         if (items.Count >= barLength)
             return false;
 
+        if (!isDiscovered(item))
+        {
+            discovered.Add(item);
+        }
+        
         //Adds to the end of the list (bottom of inventory)
         items.Add(item);
         updateBar();
@@ -139,9 +164,14 @@ public class Inventory : MonoBehaviour
         
         
         updateBar();
-        
-        addItem(recipe.created);
-        
+        if (!recipe.created.isLiquid)
+        {
+            for (int i = 0; i < recipe.amount; i++)
+            {
+                addItem(recipe.created);
+            }
+        }
+
         return true;
     }
     
@@ -190,6 +220,7 @@ public class Inventory : MonoBehaviour
     public void updateBar()
     {
         itemBar.updateBar(items);
+        craftUI.show();
     }
     
 }

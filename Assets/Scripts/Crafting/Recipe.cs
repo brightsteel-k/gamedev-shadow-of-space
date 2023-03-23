@@ -29,4 +29,6 @@ public class Recipe : ScriptableObject
     //Could be replaced with the serialized pair.
     //In case more then 1 of the resulting item is made.
     public Item created;
+
+    public float amount = 1; //For liquids
 }

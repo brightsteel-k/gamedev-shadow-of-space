@@ -34,6 +34,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        
         show();
     }
     
@@ -45,7 +46,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         }
         hover.SetActive(false);
         
-        selectRecipe(recipes[0]);
+        
         
         foreach (Recipe rec in recipes)
         {
@@ -56,6 +57,10 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    void OnEnable()
+    {
+        selectRecipe(recipes[0]);
+    }
     void OnDisable()
     {
         hover.GetComponent<HoverBox>().disable();
@@ -97,8 +102,16 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     
     public void craft()
     {
+        
         inv.makeRecipe(selectedRecipe);
         liquids.makeRecipe(selectedRecipe);
+
+        if (selectedRecipe.created.isLiquid)
+        {
+            liquids.changeAmount(selectedRecipe.created.madeLiq.id, selectedRecipe.amount);
+            liquids.selectResource(selectedRecipe.created.madeLiq.id);
+        }
+        
         show();
     }
 

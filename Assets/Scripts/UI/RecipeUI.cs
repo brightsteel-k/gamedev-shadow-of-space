@@ -33,7 +33,6 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
         recipe = newRecipe;
         result = recipe.created;
-        icon.sprite = result.sprite;
         inv = _inv;
         if (inv.canMakeRecipe(newRecipe) && rec.canMake(newRecipe))
         {
@@ -43,7 +42,11 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         {
             icon.color = Color.gray;
         }
-        recipeName.text = newRecipe.created.id; //@TODO if type is changed to an enum, we must put a string here;
+
+
+        icon.sprite = result.sprite; 
+        recipeName.text = newRecipe.created.id;
+        
     }
 
     public void OnPointerEnter(PointerEventData eventData)
