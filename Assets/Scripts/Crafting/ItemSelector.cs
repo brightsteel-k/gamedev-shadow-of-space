@@ -49,7 +49,7 @@ public class ItemSelector : MonoBehaviour
     public void ShiftPosition(bool up)
     {
         int delta = up ? 1 : -1;
-        SetSelectorTo(pos + delta);
+        SetSelectorTo(pos - delta);
     }
 
     private void SetSelectorTo(int newPos)

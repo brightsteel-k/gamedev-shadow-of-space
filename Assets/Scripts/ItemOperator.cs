@@ -76,7 +76,7 @@ public class ItemOperator : MonoBehaviour
                 currentlyDrilling = hit.transform.GetComponent<LargeObject>();
                 hit.transform.tag = "Breaking";
                 drillingTimer = 0;
-                currentDrillParticles = Instantiate(currentlyDrilling.GetBreakParticles(), hit.point, Quaternion.identity).transform;
+                currentDrillParticles = Instantiate(currentlyDrilling.GetBreakParticles(), hit.point + Player.WORLD_PLAYER.GetDirection() * 0.1f, Quaternion.identity).transform;
                 currentDrillParticles.LookAt(transform.position + new Vector3(0, 3, 0));
             }
 
@@ -104,8 +104,9 @@ public class ItemOperator : MonoBehaviour
     {
         if (currentlyDrilling != null)
             currentlyDrilling.tag = "Breakable";
+        if (currentDrillParticles != null)
+            currentDrillParticles.GetComponent<CollidingParticles>().active = false;
         currentlyDrilling = null;
-        currentDrillParticles.GetComponent<CollidingParticles>().active = false;
         drillingTimer = 0;
     }
 
@@ -113,7 +114,7 @@ public class ItemOperator : MonoBehaviour
     {
         currentlyDrilling.BreakObject();
         currentlyDrilling = null;
-        drillingTimer = 0;
+        StopDrilling();
     }
 
     private void StopDrilling()

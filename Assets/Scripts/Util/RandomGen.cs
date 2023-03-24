@@ -50,7 +50,7 @@ public class RandomGen
 
     public static int GetCountFromAbundance(float abundance, int degree)
     {
-        return Mathf.FloorToInt(abundance * (Mathf.Pow(Random.Range(1, 101), degree)));
+        return Mathf.FloorToInt(abundance * Mathf.Pow(Random.Range(1, 101), degree));
     }
 
     public static int GetCountFiftyPercent(float count)

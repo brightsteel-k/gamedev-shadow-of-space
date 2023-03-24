@@ -53,12 +53,15 @@ public class Environment : MonoBehaviour
                 case "stalagmite":
                     AddStalagmites(allFeatures, posIn, "hematite_stalagmite", RandomGen.GetCountFiftyPercent(f.Item2), "hematite_pebble", 3);
                     break;
+                case "auralite":
+                    AddStalagmites(allFeatures, posIn, "auralite", RandomGen.GetCountFromAbundance(f.Item2, 2), "gold_piece", 0);
+                    break;
                 case "mushroom":
                     AddClusteredFeature(allFeatures, posIn, f.Item1, f.Item2);
                     break;
                 case "gold_piece":
                 case "diamond":
-                    AddRareItems(allFeatures, posIn, f.Item1, f.Item2, 3);
+                    AddSmallItems(allFeatures, posIn, f.Item1, RandomGen.GetCountFromAbundance(f.Item2, 3));
                     break;
                 default:
                     AddSmallFeatures(allFeatures, posIn, f.Item1, RandomGen.Mercury(f.Item2));
@@ -85,29 +88,13 @@ public class Environment : MonoBehaviour
                 Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
                 PlaceFeature(allFeatures, pos, obj);
             }
-            catch (CancelledChunkPosException e)
+            catch (CancelledChunkPosException)
             {
                 continue;
             }
         }
     }
 
-    public static void AddRareItems(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance, int degree)
-    {
-        int c = RandomGen.GetCountFromAbundance(abundance, degree);
-        for (int k = 0; k < c; k++)
-        {
-            try
-            {
-                Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
-                PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[obj]);
-            }
-            catch (CancelledChunkPosException e)
-            {
-                continue;
-            }
-        }
-    }
     public static void AddClusteredFeature(List<WorldObject> allFeatures, Vector3 posIn, string obj, float abundance)
     {
         if (RandomGen.Range(0f, 1f) > abundance)
@@ -117,7 +104,7 @@ public class Environment : MonoBehaviour
             {
                 centre = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
             }
-            catch (CancelledChunkPosException e)
+            catch (CancelledChunkPosException)
             {
                 return;
             }
@@ -130,7 +117,7 @@ public class Environment : MonoBehaviour
                     Vector3 pos = RandomGen.GetPosInChunk(GenType.Dense, centre.x, centre.z);
                     PlaceFeature(allFeatures, pos, obj);
                 }
-                catch (CancelledChunkPosException e)
+                catch (CancelledChunkPosException)
                 {
                     continue;
                 }
@@ -148,7 +135,7 @@ public class Environment : MonoBehaviour
                 PlaceFeature(allFeatures, pos, obj);
                 AddItemCluster(allFeatures, pos, pebbleId, pebbleCount);
             }
-            catch (CancelledChunkPosException e)
+            catch (CancelledChunkPosException)
             {
                 continue;
             }
@@ -165,7 +152,7 @@ public class Environment : MonoBehaviour
                 Vector3 pos = RandomGen.GetPosInChunk(GenType.Dense, posIn.x, posIn.z);
                 PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[item]);
             }
-            catch (CancelledChunkPosException e)
+            catch (CancelledChunkPosException)
             {
                 continue;
             }
@@ -181,7 +168,7 @@ public class Environment : MonoBehaviour
                 Vector3 pos = RandomGen.GetPosInChunk(GenType.NaiveRandom, posIn.x, posIn.z);
                 PlaceItem(allFeatures, pos, Inventory.ALL_ITEMS[item]);
             }
-            catch (CancelledChunkPosException e)
+            catch (CancelledChunkPosException)
             {   
                 continue;
             }
@@ -211,7 +198,6 @@ public class Environment : MonoBehaviour
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
         feature.InitItem(item, ItemTextures.GetItemSize(item.id));
         feature.GetComponent<Rigidbody>().AddForce(RandomGen.DropItemMomentum(), ForceMode.Impulse);
-        Debug.Log("Dropping item at: (" + posIn.x + ", " + posIn.z);
         AddItem(feature, posIn);
     }
 
