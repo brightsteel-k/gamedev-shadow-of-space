@@ -13,11 +13,17 @@ public class ItemOperator : MonoBehaviour
     private float drillingTimer = 0;
     Transform currentDrillParticles;
 
+    private int groundLayer;
+    private bool isThrowing = false;
+    [SerializeField] GameObject flarePrefab;
+    
+
     // Start is called before the first frame update
     void Start()
     {
         energy = GetComponent<Energy>();
         inventory = GetComponent<Inventory>();
+        groundLayer = LayerMask.GetMask("Ground");
     }
 
     // Update is called once per frame
@@ -25,6 +31,9 @@ public class ItemOperator : MonoBehaviour
     {
         if (isDrilling && !Player.IN_MENU)
             UpdateDrilling();
+
+        if (isThrowing && !Player.IN_MENU)
+            UpdateThrowing();
     }
 
     public void TryDropSelectedItem()
@@ -128,7 +137,52 @@ public class ItemOperator : MonoBehaviour
 
     private void StartThrowing()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isThrowing = true;
+    }
 
+    private void UpdateThrowing()
+    {
+        if (Input.GetMouseButtonUp(1))
+            ThrowFlare();
+
+        if (selectedItem.id != "flare")
+            StopThrowing();
+    }
+
+    private void ThrowFlare()
+    {
+        RaycastHit hit;
+        Ray ray = Player.MAIN_CAMERA.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, groundLayer))
+        {
+            Rigidbody flare = Instantiate(flarePrefab, CentrePos(), Quaternion.identity).GetComponent<Rigidbody>();
+            flare.velocity = CalculateVelocity(new Vector3(transform.position.x, 0, transform.position.z), hit.point);
+            flare.angularVelocity = RandomGen.RandomRotation();
+        }
+        else
+        {
+            Instantiate(flarePrefab, CentrePos(), Quaternion.identity);
+        }
+        inventory.removeSelectedItem();
+        StopThrowing();
+    }
+
+    private Vector3 CalculateVelocity(Vector3 sourcePos, Vector3 targetPos)
+    {
+        float distance = Vector3.Distance(transform.position, targetPos);
+        float vy = 3f;
+        float vx = -0.5f * vy * distance + (distance / 2) * Mathf.Sqrt(vy + 19.62f);
+        float theta = Mathf.Atan2(targetPos.z - sourcePos.z, targetPos.x - sourcePos.x);
+        return new Vector3(vx * Mathf.Cos(theta), vy, vx * Mathf.Sin(theta));
+    }
+
+    private void StopThrowing()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        isThrowing = false;
     }
 
     public Vector3 CentrePos()

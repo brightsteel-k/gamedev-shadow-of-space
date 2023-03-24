@@ -38,12 +38,6 @@ public class StygianStalker : Rotatable
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.P)) // TODO: REMOVE DEBUGGING TOOL
-        {
-            BeginFleeing(TARGET.position);
-        }
-
-
         if (currentMode == StygianMode.Tracking)
             TrackingPosition();
         else if (currentMode == StygianMode.Stalking)
@@ -98,8 +92,9 @@ public class StygianStalker : Rotatable
             case "Player":
                 AttackPlayer(other.GetComponent<Player>());
                 break;
-            case "MobileFlare":
+            case "NewFlare":
                 BeginFleeing(other.transform.position);
+                other.GetComponent<Flare>().Detonate();
                 break;
         }
     }

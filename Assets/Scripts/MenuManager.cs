@@ -31,7 +31,7 @@ public class MenuManager : MonoBehaviour
         //@TODO use the unity input manager to make this a "cancel". Maybe make it a toggle menu?
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            craft.SetMenuActive(false);
+            SetCraftingMenuActive(false);
         }
     }
  

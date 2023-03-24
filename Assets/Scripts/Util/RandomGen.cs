@@ -75,7 +75,7 @@ public class RandomGen
 
     public static float MercuryDirection(float theta)
     {
-        return theta + Random.Range(-1f, 1f);
+        return theta + Random.Range(-0.75f, 0.75f);
     }
 
     public static float RecuperationTime(int numTimesFled)
@@ -100,6 +100,11 @@ public class RandomGen
         float theta = Random.Range(0, 2 * Mathf.PI);
         float magnitude = 1.5f;
         return new Vector3(Mathf.Cos(theta) * magnitude, Random.Range(2.5f, 3.5f), Mathf.Sin(theta) * magnitude);
+    }
+
+    public static Vector3 RandomRotation()
+    {
+        return new Vector3(Random.Range(-16f, 16f), 0, Random.Range(-16f, 16f));
     }
 }
 

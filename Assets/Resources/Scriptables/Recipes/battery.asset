@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needed: []
   liquids:
-  - amount: 50
-    res: {fileID: 11400000, guid: 190da64c46fbf1544ac7aa4d2a7a0baf, type: 2}
+  - amount: 20
+    res: {fileID: 11400000, guid: 01f1440e9615e514e981b944df282d83, type: 2}
   - amount: 10
-    res: {fileID: 11400000, guid: d11317345581b924999f6695a7d12f90, type: 2}
-  created: {fileID: 11400000, guid: 1bd9d33c64185ce4c823704c1c74cee3, type: 2}
+    res: {fileID: 11400000, guid: ca969cee8776be0438aab3e350bd6b84, type: 2}
+  created: {fileID: 11400000, guid: 2ea0cd3279fcf7b4485426e9d1e2cd1c, type: 2}
   amount: 1

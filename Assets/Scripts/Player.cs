@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
-    public static GameObject MAIN_CAMERA;
+    public static Camera MAIN_CAMERA;
     public static bool IN_MENU = false;
     private PlayerAnimation animations;
     private ItemOperator itemOperator;
@@ -31,8 +31,6 @@ public class Player : MonoBehaviour
     private int mouseCentrePos;
     private int mouseInput = 0;
 
-    // Inventory
-    
     private void Awake()
     {
         WORLD_PLAYER = GetComponent<Player>();
@@ -44,7 +42,7 @@ public class Player : MonoBehaviour
         INVENTORY = GetComponent<Inventory>();
         ENERGY = GetComponent<Energy>();
         animations = GetComponent<PlayerAnimation>();
-        MAIN_CAMERA = transform.Find("Main Camera").gameObject;
+        MAIN_CAMERA = transform.Find("Main Camera").GetComponent<Camera>();
         itemOperator = GetComponent<ItemOperator>();
         mouseThreshold = Screen.width / 3;
         mouseCentrePos = Screen.width / 2;
@@ -71,9 +69,11 @@ public class Player : MonoBehaviour
         CheckCurrentTile();
 
 
-        // @TODO: Debug method to check chunks
+        // @TODO: Debug methods
         if (Input.GetKeyDown(KeyCode.I))
             PrintChunk();
+        if (Input.GetKeyDown(KeyCode.P))
+            Debug.Log("Why can't I rotate? CanRotate: " + canRotate + ", In_Menu: " + IN_MENU + ", cooldown: " + pivotCooldown);
 
     }
 
@@ -212,7 +212,7 @@ public class Player : MonoBehaviour
         float movementIntoX = Vector3.Dot(movementInput, sideDirection);
         float movementIntoZ = Vector3.Dot(movementInput, forwardDirection);
 
-        Vector3 modifiedMovement = new Vector3(movementIntoX, 0, movementIntoZ);
+        Vector3 modifiedMovement = new Vector3(movementIntoX, -1f, movementIntoZ);
         
         CONTROLLER.Move(speed * Time.fixedDeltaTime * modifiedMovement);
     }
