@@ -49,7 +49,9 @@ public class ItemOperator : MonoBehaviour
             case "drill":
                 StartDrilling();
                 break;
-
+            case "flare":
+                StartThrowing();
+                break;
         }
     }
 
@@ -76,7 +78,7 @@ public class ItemOperator : MonoBehaviour
                 currentlyDrilling = hit.transform.GetComponent<LargeObject>();
                 hit.transform.tag = "Breaking";
                 drillingTimer = 0;
-                currentDrillParticles = Instantiate(currentlyDrilling.GetBreakParticles(), hit.point + Player.WORLD_PLAYER.GetDirection() * 0.1f, Quaternion.identity).transform;
+                currentDrillParticles = Instantiate(currentlyDrilling.GetMineParticles(), hit.point + Player.WORLD_PLAYER.GetDirection() * 0.1f, Quaternion.identity).transform;
                 currentDrillParticles.LookAt(transform.position + new Vector3(0, 3, 0));
             }
 
@@ -122,6 +124,11 @@ public class ItemOperator : MonoBehaviour
         LoseDrillingSubject();
         isDrilling = false;
         energy.SetDrilling(false);
+    }
+
+    private void StartThrowing()
+    {
+
     }
 
     public Vector3 CentrePos()

@@ -7,12 +7,18 @@ public class CollidingParticles : MonoBehaviour
     public bool active = true;
     private ParticleSystem particles;
     [SerializeField] float destroyDelay = 5f;
+    [SerializeField] bool automaticallyDecay = false;
 
     // Start is called before the first frame update
     void Start()
     {
         particles = GetComponent<ParticleSystem>();
         particles.collision.AddPlane(Environment.INSTANCE.transform.Find("Terrain"));
+        if (automaticallyDecay)
+        {
+            LeanTween.delayedCall(destroyDelay, SafeDelete);
+            this.enabled = false;
+        }    
     }
 
     // Update is called once per frame
@@ -21,8 +27,14 @@ public class CollidingParticles : MonoBehaviour
         if (!active)
         {
             particles.Stop();
-            LeanTween.delayedCall(destroyDelay, e => Destroy(gameObject));
+            LeanTween.delayedCall(destroyDelay, SafeDelete);
             this.enabled = false;
         }
+    }
+
+    void SafeDelete()
+    {
+        if (gameObject != null)
+            Destroy(gameObject);
     }
 }

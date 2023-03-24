@@ -82,7 +82,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        //Debug.Log("Clicked: " + eventData.pointerCurrentRaycast.gameObject.name);
         RecipeUI clickedUI = eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<RecipeUI>();
         if (clickedUI == null)
             return;
@@ -95,7 +94,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         selectedRecipe = recipe;
         Item result = recipe.created;
         selectedIcon.sprite = result.sprite;
-        selectedName.text = result.displayName;
+        selectedName.text = result.displayName.Replace("@p", "100");
 
         if (inv.canMakeRecipe(recipe) && liquids.canMakeRecipe(selectedRecipe))
             craftButtonImage.color = Color.white;

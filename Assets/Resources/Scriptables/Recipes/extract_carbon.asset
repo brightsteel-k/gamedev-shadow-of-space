@@ -17,4 +17,4 @@ MonoBehaviour:
     item: {fileID: 11400000, guid: 453d69a3793741343bba160e1b07ceba, type: 2}
   liquids: []
   created: {fileID: 11400000, guid: b71578439461c0e4fa733b82391136f5, type: 2}
-  amount: 20
+  amount: 5

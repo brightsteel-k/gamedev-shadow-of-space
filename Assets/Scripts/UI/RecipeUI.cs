@@ -41,9 +41,8 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
             icon.color = unavailableColor;
 
 
-        icon.sprite = result.sprite; 
-        recipeName.text = newRecipe.created.displayName;
-        
+        icon.sprite = result.sprite;
+        recipeName.text = newRecipe.created.displayName.Replace("@p", "100");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -55,7 +55,9 @@ MonoBehaviour:
   rockDropNumMin: 0
   rockDropNumMax: 3
   rareDrop: 
-  breakParticles: {fileID: 6337879963794549651, guid: 35555e6ba5024a94c8b8cb5f84e9e584,
+  mineParticles: {fileID: 6337879963794549651, guid: 35555e6ba5024a94c8b8cb5f84e9e584,
+    type: 3}
+  breakParticles: {fileID: 2170555181188296747, guid: bfd7dab08db025740b3e9b8e56e96cc5,
     type: 3}
   breakTime: 3
 --- !u!136 &3161520356435492409

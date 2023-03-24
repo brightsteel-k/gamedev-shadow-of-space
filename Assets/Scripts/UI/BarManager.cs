@@ -16,7 +16,7 @@ public class BarManager : MonoBehaviour
     public Image barSprite;
 
     //The bar's parameters:
-
+    [SerializeField] string unitSuffix = "%";
     public float maxValue = 100f;
     public float currentValue = 100f;
     public Color barColor = Color.red;
@@ -48,7 +48,7 @@ public class BarManager : MonoBehaviour
     private void setBar()
     {
         colorBar.localScale = new Vector3(currentValue/maxValue, 1, 1);
-        text.text = ((int)(100 * currentValue / maxValue)).ToString("D") + "%";
+        text.text = ((int)(100 * currentValue / maxValue)).ToString("D") + unitSuffix;
         barSprite.color = barColor;
     }
     

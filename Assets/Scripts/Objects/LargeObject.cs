@@ -14,6 +14,7 @@ public class LargeObject : WorldObject
     [SerializeField] private int rockDropNumMin;
     [SerializeField] private int rockDropNumMax;
     [SerializeField] private string rareDrop = "";
+    [SerializeField] private GameObject mineParticles;
     [SerializeField] private GameObject breakParticles;
     public float breakTime;
 
@@ -45,11 +46,13 @@ public class LargeObject : WorldObject
 
         if (rareDrop != "" && RandomGen.GetCountFromAbundance(0.000002f, 3) > 0)
             Environment.DropItem(rareDrop, transform.position + Vector3.up);
+
+        Instantiate(breakParticles, transform.position + Vector3.up, Quaternion.Euler(new Vector3(-90, 0, 0)));
         Remove();
     }
 
-    public GameObject GetBreakParticles()
+    public GameObject GetMineParticles()
     {
-        return breakParticles;
+        return mineParticles;
     }
 }

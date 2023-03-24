@@ -55,7 +55,9 @@ MonoBehaviour:
   rockDropNumMin: 2
   rockDropNumMax: 3
   rareDrop: lithium
-  breakParticles: {fileID: 8396238091676107313, guid: 33e545cbe9ace0c4e80dd475ccafc837,
+  mineParticles: {fileID: 8396238091676107313, guid: 33e545cbe9ace0c4e80dd475ccafc837,
+    type: 3}
+  breakParticles: {fileID: 5408541517102609929, guid: 4b445eaa0dee9be4fb39d1403582f931,
     type: 3}
   breakTime: 5
 --- !u!65 &1428203579685388449
