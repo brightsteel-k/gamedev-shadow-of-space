@@ -147,7 +147,7 @@ public class ItemOperator : MonoBehaviour
         if (Input.GetMouseButtonUp(1))
             ThrowFlare();
 
-        if (selectedItem.id != "flare")
+        if (selectedItem == null || selectedItem.id != "flare")
             StopThrowing();
     }
 

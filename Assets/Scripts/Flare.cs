@@ -59,7 +59,7 @@ public class Flare : MonoBehaviour
 
     private void VaryLightSource()
     {
-        lightSource.intensity = 2 * Mathf.Sin(5 * Mathf.Cos(Time.time / 2)) + 5;
+        lightSource.intensity = 3 * Mathf.Sin(5 * Mathf.Cos(Time.time / 2)) + 10;
     }
 
     public void Detonate()

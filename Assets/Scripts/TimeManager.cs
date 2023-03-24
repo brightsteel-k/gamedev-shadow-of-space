@@ -7,16 +7,16 @@ using UnityEngine.Rendering;
 public class TimeManager : MonoBehaviour
 {
     [SerializeField] private Volume dayVolume;
-    [SerializeField] private Volume nightVolume;
+    [SerializeField] private Volume eclipseVolume;
     [SerializeField] private LightingSettings lightingSettings;
 
     [System.Serializable]
     public enum TimeState
     {
+        Bright,
         Day,
-        Twilight,
-        Night,
-        Morning
+        Penumbra,
+        Eclipse
     };
 
     public TimeState timeState;
@@ -26,10 +26,10 @@ public class TimeManager : MonoBehaviour
 
     public Dictionary<TimeState, float> timeStateLengths = new Dictionary<TimeState, float>()
     {
+        [TimeState.Bright] = 5,
         [TimeState.Day] = 5,
-        [TimeState.Twilight] = 5,
-        [TimeState.Night] = 5,
-        [TimeState.Morning] = 5
+        [TimeState.Penumbra] = 5,
+        [TimeState.Eclipse] = 5
     };
 
     private void Update()
@@ -48,7 +48,7 @@ public class TimeManager : MonoBehaviour
 
     void AdvanceTimeState()
     {
-        timeState = (int)timeState > 2 ? TimeState.Day : timeState + 1;
+        timeState = (int)timeState > 2 ? TimeState.Bright : timeState + 1;
         timeStateCounter = timeStateLengths[timeState];
     }
 
@@ -56,21 +56,21 @@ public class TimeManager : MonoBehaviour
     {
         switch (timeState)
         {
-            case TimeState.Day:
+            case TimeState.Bright:
                 dayVolume.weight = 1;
-                nightVolume.weight = 0;
+                eclipseVolume.weight = 0;
                 break;
-            case TimeState.Twilight:
-                nightVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Twilight]);
-                dayVolume.weight = timeStateCounter / timeStateLengths[TimeState.Twilight];
+            case TimeState.Day:
+                dayVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Day]);
+                eclipseVolume.weight = timeStateCounter / timeStateLengths[TimeState.Day];
                 break;
-            case TimeState.Night:
-                nightVolume.weight = 1;
+            case TimeState.Penumbra:
+                eclipseVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Penumbra]);
+                dayVolume.weight = timeStateCounter / timeStateLengths[TimeState.Penumbra];
+                break;
+            case TimeState.Eclipse:
+                eclipseVolume.weight = 1;
                 dayVolume.weight = 0;
-                break;
-            case TimeState.Morning:
-                dayVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Morning]);
-                nightVolume.weight = timeStateCounter / timeStateLengths[TimeState.Morning];
                 break;
         }
     }
