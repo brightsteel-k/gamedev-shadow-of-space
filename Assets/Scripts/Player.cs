@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject rotateBar;
     private Transform rotateBarPointer;
+    private TextMeshProUGUI rotateBarText;
     [SerializeField] private float speed;
     private static float pivotCooldown = 1f;
     [SerializeField] private float cameraOffsetRadius;
@@ -29,7 +30,6 @@ public class Player : MonoBehaviour
 
     private int mouseThreshold;
     private int mouseHalfScreen;
-    private int mouseInput = 0;
 
     private void Awake()
     {
@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
         MAIN_CAMERA = transform.Find("Main Camera").GetComponent<Camera>();
         itemOperator = GetComponent<ItemOperator>();
         rotateBarPointer = rotateBar.transform.Find("Pointer");
+        rotateBarText = rotateBar.transform.Find("Direction").GetComponent<TextMeshProUGUI>();
         InitRotateSystem();
     }
 
@@ -154,6 +155,21 @@ public class Player : MonoBehaviour
         rotateBarPointer.localPosition = new Vector2(Mathf.Clamp(x, -320, 320), 0);
     }
 
+    private string GetDirectionBarText(int newRotation)
+    {
+        string display = "";
+        if (newRotation > 0 && newRotation < 4)
+            display = "N";
+        else if (newRotation > 4)
+            display = "S";
+
+        if (newRotation > 2 && newRotation < 6)
+            display += "W";
+        else if (newRotation > 6 || newRotation < 2)
+            display += "E";
+        return display;
+    }
+
     private void TickPivotCooldown()
     {
         if (pivotCooldown < 0)
@@ -168,6 +184,8 @@ public class Player : MonoBehaviour
     private void PivotWorld(bool clockwise)
     {
         pivotCooldown = 0.66f;
+
+        rotateBarText.SetText(GetDirectionBarText((CAMERA_ROTATION + (clockwise ? 7 : 1)) % 8));
         
         EventManager.WorldPivot(clockwise);
         Pivot(gameObject, clockwise);

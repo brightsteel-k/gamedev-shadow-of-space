@@ -23,7 +23,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color invalidCraftColor;
 
     //Private fields
-    private List<Recipe> recipes;
+    [SerializeField] private List<Recipe> recipes;
     private Recipe selectedRecipe;
 
     private TMP_Text selectedName;
@@ -36,7 +36,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
 
     void Awake()
     {
-        initializeRecipes();
         selectedName = transform.Find("RecipeName").GetComponent<TMP_Text>();
         selectedIcon = transform.Find("RecipeIcon").GetComponent<Image>();
         craftButton = transform.Find("CraftButton").GetComponent<RecipeUI>();
@@ -54,12 +53,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     {
         float scale = (Screen.height - 70) / 400f;
         transform.localScale = new Vector3(scale, scale, scale);
-    }
-
-    void initializeRecipes()
-    {
-        recipes = new List<Recipe>();
-        recipes.AddRange(Resources.LoadAll<Recipe>("Scriptables/Recipes"));
     }
 
     public void show()

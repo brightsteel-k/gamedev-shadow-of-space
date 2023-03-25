@@ -35,6 +35,11 @@ public class StygianStalker : Rotatable
         StartTracking();
     }
 
+    private void Update()
+    {
+        
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
