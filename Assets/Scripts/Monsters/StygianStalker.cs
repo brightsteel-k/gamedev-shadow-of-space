@@ -159,7 +159,10 @@ public class StygianStalker : Rotatable
 
     void ChargePlayer()
     {
-        navMeshAgent.SetDestination(TARGET.position + Player.CONTROLLER.velocity);
+        Vector3 monsterToPlayer = Player.CONTROLLER.transform.position - transform.position;
+        Vector3 cross = Vector3.Cross(monsterToPlayer, Vector3.up).normalized;
+        Vector3 projection = Vector3.Dot(cross, Player.CONTROLLER.velocity) * Player.CONTROLLER.velocity;
+        navMeshAgent.SetDestination(TARGET.position + projection);
     }
 
     // ATTACKING = = = = = = = = = = = = = = = = = = = = = = = [END OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = ATTACKING
