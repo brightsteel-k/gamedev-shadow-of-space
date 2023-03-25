@@ -17,13 +17,18 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     public ResourceCrafter liquids;
     
     //The tooltip hoverbox
-    public GameObject hover;
+    public HoverBox hover;
 
     // Color of craft button for unavailable recipes
     [SerializeField] private Color invalidCraftColor;
 
-    //Private fields
+    // Craft sound effect
+    [SerializeField] private AudioClip craftClip;
+
+    // Ordered list of all recipes
     [SerializeField] private List<Recipe> recipes;
+
+    //Private fields
     private Recipe selectedRecipe;
 
     private TMP_Text selectedName;
@@ -61,14 +66,14 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         {
             GameObject.Destroy(child.gameObject);
         }
-        hover.SetActive(false);
+        hover.gameObject.SetActive(false);
         
         foreach (Recipe rec in recipes)
         {
             GameObject obj = Instantiate(recipePrefab, recipeView);
             RecipeUI ui = obj.GetComponent<RecipeUI>();
             ui.prepareDisplay(rec, inv, liquids);
-            ui.hover = hover.GetComponent<HoverBox>();
+            ui.hover = hover;
         }
     }
     
@@ -102,7 +107,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
             return;
         inv.makeRecipe(selectedRecipe);
         liquids.makeRecipe(selectedRecipe);
-
         if (selectedRecipe.created.isLiquid)
         {
             liquids.changeAmount(selectedRecipe.created.madeLiq.id, selectedRecipe.amount);
@@ -110,6 +114,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         }
         
         show();
+        Player.PlaySound(craftClip, 0.7f);
         selectRecipe(selectedRecipe);
     }
 
@@ -125,7 +130,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            hover.GetComponent<HoverBox>().disable();
+            hover.disable();
         }
     }
 }

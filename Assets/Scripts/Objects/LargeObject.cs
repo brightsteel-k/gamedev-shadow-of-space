@@ -37,6 +37,7 @@ public class LargeObject : WorldObject
 
     public virtual void BreakObject()
     {
+        Player.PlaySound(ItemResources.GetInteractClip("shatter_" + id), 0.8f);
         Vector3 dropPos;
         int count = RandomGen.Range(rockDropNumMin, rockDropNumMax);
         for (int k = 0; k < count; k++) {

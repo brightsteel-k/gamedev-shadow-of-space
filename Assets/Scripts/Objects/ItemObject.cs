@@ -43,15 +43,14 @@ public class ItemObject : WorldObject
         InitSprite();
         sprite.transform.localScale = new Vector3(size, size, size);
 
-        Sprite img = ItemTextures.GetItemTexture(id);
-        physHeight = img.texture.height / img.pixelsPerUnit / 12 / Mathf.Sqrt(2);
-        sprite.GetComponent<SpriteRenderer>().sprite = img;
+        sprite.GetComponent<SpriteRenderer>().sprite = ItemResources.GetItemTexture(id, out physHeight);
     }
 
     public void Pickup(Vector3 playerPos)
     {
         sphereCollider.enabled = false;
         tag = "Untagged";
+        Player.PlaySound(ItemResources.GetInteractClip(id));
         transform.LeanMove(playerPos, 0.1f).setOnComplete(Remove);
     }
 

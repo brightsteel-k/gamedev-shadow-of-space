@@ -18,7 +18,7 @@ public class MassiveObject : LargeObject
     public override void InitSprite()
     {
         base.InitSprite();
-        textures = ItemTextures.GetDirectionalTextures(id, out initDirection);
+        textures = ItemResources.GetDirectionalTextures(id, out initDirection);
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
         RotateTexture(0);
     }

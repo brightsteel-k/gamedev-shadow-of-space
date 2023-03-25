@@ -32,6 +32,7 @@ public class ItemSelector : MonoBehaviour
     void Start()
     {
         LoadInstructions();
+        EventManager.OnPlayerDying += Deactivate;
     }
 
     void LoadInstructions()
@@ -135,5 +136,10 @@ public class ItemSelector : MonoBehaviour
 
         identifierAlpha -= fadeRate * Time.deltaTime / identifierAlpha;
         identifier.color = new Color32(255, 255, 255, (byte)identifierAlpha);
+    }
+
+    private void Deactivate()
+    {
+        instructionsText.gameObject.SetActive(false);
     }
 }

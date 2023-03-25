@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public static CharacterController CONTROLLER;
     public static int CAMERA_ROTATION = 2;
     public static Camera MAIN_CAMERA;
+    private static AudioSource audioSource;
     public static bool IN_MENU = false;
     private PlayerAnimation animations;
     private ItemOperator itemOperator;
@@ -31,6 +32,8 @@ public class Player : MonoBehaviour
     private int mouseThreshold;
     private int mouseHalfScreen;
 
+    public bool hasEncounteredMonster = false;
+
     private void Awake()
     {
         WORLD_PLAYER = GetComponent<Player>();
@@ -43,10 +46,12 @@ public class Player : MonoBehaviour
         ENERGY = GetComponent<Energy>();
         animations = GetComponent<PlayerAnimation>();
         MAIN_CAMERA = transform.Find("Main Camera").GetComponent<Camera>();
+        audioSource = GetComponent<AudioSource>();
         itemOperator = GetComponent<ItemOperator>();
         rotateBarPointer = rotateBar.transform.Find("Pointer");
         rotateBarText = rotateBar.transform.Find("Direction").GetComponent<TextMeshProUGUI>();
         InitRotateSystem();
+        EventManager.OnPlayerDying += Die;
     }
 
     private void InitRotateSystem()
@@ -62,6 +67,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (EventManager.PLAYER_DYING)
+            return;
         if (pivotCooldown != 0)
             TickPivotCooldown();
 
@@ -184,14 +191,14 @@ public class Player : MonoBehaviour
     private void PivotWorld(bool clockwise)
     {
         pivotCooldown = 0.66f;
-
-        rotateBarText.SetText(GetDirectionBarText((CAMERA_ROTATION + (clockwise ? 7 : 1)) % 8));
+        int newCameraRotation = (CAMERA_ROTATION + (clockwise ? 7 : 1)) % 8;
+        rotateBarText.SetText(GetDirectionBarText(newCameraRotation));
         
         EventManager.WorldPivot(clockwise);
         Pivot(gameObject, clockwise);
         animations.RotateCamera(clockwise);
 
-        CAMERA_ROTATION = (CAMERA_ROTATION + (clockwise ? 7 : 1)) % 8;
+        CAMERA_ROTATION = newCameraRotation;
     }
 
     public Vector3 GetDirection()
@@ -212,7 +219,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!IN_MENU)
+        if (!IN_MENU && !EventManager.PLAYER_DYING)
             Move();
     }
 
@@ -223,7 +230,9 @@ public class Player : MonoBehaviour
         Vector3 forwardDirection = transform.forward;
         Vector3 sideDirection = Vector3.Cross(forwardDirection, Vector3.up);
 
-        Vector3 movementInput = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 movementInput = Vector3.zero;
+        if (!EventManager.PLAYER_DYING)
+            movementInput = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
         float movementIntoX = Vector3.Dot(movementInput, sideDirection);
         float movementIntoZ = Vector3.Dot(movementInput, forwardDirection);
@@ -236,7 +245,14 @@ public class Player : MonoBehaviour
     public void SetInMenu(bool inMenu)
     {
         IN_MENU = inMenu;
+        rotateBar.SetActive(!inMenu);
         animations.SetInMenu(inMenu);
+    }
+
+    private void Die()
+    {
+        SetInMenu(false);
+        rotateBar.SetActive(false);
     }
 
     public static float CurrentYRotation()
@@ -253,6 +269,14 @@ public class Player : MonoBehaviour
             .setEase(easeType)
             .setOnStart(ToggleMove)
             .setOnComplete(ToggleMove);
+    }
+
+    public static void PlaySound(AudioClip clip) => PlaySound(clip, 0.3f);
+
+    public static void PlaySound(AudioClip clip, float volume)
+    {
+        audioSource.pitch = 1 + RandomGen.Range(-0.3f, 0.3f);
+        audioSource.PlayOneShot(clip, volume);
     }
 
     public void CheckCurrentTile()

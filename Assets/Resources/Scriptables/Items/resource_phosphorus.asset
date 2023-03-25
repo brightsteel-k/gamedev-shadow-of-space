@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Phosphorus
   id: res_phosphorus
-  sprite: {fileID: 21300000, guid: f82dfc5fc3c5a8f4080a3550427019c8, type: 3}
+  sprite: {fileID: 21300000, guid: 9d368ee4806675c4a8161a0d78f22d87, type: 3}
   isLiquid: 1
   madeLiq: {fileID: 11400000, guid: 60ee23a911af78446b2a3b2aebd5e3cd, type: 2}

@@ -165,9 +165,7 @@ public class Inventory : MonoBehaviour
     public bool makeRecipe(Recipe recipe)
     {
         if (!canMakeRecipe(recipe))
-        {
             return false;
-        }
         
         foreach (Recipe.Pair1 pair in recipe.needed)
         {
@@ -179,11 +177,23 @@ public class Inventory : MonoBehaviour
         {
             for (int i = 0; i < recipe.amount; i++)
             {
-                addItem(recipe.created);
+                addItem(formatCraftedItem(recipe.created));
             }
         }
 
         return true;
+    }
+
+    // Creates custom instance of items with data tags
+    private Item formatCraftedItem(Item item)
+    {
+        switch (item.id)
+        {
+            case "battery":
+                return ScriptableObject.CreateInstance<Item>().Initialize(item, ("power", 100));
+            default:
+                return item;
+        }
     }
     
     //Removes a number of item of the same type given 

@@ -31,6 +31,7 @@ public class ResizableObject : WorldObject
     {
         tag = "Untagged";
         sprite.SetActive(false);
+        Player.PlaySound(ItemResources.GetInteractClip("harvest_" + id));
         GetComponent<ParticleSystem>().Play();
         LeanTween.delayedCall(2f, Remove);
     }

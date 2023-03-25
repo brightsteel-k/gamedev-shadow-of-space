@@ -11,6 +11,8 @@ public class Flare : MonoBehaviour
     private ParticleSystem particles;
     private MeshRenderer headRenderer;
     private Light lightSource;
+    private AudioSource audioSourceBody;
+    private AudioSource audioSourceHead;
     private bool isGrounded = false;
     private bool hasExploded = false;
 
@@ -18,10 +20,12 @@ public class Flare : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        headRenderer = transform.Find("Head").GetComponent<MeshRenderer>();
         col = transform.Find("Body").GetComponent<CapsuleCollider>();
-        lightSource = transform.Find("Light").GetComponent<Light>();
         particles = transform.Find("Particles").GetComponent<ParticleSystem>();
+        headRenderer = transform.Find("Head").GetComponent<MeshRenderer>();
+        lightSource = transform.Find("Light").GetComponent<Light>();
+        audioSourceBody = transform.Find("Body").GetComponent<AudioSource>();
+        audioSourceHead = transform.Find("Head").GetComponent<AudioSource>();
         LeanTween.delayedCall(0.5f, e => {
             if (!isGrounded)
                 col.enabled = true;
@@ -67,6 +71,8 @@ public class Flare : MonoBehaviour
         tag = "Untagged";
         headRenderer.material = litMat;
         lightSource.enabled = true;
+        audioSourceBody.Play();
+        audioSourceHead.PlayDelayed(0.4f);
         particles.Play();
         hasExploded = true;
     }

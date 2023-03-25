@@ -10,8 +10,9 @@ public class InvBar : MonoBehaviour
     public ItemSelector selector;
     //This sprite should be what an empty inventory slot looks like (maybe just transparent?)
     public Sprite empty;
+    private AudioSource audioSource;
+    private AudioClip clickClip;
     
-    // Start is called before the first frame update
     private void Awake()
     {
         adjustSize();
@@ -31,6 +32,11 @@ public class InvBar : MonoBehaviour
         return SCALE;
     }
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        clickClip = Resources.Load<AudioClip>("Sounds/SwitchInventorySlot");
+    }
 
     public void updateBar(List<Item> items)
     {
@@ -50,6 +56,12 @@ public class InvBar : MonoBehaviour
     
     public void ShiftSelector(bool up)
     {
+        PlayUIClick();
         selector.ShiftPosition(up);
+    }
+
+    public void PlayUIClick()
+    {
+        audioSource.PlayOneShot(clickClip);
     }
 }

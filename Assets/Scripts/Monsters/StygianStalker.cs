@@ -155,6 +155,8 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Attacking!");
         currentMode = StygianMode.Attacking;
+        if (!Player.WORLD_PLAYER.hasEncounteredMonster)
+            Player.WORLD_PLAYER.hasEncounteredMonster = true;
     }
 
     void ChargePlayer()

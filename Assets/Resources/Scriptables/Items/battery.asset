@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Lithium-Ion Battery (@p%)
   id: battery
-  sprite: {fileID: 21300000, guid: 822f85f91fbdc024dad1e9b03be7428b, type: 3}
+  sprite: {fileID: 21300000, guid: f9b5dfb0437cb3d44a510565a9048e70, type: 3}
+  isLiquid: 0
+  madeLiq: {fileID: 0}

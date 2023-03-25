@@ -184,7 +184,7 @@ public class Environment : MonoBehaviour
     public static void PlaceItem(List<WorldObject> allFeatures, Vector3 posIn, Item item)
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
-        feature.InitItem(item, ItemTextures.GetItemSize(item.id));
+        feature.InitItem(item, ItemResources.GetItemSize(item.id));
         feature.Place(allFeatures);
     }
 
@@ -196,7 +196,7 @@ public class Environment : MonoBehaviour
     public static void DropItem(Item item, Vector3 posIn)
     {
         ItemObject feature = Instantiate(WORLD_OBJECTS["item"], posIn, Quaternion.identity, INSTANCE.transform).GetComponent<ItemObject>();
-        feature.InitItem(item, ItemTextures.GetItemSize(item.id));
+        feature.InitItem(item, ItemResources.GetItemSize(item.id));
         feature.GetComponent<Rigidbody>().AddForce(RandomGen.DropItemMomentum(), ForceMode.Impulse);
         AddItem(feature, posIn);
     }

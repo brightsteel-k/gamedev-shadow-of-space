@@ -21,9 +21,11 @@ public class EventTester : MonoBehaviour
         //Test should print "true"
         if (Input.GetKeyDown(KeyCode.L))
         {
-            hp.removeHealth(80);
-            Debug.Log(hp.dead);
-            en.draining = false;
+            hp.removeHealth(20);
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            en.removeEnergy(20);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftBracket))

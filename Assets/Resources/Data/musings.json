@@ -3,32 +3,115 @@
 		"You know what would be a good stress reliever? Destroying those with something."
 	],
 	"hematite_pebble": [
-		"Rocks, rocks, and more rocks."
+		"Rocks, rocks, and more rocks.",
+		"You look useful.",
+		"You look ominous.",
+		"I could break that down in my NOVA.",
+		"Maybe I should turn one of you rocks into my Wilson.",
+		"If rocks could talk, what would these ones say?"
 	],
 	"tyranite": [
-		"What a pretty colour. The things nature can create sometimes."
+		"What a pretty colour. The things nature can create sometimes.",
+		"I need to get minerals out of this somehow.",
+		"My computer detects trace amounts of lithium in the core…"
 	],
 	"tyranite_pebble": [
-		"I wonder what chemicals cause that colour."
+		"I wonder what chemicals cause that colour.",
+		"I could break that down in my NOVA.",
+		"Any of you rocks want to be my Wilson?"
 	],
 	"diamond": [
 		"What can two months' salary get me here?",
 		"Reduced to nothing but a rock.",
-		"Just carbon arranged in an ephemerally dazzling lattice."
+		"Just carbon arranged in an ephemerally symmetrical lattice.",
+		"We're both worth a lot more on Earth, aren't we?",
+		"If this were Earth, this place would be empty of diamonds in less than a day."
 	],
 	"gold": [
-		"Gold lying around like it’s trash? This definitely isn’t Earth."
+		"Gold lying around like rocks. I guess they aren't much more here.",
+		"What I wouldn't give to be back on Earth right now."
+	],
+	"auralite": [
+		"Maybe I can break this down into something more useful.",
+		"Shiny--maybe this could be useful."
 	],
 	"mushroom": [
 		"Food or phosphorus?",
-		"You, my friend, look like an excellent light source.",
-		"I’ll probably need these at night…"
+		"You look like an excellent light source.",
+		"I’ll probably need these if it gets dark here…",
+		"Looks like the light at the end of the tunnel…"
 	],
-	"sky": [
+	"drill": [
+		"I needed this."
+	],
+	"ferritic_steel": [
+		"It's not a stainless steel appliance, but it's something.",
+		"What could I make with ferritic steel?",
+		"One step closer to making a drill."
+	],
+	"flare": [
+		"This could save my life.",
+		"Something tells me this might come in handy.",
+		"I could use more of these.",
+		"My SOS signals… like anyone's even watching."
+	],
+	"battery": [
+		"If I leave a trail of batteries, will anyone find me?",
+		"Littering isn't very sustainable. But sooner or later I'll be gone or dead anyways.",
+		"If this planet stops helping me, I'll stop littering on it."
+	],
+	"microcircuit": [
+		"Wait--I recognize those components. That's a capacitor. And that's an IC with four multiplexers and a NOR gate. Was I an engineer…?"
+	],
+	"@E_all": [
 		"What kind of sky has a purple sun?",
 		"Ok, focus. Step 1: find a way to power suit. Step 2: stay alive. Step 3: ...",
 		"When in doubt, gather resources.",
+		"What have I got to work with around here?",
+		"Is anything around here useful?",
 		"If this suit dies, I die with it.",
-		"Batteries, batteries... where's the nearest convenience store when you need one?"
+		"Batteries, batteries… where's the nearest convenience store when you need one?",
+		"A sun and moon both in the sky? Even they have companions.",
+		"This definitely doesn't look like Earth.",
+		"That's a strange sky.",
+		"Why isn't the sun moving across the sky?",
+		"Looks like an active magnetar ionizing metallic particles in the atmosphere. Wait, how do I know that?",
+		"Sure would love to remember how I got here.",
+		"Damn, my head hurts. Why am I here right now?",
+		"When does a person die on an abandoned planet--when they stop breathing, or when they were first abandoned?",
+		"I can't remember anything… but I really hope someone remembers that I'm here.",
+		"I have no idea where I am, so I hope somebody out there does.",
+		"I get the feeling I might be the only person on this entire planet.",
+		"I can't remember my past… my present is looking pretty bleak… and I don't even want to think about the future…"
+	],
+	"@E_penumbra": [
+		"The moon is eclipsing the sun… perfect…",
+		"Figures I end up stuck on this planet the one day an eclipse is about to happen.",
+		"How can I prepare before the moon completely blocks the sun?",
+		"It'll be even lonelier in the dark.",
+		"Earth was never this dark."
+	],
+	"@E_eclipse": [
+		"I hate this so much.",
+		"What was that noise??"
+	],
+	"@E_monster": [
+		"All I can do is run.",
+		"I need a distraction.",
+		"What the hell was that??",
+		"I may not remember anything, but I know that thing's not from Earth!",
+		"I liked it better when I thought I was alone!",
+		"Shit shit shit--",
+		"Where is it?",
+		"Run run run--"
+	],
+	"transition_day": [
+		"This seems like a really long day. The sun isn't even moving across the sky."
+	],
+	"transition_penumbra": [
+		"…there's an eclipse coming. And it's getting dark. Just what I needed right now."
+	],
+	"transition_eclipse": [
+		"Shit. I can barely see anything."
 	]
 }

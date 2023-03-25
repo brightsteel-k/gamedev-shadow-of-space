@@ -16,6 +16,8 @@ public class MuseSystem : MonoBehaviour
     [SerializeField] private RectTransform museSliderTransform;
     [SerializeField] private TextMeshProUGUI museText;
     private Sprite skyIcon;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] typingClips = new AudioClip[3];
 
     [SerializeField] private SpriteRenderer iconObject;
     private Image iconEnvironment;
@@ -31,25 +33,23 @@ public class MuseSystem : MonoBehaviour
         INSTANCE = this;
         MUSE_SLIDER = museSliderTransform.transform.GetComponent<Slider>();
         iconEnvironment = museSliderTransform.Find("Icon").GetComponent<Image>();
+        audioSource = museSliderTransform.transform.GetComponent<AudioSource>();
         skyIcon = Resources.Load<Sprite>("Textures/UI/muse_sky");
         musableLayerMask = LayerMask.GetMask("Musable");
 
         TextAsset ta = Resources.Load<TextAsset>("Data/musings");
         allMusings = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(ta.text);
+        EventManager.OnPlayerDying += Deactivate;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(museButton) && MUSABLE)
-        {
             TryMusing();
-        }
         
         if (Input.GetKeyUp(museButton) && isMusing)
-        {
             StopMusing();
-        }
     }
 
     private void FixedUpdate()
@@ -70,13 +70,13 @@ public class MuseSystem : MonoBehaviour
 
     private void UpdateMusingBar()
     {
-        if (currentSubject != "sky" && Vector3.Distance(transform.position, currentSubjectPos) > 5f)
+        if (!currentSubject.StartsWith("@E") && Vector3.Distance(transform.position, currentSubjectPos) > 5f)
         {
             StopMusing();
             return;
         }
 
-        MUSE_SLIDER.value += Time.deltaTime / 2f;
+        MUSE_SLIDER.value += Time.deltaTime / 1.5f;
         if (MUSE_SLIDER.value == 1)
         {
             PrintMusing(currentSubject);
@@ -107,7 +107,14 @@ public class MuseSystem : MonoBehaviour
     private void BeginMusingEnvironment()
     {
         iconEnvironment.enabled = true;
-        currentSubject = "sky";
+        if (TimeManager.TIME_STATE == TimeManager.TimeState.Penumbra)
+            currentSubject = "@E_penumbra";
+        else if (TimeManager.TIME_STATE == TimeManager.TimeState.Eclipse)
+            currentSubject = "@E_eclipse";
+        else if (Player.WORLD_PLAYER.hasEncounteredMonster)
+            currentSubject = "@E_monster";
+        else
+            currentSubject = "@E_all";
         isMusing = true;
     }
 
@@ -124,14 +131,26 @@ public class MuseSystem : MonoBehaviour
         StopMusing();
         isSpeaking = true;
 
+        LeanTween.cancel(gameObject);
         string[] options = allMusings[subject];
         string message = "\"" + options[RandomGen.Range(0, options.Length - 1)] + "\"";
-        museText.SetText(message);
         museText.maxVisibleCharacters = 0;
+        museText.SetText(message);
         museText.CrossFadeAlpha(1, 0, true);
-        LeanTween.value(0, message.Length, 3f)
-            .setOnUpdate(c => museText.maxVisibleCharacters = (int)c);
+        LeanTween.value(gameObject, 0, message.Length, message.Length * 0.05f)
+            .setOnUpdate(c =>
+            {
+                int intc = (int)c;
+                if (intc > museText.maxVisibleCharacters && intc % 2 == 0)
+                    PlayRandomTypeSound();
+                museText.maxVisibleCharacters = intc;
+            });
         speakingCooldown = 5;
+    }
+
+    private void PlayRandomTypeSound()
+    {
+        audioSource.PlayOneShot(typingClips[Random.Range(0, 3)]);
     }
 
     private void FadeMusing()
@@ -149,4 +168,6 @@ public class MuseSystem : MonoBehaviour
         INSTANCE.StopMusing();
         MUSE_SLIDER.gameObject.SetActive(musable);
     }
+
+    private void Deactivate() => SetMusable(false);
 }

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Lithium
   id: res_lithium
-  sprite: {fileID: 21300000, guid: f82dfc5fc3c5a8f4080a3550427019c8, type: 3}
+  sprite: {fileID: 21300000, guid: c64f2a3f316fc5e4a8b671fefea05093, type: 3}
   isLiquid: 1
   madeLiq: {fileID: 11400000, guid: ca969cee8776be0438aab3e350bd6b84, type: 2}

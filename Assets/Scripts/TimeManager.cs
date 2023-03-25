@@ -4,14 +4,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
     [SerializeField] private Volume dayVolume;
     [SerializeField] private Volume eclipseVolume;
+    [SerializeField] private Volume dyingVolume;
+    [SerializeField] private Image fadeImage;
     
     [SerializeField] private CustomRenderSettings daySettings;
     [SerializeField] private CustomRenderSettings nightSettings;
+    private MuseSystem museSystem;
 
     [Serializable]
     public enum TimeState
@@ -22,7 +26,7 @@ public class TimeManager : MonoBehaviour
         Eclipse
     };
 
-    public TimeState timeState;
+    public static TimeState TIME_STATE;
 
     [SerializeField] private float timeStateCounter = 5;
 
@@ -38,8 +42,17 @@ public class TimeManager : MonoBehaviour
         // [TimeState.Eclipse] = 5
     };
 
+    void Start()
+    {
+        museSystem = Player.WORLD_PLAYER.GetComponent<MuseSystem>();
+        EventManager.OnPlayerDying += DisplayDyingOverlay;
+    }
+
     private void Update()
     {
+        if (EventManager.PLAYER_DYING)
+            return;
+
         timeStateCounter -= Time.deltaTime;
 
         if (timeStateCounter < 0)
@@ -53,13 +66,14 @@ public class TimeManager : MonoBehaviour
 
     void AdvanceTimeState()
     {
-        timeState = (int)timeState > 2 ? TimeState.Bright : timeState + 1;
-        timeStateCounter = timeStateLengths[timeState];
+        TIME_STATE = (int)TIME_STATE > 2 ? TimeState.Bright : TIME_STATE + 1;
+        timeStateCounter = timeStateLengths[TIME_STATE];
+        SendMuseMessage();
     }
 
     void UpdatePostProcessing()
     {
-        switch (timeState)
+        switch (TIME_STATE)
         {
             case TimeState.Day:
                 dayVolume.weight = 1;
@@ -82,8 +96,8 @@ public class TimeManager : MonoBehaviour
 
     void UpdateLighting()
     {
-        float t = 1 - (timeStateCounter / timeStateLengths[timeState]);
-        switch (timeState)
+        float t = 1 - (timeStateCounter / timeStateLengths[TIME_STATE]);
+        switch (TIME_STATE)
         {
             case TimeState.Bright:
                 RenderSettings.fog = true;
@@ -109,5 +123,26 @@ public class TimeManager : MonoBehaviour
                 RenderSettings.ambientLight = nightSettings.colour;
                 break;
         }
+    }
+
+    void SendMuseMessage()
+    {
+        if (TIME_STATE != TimeState.Bright)
+        {
+            museSystem.PrintMusing("transition_" + TIME_STATE.ToString().ToLower());
+        }
+    }
+
+    private void DisplayDyingOverlay()
+    {
+        LeanTween.value(0f, 1f, 2f)
+            .setOnUpdate(c => dyingVolume.weight = c)
+            .setOnComplete(FadeToBlack);
+    }
+
+    private void FadeToBlack()
+    {
+        LeanTween.value(0f, 1f, 5f)
+            .setOnUpdate(c => fadeImage.color = new Color(0, 0, 0, c));
     }
 }

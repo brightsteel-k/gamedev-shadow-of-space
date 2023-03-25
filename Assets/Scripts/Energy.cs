@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Energy : MonoBehaviour
 {
@@ -16,8 +17,13 @@ public class Energy : MonoBehaviour
     //Perhaps we only drain during certain times
     public bool draining = true;
     private bool isDrilling = false;
+    private bool lowEnergy = false;
+    private AudioSource audioSource;
+    private AudioClip powerDownClip;
+    private Image barBack;
     [SerializeField] Color normalColor;
     [SerializeField] Color drillingColor;
+    [SerializeField] Color lowEnergyColor;
 
     float drainSpeed = 0.5f;
 
@@ -27,6 +33,10 @@ public class Energy : MonoBehaviour
         bar.maxValue = maxEnergy;
         bar.setColor(normalColor);
         bar.setValue(value);
+        audioSource = bar.GetComponent<AudioSource>();
+        powerDownClip = Resources.Load<AudioClip>("Sounds/SuitPowerDown");
+        barBack = bar.GetComponent<Image>();
+        EventManager.OnPlayerDying += Deactivate;
     }
     
     //For now, it will slowly drain energy as long as main is running.
@@ -37,14 +47,13 @@ public class Energy : MonoBehaviour
         {
             //Multiplaying by deltaTime to make the drain smooth with framerate.
             value -= drainSpeed * Time.deltaTime;
-            
+
+            VerifyEnergy();
             updateBar();
-            if (value <= 0)
-            {
-                value = 0;
-                energyEmpty();
-            }
         }
+
+        if (lowEnergy)
+            barBack.color = Color.Lerp(Color.white, lowEnergyColor, Mathf.Cos(3f * Time.time));
     }
 
     public float getEnergy()
@@ -61,22 +70,15 @@ public class Energy : MonoBehaviour
     public void setEnergy(float amount)
     {
         value = amount;
-        
-        if (value > maxEnergy)
-        {
-            value = maxEnergy;
-        }
-        
+
+        VerifyEnergy();
         updateBar();
     }
     public void addEnergy(float amount)
     {
         value += amount;
-        if (value > maxEnergy)
-        {
-            value = maxEnergy;
-        }
-        
+
+        VerifyEnergy();
         updateBar();
         
     }
@@ -84,11 +86,7 @@ public class Energy : MonoBehaviour
     {
         maxEnergy = amount;
         bar.maxValue = amount;
-        if (value > maxEnergy)
-        {
-            value = maxEnergy;
-        }
-        
+        VerifyEnergy();
         updateBar();
     }
 
@@ -99,7 +97,7 @@ public class Energy : MonoBehaviour
 
         if (drilling)
         {
-            drainSpeed = 2f;
+            drainSpeed = 1f;
             bar.setColor(drillingColor);
         }
         else
@@ -129,9 +127,38 @@ public class Energy : MonoBehaviour
         updateBar();
         return oldBattery;
     }
-    
-    void energyEmpty()
+
+    private void VerifyEnergy()
     {
-        //Gameover? Other consequences? Put a "GameOver" call to a game manager?
+        if (value > maxEnergy)
+            value = maxEnergy;
+        else if (value <= 0)
+            EnergyEmpty();
+        else if (value <= 20)
+        {
+            if (!lowEnergy)
+            {
+                audioSource.Play();
+                lowEnergy = true;
+            }
+        }
+        else if (lowEnergy)
+        {
+            audioSource.Stop();
+            barBack.color = Color.white;
+            lowEnergy = false;
+        }
+    }
+
+    void EnergyEmpty()
+    {
+        Player.PlaySound(powerDownClip, 2f);
+        EventManager.PlayerDying();
+    }
+
+    void Deactivate()
+    {
+        audioSource.Stop();
+        draining = false;
     }
 }

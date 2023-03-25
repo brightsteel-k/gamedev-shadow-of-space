@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ItemOperator : MonoBehaviour
 {
+    [SerializeField] AudioSource backgroundSource;
+    [SerializeField] AudioClip replaceBatteryClip;
+    [SerializeField] AudioClip drillingClip;
+    [SerializeField] AudioClip drillingRockClip;
     public Item selectedItem;
     private Energy energy;
     private Inventory inventory;
@@ -24,16 +28,19 @@ public class ItemOperator : MonoBehaviour
         energy = GetComponent<Energy>();
         inventory = GetComponent<Inventory>();
         groundLayer = LayerMask.GetMask("Ground");
+        EventManager.OnPlayerDying += EndProcesses;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isDrilling && !Player.IN_MENU)
-            UpdateDrilling();
-
-        if (isThrowing && !Player.IN_MENU)
-            UpdateThrowing();
+        if (!Player.IN_MENU)
+        {
+            if (isDrilling)
+                UpdateDrilling();
+            if (isThrowing)
+                UpdateThrowing();
+        }
     }
 
     public void TryDropSelectedItem()
@@ -67,12 +74,15 @@ public class ItemOperator : MonoBehaviour
     private void SwitchBatteries(Item battery)
     {
         Item newBattery = energy.SwitchBatteries(battery);
+        Player.PlaySound(replaceBatteryClip, 0.7f);
         inventory.removeSelectedItem();
         Environment.DropItem(newBattery, CentrePos());
     }
 
     private void StartDrilling()
     {
+        backgroundSource.clip = drillingClip;
+        backgroundSource.Play();
         isDrilling = true;
         energy.SetDrilling(true);
     }
@@ -87,6 +97,8 @@ public class ItemOperator : MonoBehaviour
                 currentlyDrilling = hit.transform.GetComponent<LargeObject>();
                 hit.transform.tag = "Breaking";
                 drillingTimer = 0;
+                backgroundSource.clip = drillingRockClip;
+                backgroundSource.Play();
                 currentDrillParticles = Instantiate(currentlyDrilling.GetMineParticles(), hit.point + Player.WORLD_PLAYER.GetDirection() * 0.1f, Quaternion.identity).transform;
                 currentDrillParticles.LookAt(transform.position + new Vector3(0, 3, 0));
             }
@@ -131,6 +143,8 @@ public class ItemOperator : MonoBehaviour
     private void StopDrilling()
     {
         LoseDrillingSubject();
+        backgroundSource.clip = drillingClip;
+        backgroundSource.Stop();
         isDrilling = false;
         energy.SetDrilling(false);
     }
@@ -183,14 +197,14 @@ public class ItemOperator : MonoBehaviour
         isThrowing = false;
     }
 
+    private void EndProcesses()
+    {
+        StopDrilling();
+        StopThrowing();
+    }
+
     public Vector3 CentrePos()
     {
         return transform.position + Vector3.up;
-    }
-
-    public void OnDrawGizmos()
-    {
-        /*Vector3 centre = CentrePos();
-        Gizmos.DrawLine(centre, centre + Player.WORLD_PLAYER.GetDirection() * 2);*/
     }
 }

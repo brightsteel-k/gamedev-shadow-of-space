@@ -23,11 +23,15 @@ public class PlayerAnimation : MonoBehaviour
         idleSprites[2] = Resources.Load<Sprite>("Textures/Player/Standing_DOWN");
         anim = textureObject.GetComponent<Animator>();
         spriteRenderer = textureObject.GetComponent<SpriteRenderer>();
+        EventManager.OnPlayerDying += Die;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (EventManager.PLAYER_DYING)
+            return;
+
         ManageDirection();
         if (!Player.IN_MENU)
         {
@@ -213,6 +217,13 @@ public class PlayerAnimation : MonoBehaviour
             SetRotatableState(AnimationState.Idle);
         else
             UpdateAnimationState();
+    }
+
+    private void Die()
+    {
+        EventManager.PLAYER_DYING = true;
+        LeanTween.value(0.5f, 0f, 1f)
+            .setOnUpdate(e => anim.speed = e);
     }
 
     void UpdateAnimationState()

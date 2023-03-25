@@ -93,6 +93,7 @@ MonoBehaviour:
   text: {fileID: 6960982721065441457}
   colorBar: {fileID: 8597995322090000443}
   barSprite: {fileID: 7936626296336700853}
+  unitSuffix: dag
   maxValue: 100
   currentValue: 50
   barColor: {r: 0, g: 0, b: 0, a: 1}
@@ -343,6 +344,7 @@ MonoBehaviour:
   text: {fileID: 6960982721065441457}
   colorBar: {fileID: 8597995322090000443}
   barSprite: {fileID: 7936626296336700853}
+  unitSuffix: '%'
   maxValue: 100
   currentValue: 100
   barColor: {r: 1, g: 0, b: 0, a: 1}
@@ -456,11 +458,11 @@ RectTransform:
   m_Father: {fileID: 8237180940992945907}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 103.5, y: 0.0000076293945}
-  m_SizeDelta: {x: -106.1982, y: 8.776199}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 156.59909, y: 0}
+  m_SizeDelta: {x: 70, y: 32.7762}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4559828582227881259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -489,7 +491,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: X%
+  m_text: XXdag
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -498,8 +500,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Phosphorescent Mushroom
   id: mushroom
-  sprite: {fileID: 21300000, guid: 17439a36adde2e0489e67de76c510583, type: 3}
+  sprite: {fileID: 21300000, guid: 9d368ee4806675c4a8161a0d78f22d87, type: 3}
+  isLiquid: 0
+  madeLiq: {fileID: 0}
