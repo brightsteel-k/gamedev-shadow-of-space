@@ -8,44 +8,39 @@ using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
-    [SerializeField] private Volume dayVolume;
-    [SerializeField] private Volume eclipseVolume;
+    [Tooltip("In order: Volume profiles for Bright, Day, Penumbra, and Eclipse.")]
+    [SerializeField] private VolumeProfile[] volumeProfiles = new VolumeProfile[4];
+    [SerializeField] private Volume currentVolume;
+    [SerializeField] private Volume previousVolume;
     [SerializeField] private Volume dyingVolume;
     [SerializeField] private Image fadeImage;
     
     [SerializeField] private CustomRenderSettings daySettings;
     [SerializeField] private CustomRenderSettings nightSettings;
     private MuseSystem museSystem;
+    private MusicManager musicManager;
 
-    [Serializable]
-    public enum TimeState
-    {
-        Bright,
-        Day,
-        Penumbra,
-        Eclipse
-    };
-
-    public static TimeState TIME_STATE;
-
-    [SerializeField] private float timeStateCounter = 5;
+    public static TimeState TIME_STATE = 0;
 
     private Dictionary<TimeState, float> timeStateLengths = new Dictionary<TimeState, float>()
     {
-        [TimeState.Day] = 60,
-        [TimeState.Bright] = 360,
+        [TimeState.Bright] = 180,
+        [TimeState.Day] = 180,
         [TimeState.Penumbra] = 120,
         [TimeState.Eclipse] = 300
-        // [TimeState.Day] = 5,
-        // [TimeState.Bright] = 5,
-        // [TimeState.Penumbra] = 5,
-        // [TimeState.Eclipse] = 5
     };
+
+    [SerializeField] private float timeStateCounter = 180;
+    private float transitionLength = 20;
+    private float transitionCounter = 0;
 
     void Start()
     {
+        musicManager = GetComponent<MusicManager>();
         museSystem = Player.WORLD_PLAYER.GetComponent<MuseSystem>();
         EventManager.OnPlayerDying += DisplayDyingOverlay;
+        timeStateCounter = timeStateLengths[TIME_STATE];
+        musicManager.UpdateTimeStateTrack();
     }
 
     private void Update()
@@ -53,75 +48,68 @@ public class TimeManager : MonoBehaviour
         if (EventManager.PLAYER_DYING)
             return;
 
-        timeStateCounter -= Time.deltaTime;
+        timeStateCounter -= Time.deltaTime; // @TODO: remove accelerated time rate
+        if (transitionCounter > 0)
+        {
+            transitionCounter -= Time.deltaTime;
+            if (transitionCounter < 0)
+                transitionCounter = 0;
+            UpdatePostProcessing();
+        }
+        UpdateLighting();
 
         if (timeStateCounter < 0)
-        {
             AdvanceTimeState();
-        }
-
-        UpdatePostProcessing();
-        UpdateLighting();
     }
 
     void AdvanceTimeState()
     {
-        TIME_STATE = (int)TIME_STATE > 2 ? TimeState.Bright : TIME_STATE + 1;
+        TIME_STATE = (int)TIME_STATE >= 3 ? TimeState.Bright : TIME_STATE + 1;
+        previousVolume.profile = currentVolume.profile;
+        previousVolume.weight = 1;
+        currentVolume.weight = 0;
+        currentVolume.profile = volumeProfiles[(int)TIME_STATE];
         timeStateCounter = timeStateLengths[TIME_STATE];
+        transitionCounter = transitionLength;
+        HandleLightingShift();
+
         SendMuseMessage();
+        musicManager.UpdateTimeStateTrack();
     }
 
     void UpdatePostProcessing()
     {
-        switch (TIME_STATE)
+        float decreasingWeight = transitionCounter / transitionLength;
+        previousVolume.weight = decreasingWeight;
+        currentVolume.weight = 1 - decreasingWeight;
+    }
+
+    void HandleLightingShift()
+    {
+        if (TIME_STATE == TimeState.Penumbra)
         {
-            case TimeState.Day:
-                dayVolume.weight = 1;
-                eclipseVolume.weight = 0;
-                break;
-            case TimeState.Bright:
-                dayVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Day]);
-                eclipseVolume.weight = timeStateCounter / timeStateLengths[TimeState.Day];
-                break;
-            case TimeState.Penumbra:
-                eclipseVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Penumbra]);
-                dayVolume.weight = timeStateCounter / timeStateLengths[TimeState.Penumbra];
-                break;
-            case TimeState.Eclipse:
-                eclipseVolume.weight = 1;
-                dayVolume.weight = 0;
-                break;
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = FogMode.Exponential;
+        }
+        else if (TIME_STATE == TimeState.Day)
+        {
+            RenderSettings.fog = false;
         }
     }
 
     void UpdateLighting()
     {
-        float t = 1 - (timeStateCounter / timeStateLengths[TIME_STATE]);
-        switch (TIME_STATE)
+        if (TIME_STATE == TimeState.Bright && RenderSettings.fog)
         {
-            case TimeState.Bright:
-                RenderSettings.fog = true;
-                RenderSettings.fogDensity = Mathf.Lerp(nightSettings.fogIntensity, daySettings.fogIntensity, t);
-                RenderSettings.ambientLight = Color32.Lerp(nightSettings.colour, daySettings.colour, t);
-                break;
-            
-            case TimeState.Day:
-                RenderSettings.fog = false;
-                RenderSettings.fogDensity = daySettings.fogIntensity;
-                RenderSettings.ambientLight = daySettings.colour;
-
-                break;
-            case TimeState.Penumbra:
-                RenderSettings.fog = true;
-                RenderSettings.fogDensity = Mathf.Lerp(daySettings.fogIntensity, nightSettings.fogIntensity, t);
-                RenderSettings.ambientLight = Color32.Lerp(daySettings.colour, nightSettings.colour, t);
-                
-                break;
-            case TimeState.Eclipse:
-                RenderSettings.fog = true;
-                RenderSettings.fogDensity = nightSettings.fogIntensity;
-                RenderSettings.ambientLight = nightSettings.colour;
-                break;
+            float t = transitionCounter / transitionLength;
+            RenderSettings.fogDensity = Mathf.Lerp(daySettings.fogIntensity, nightSettings.fogIntensity, t);
+            RenderSettings.ambientLight = Color32.Lerp(daySettings.colour, nightSettings.colour, t);
+        }
+        else if (TIME_STATE == TimeState.Penumbra)
+        {
+            float t = timeStateCounter / timeStateLengths[TimeState.Penumbra];
+            RenderSettings.fogDensity = Mathf.Lerp(nightSettings.fogIntensity, daySettings.fogIntensity, t);
+            RenderSettings.ambientLight = Color32.Lerp(nightSettings.colour, daySettings.colour, t);
         }
     }
 
@@ -142,7 +130,17 @@ public class TimeManager : MonoBehaviour
 
     private void FadeToBlack()
     {
+        fadeImage.gameObject.SetActive(true);
         LeanTween.value(0f, 1f, 5f)
             .setOnUpdate(c => fadeImage.color = new Color(0, 0, 0, c));
     }
+}
+
+[Serializable]
+public enum TimeState
+{
+    Bright,
+    Day,
+    Penumbra,
+    Eclipse
 }

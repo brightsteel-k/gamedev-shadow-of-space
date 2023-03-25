@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colour:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4286872188
   fogEnabled: 0
   fogColour:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
   fogIntensity: 0

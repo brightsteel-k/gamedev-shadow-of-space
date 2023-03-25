@@ -107,9 +107,9 @@ public class MuseSystem : MonoBehaviour
     private void BeginMusingEnvironment()
     {
         iconEnvironment.enabled = true;
-        if (TimeManager.TIME_STATE == TimeManager.TimeState.Penumbra)
+        if (TimeManager.TIME_STATE == TimeState.Penumbra)
             currentSubject = "@E_penumbra";
-        else if (TimeManager.TIME_STATE == TimeManager.TimeState.Eclipse)
+        else if (TimeManager.TIME_STATE == TimeState.Eclipse)
             currentSubject = "@E_eclipse";
         else if (Player.WORLD_PLAYER.hasEncounteredMonster)
             currentSubject = "@E_monster";

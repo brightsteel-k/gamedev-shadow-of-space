@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class StygianStalker : Rotatable
 {
+    [SerializeField] Transform sphere;
+
     private static Transform TARGET;
     [SerializeField] private Vector3 spawnPos;
     [SerializeField] float circleSpeed;
@@ -155,6 +157,7 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Attacking!");
         currentMode = StygianMode.Attacking;
+        MusicManager.SetAttackingTrack(true);
         if (!Player.WORLD_PLAYER.hasEncounteredMonster)
             Player.WORLD_PLAYER.hasEncounteredMonster = true;
     }
@@ -163,8 +166,10 @@ public class StygianStalker : Rotatable
     {
         Vector3 monsterToPlayer = Player.CONTROLLER.transform.position - transform.position;
         Vector3 cross = Vector3.Cross(monsterToPlayer, Vector3.up).normalized;
-        Vector3 projection = Vector3.Dot(cross, Player.CONTROLLER.velocity) * Player.CONTROLLER.velocity;
+        Vector3 projection = Vector3.Dot(cross, Player.CONTROLLER.velocity) * Player.CONTROLLER.velocity / 4;
         navMeshAgent.SetDestination(TARGET.position + projection);
+        sphere.position = TARGET.position + projection;
+        
     }
 
     // ATTACKING = = = = = = = = = = = = = = = = = = = = = = = [END OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = ATTACKING
@@ -178,6 +183,7 @@ public class StygianStalker : Rotatable
         float theta = Mathf.Atan2(transform.position.z - source.z, transform.position.x - source.x);
         theta = RandomGen.MercuryDirection(theta);
 
+        MusicManager.SetAttackingTrack(false);
         Vector3 direction = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
         targetPos = ChunkHandler.BoundCoordinate(direction.normalized * 80f);
         navMeshAgent.SetDestination(targetPos);

@@ -6,7 +6,7 @@
 		{ "Item1": "diamond", "Item2": 0.000003 },
 		{ "Item1": "stalagmite", "Item2": 3 },
 		{ "Item1": "auralite", "Item2": 0.00013 },
-		{ "Item1": "gold_piece", "Item2": 0.0000005 },
+		{ "Item1": "gold_piece", "Item2": 0.000001 },
 		{ "Item1": "mushroom", "Item2": 0.3 }
 	]
 }

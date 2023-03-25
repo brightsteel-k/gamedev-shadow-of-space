@@ -267,8 +267,8 @@ public class Player : MonoBehaviour
         Quaternion modifiedRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y - rotationChange, currentRotation.eulerAngles.z);
         LeanTween.rotate(obj, modifiedRotation.eulerAngles, WORLD_PLAYER.rotationTime).setEase(easeType)
             .setEase(easeType)
-            .setOnStart(ToggleMove)
-            .setOnComplete(ToggleMove);
+            .setOnStart(() => canRotate = false)
+            .setOnComplete(e => canRotate = true);
     }
 
     public static void PlaySound(AudioClip clip) => PlaySound(clip, 0.3f);
