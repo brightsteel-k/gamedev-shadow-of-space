@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3709e85632523224ba62fd0e45d69926, type: 3}
   m_Name: microcircuit
   m_EditorClassIdentifier: 
-  displayName: Diamond-Tipped Drill
-  id: drill
-  sprite: {fileID: 21300000, guid: 173fbf992ae38b348851afefed019d55, type: 3}
+  displayName: Microcircuit
+  id: microcircuit
+  sprite: {fileID: 21300000, guid: 57bd523a2aa45c946909114717a52cc7, type: 3}
+  isLiquid: 0
+  madeLiq: {fileID: 0}
