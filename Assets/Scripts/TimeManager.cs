@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -8,9 +9,11 @@ public class TimeManager : MonoBehaviour
 {
     [SerializeField] private Volume dayVolume;
     [SerializeField] private Volume eclipseVolume;
-    [SerializeField] private LightingSettings lightingSettings;
+    
+    [SerializeField] private CustomRenderSettings daySettings;
+    [SerializeField] private CustomRenderSettings nightSettings;
 
-    [System.Serializable]
+    [Serializable]
     public enum TimeState
     {
         Bright,
@@ -21,20 +24,22 @@ public class TimeManager : MonoBehaviour
 
     public TimeState timeState;
 
-    [SerializeField] private float time;
     [SerializeField] private float timeStateCounter = 5;
 
-    public Dictionary<TimeState, float> timeStateLengths = new Dictionary<TimeState, float>()
+    private Dictionary<TimeState, float> timeStateLengths = new Dictionary<TimeState, float>()
     {
-        [TimeState.Bright] = 5,
-        [TimeState.Day] = 5,
-        [TimeState.Penumbra] = 5,
-        [TimeState.Eclipse] = 5
+        [TimeState.Day] = 60,
+        [TimeState.Bright] = 360,
+        [TimeState.Penumbra] = 120,
+        [TimeState.Eclipse] = 300
+        // [TimeState.Day] = 5,
+        // [TimeState.Bright] = 5,
+        // [TimeState.Penumbra] = 5,
+        // [TimeState.Eclipse] = 5
     };
 
     private void Update()
     {
-        time += Time.deltaTime;
         timeStateCounter -= Time.deltaTime;
 
         if (timeStateCounter < 0)
@@ -56,11 +61,11 @@ public class TimeManager : MonoBehaviour
     {
         switch (timeState)
         {
-            case TimeState.Bright:
+            case TimeState.Day:
                 dayVolume.weight = 1;
                 eclipseVolume.weight = 0;
                 break;
-            case TimeState.Day:
+            case TimeState.Bright:
                 dayVolume.weight = 1 - (timeStateCounter / timeStateLengths[TimeState.Day]);
                 eclipseVolume.weight = timeStateCounter / timeStateLengths[TimeState.Day];
                 break;
@@ -77,6 +82,32 @@ public class TimeManager : MonoBehaviour
 
     void UpdateLighting()
     {
-        
+        float t = 1 - (timeStateCounter / timeStateLengths[timeState]);
+        switch (timeState)
+        {
+            case TimeState.Bright:
+                RenderSettings.fog = true;
+                RenderSettings.fogDensity = Mathf.Lerp(nightSettings.fogIntensity, daySettings.fogIntensity, t);
+                RenderSettings.ambientLight = Color32.Lerp(nightSettings.colour, daySettings.colour, t);
+                break;
+            
+            case TimeState.Day:
+                RenderSettings.fog = false;
+                RenderSettings.fogDensity = daySettings.fogIntensity;
+                RenderSettings.ambientLight = daySettings.colour;
+
+                break;
+            case TimeState.Penumbra:
+                RenderSettings.fog = true;
+                RenderSettings.fogDensity = Mathf.Lerp(daySettings.fogIntensity, nightSettings.fogIntensity, t);
+                RenderSettings.ambientLight = Color32.Lerp(daySettings.colour, nightSettings.colour, t);
+                
+                break;
+            case TimeState.Eclipse:
+                RenderSettings.fog = true;
+                RenderSettings.fogDensity = nightSettings.fogIntensity;
+                RenderSettings.ambientLight = nightSettings.colour;
+                break;
+        }
     }
 }
