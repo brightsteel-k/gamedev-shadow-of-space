@@ -53,7 +53,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     void adjustSize()
     {
         float scale = (Screen.height - 70) / 400f;
-
         transform.localScale = new Vector3(scale, scale, scale);
     }
 
@@ -125,7 +124,6 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler
     {
         gameObject.SetActive(active);
         Player.IN_MENU = active;
-        Cursor.lockState = active ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = active;
         if (active)
         {

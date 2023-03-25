@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     private PlayerAnimation animations;
     private ItemOperator itemOperator;
 
+    [SerializeField] private GameObject rotateBar;
+    private Transform rotateBarPointer;
     [SerializeField] private float speed;
     private static float pivotCooldown = 1f;
     [SerializeField] private float cameraOffsetRadius;
@@ -25,10 +27,8 @@ public class Player : MonoBehaviour
     public static bool canRotate = true;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
 
-    [SerializeField] private bool walkType;
-
     private int mouseThreshold;
-    private int mouseCentrePos;
+    private int mouseHalfScreen;
     private int mouseInput = 0;
 
     private void Awake()
@@ -44,10 +44,19 @@ public class Player : MonoBehaviour
         animations = GetComponent<PlayerAnimation>();
         MAIN_CAMERA = transform.Find("Main Camera").GetComponent<Camera>();
         itemOperator = GetComponent<ItemOperator>();
+        rotateBarPointer = rotateBar.transform.Find("Pointer");
+        InitRotateSystem();
+    }
+
+    private void InitRotateSystem()
+    {
         mouseThreshold = Screen.width / 3;
-        mouseCentrePos = Screen.width / 2;
+        mouseHalfScreen = Screen.width / 2;
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        // Deals with logic for resizing to fit screen
+        float scale = (Screen.width / 2) / 700f;
+        rotateBar.transform.localScale = new Vector3(scale, scale, scale);
     }
 
     private void Update()
@@ -121,36 +130,28 @@ public class Player : MonoBehaviour
 
     private void PlayerRotateInput()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        float deltaMousePos = Input.mousePosition.x - mouseHalfScreen;
+        UpdateRotateBar(deltaMousePos);
+        if (deltaMousePos > mouseThreshold)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = false;
-        }
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            mouseInput = 0;
-        }
-        else if (mouseCentrePos - Input.mousePosition.x > mouseThreshold)
-        {
-            if (mouseInput != 1 && canRotate && pivotCooldown == 0)
-            {
-                PivotWorld(false);
-                mouseInput = 1;
-            }
-        }
-        else if (mouseCentrePos - Input.mousePosition.x < -mouseThreshold)
-        {
-            if (mouseInput != -1 && canRotate && pivotCooldown == 0)
+            if (canRotate && pivotCooldown == 0)
             {
                 PivotWorld(true);
-                mouseInput = -1;
             }
         }
-        else if (mouseInput != 0)
+        else if (deltaMousePos < -mouseThreshold)
         {
-            mouseInput = 0;
+            if (canRotate && pivotCooldown == 0)
+            {
+                PivotWorld(false);
+            }
         }
+    }
+
+    private void UpdateRotateBar(float deltaMousePos)
+    {
+        float x = deltaMousePos / mouseThreshold * 295f;
+        rotateBarPointer.localPosition = new Vector2(Mathf.Clamp(x, -320, 320), 0);
     }
 
     private void TickPivotCooldown()
@@ -166,16 +167,13 @@ public class Player : MonoBehaviour
 
     private void PivotWorld(bool clockwise)
     {
-        pivotCooldown = 0.5f;
+        pivotCooldown = 0.66f;
         
         EventManager.WorldPivot(clockwise);
         Pivot(gameObject, clockwise);
         animations.RotateCamera(clockwise);
 
-        if (clockwise)
-            CAMERA_ROTATION = CAMERA_ROTATION == 0 ? 7 : CAMERA_ROTATION - 1;
-        else
-            CAMERA_ROTATION = CAMERA_ROTATION == 7 ? 0 : CAMERA_ROTATION + 1;
+        CAMERA_ROTATION = (CAMERA_ROTATION + (clockwise ? 7 : 1)) % 8;
     }
 
     public Vector3 GetDirection()
@@ -223,10 +221,9 @@ public class Player : MonoBehaviour
         animations.SetInMenu(inMenu);
     }
 
-    public static void PivotInit(GameObject obj)
+    public static float CurrentYRotation()
     {
-        Vector3 currentRotation = obj.transform.eulerAngles;
-        obj.transform.eulerAngles = new Vector3(currentRotation.x, WORLD_PLAYER.transform.eulerAngles.y, currentRotation.z);
+        return WORLD_PLAYER.transform.eulerAngles.y;
     }
 
     public static void Pivot(GameObject obj, bool clockwise)

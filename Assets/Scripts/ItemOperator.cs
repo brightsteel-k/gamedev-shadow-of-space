@@ -137,7 +137,6 @@ public class ItemOperator : MonoBehaviour
 
     private void StartThrowing()
     {
-        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         isThrowing = true;
     }
@@ -180,7 +179,6 @@ public class ItemOperator : MonoBehaviour
 
     private void StopThrowing()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         isThrowing = false;
     }

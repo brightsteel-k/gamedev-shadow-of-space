@@ -15,7 +15,13 @@ public class Rotatable : MonoBehaviour
     protected virtual void InitRotation()
     {
         EventManager.OnWorldPivot += Pivot;
-        Player.PivotInit(textureObject);
+        VerifyRotation();
+    }
+
+    protected virtual void VerifyRotation()
+    {
+        Vector3 rotation = textureObject.transform.eulerAngles;
+        textureObject.transform.eulerAngles = new Vector3(rotation.x, Player.CurrentYRotation(), rotation.z);
     }
 
     protected virtual void RemoveRotation()
@@ -30,6 +36,9 @@ public class Rotatable : MonoBehaviour
 
     protected virtual void Pivot(bool clockwise) {
         if (gameObject.activeSelf)
+        {
+            VerifyRotation();
             Player.Pivot(textureObject, clockwise);
+        }
     }
 }

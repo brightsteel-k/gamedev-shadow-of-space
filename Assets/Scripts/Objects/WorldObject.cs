@@ -51,8 +51,8 @@ public abstract class WorldObject : Rotatable
 
     public virtual void SetActive(bool active) //Properly deactivates world object, in case information about it needs to be saved first
     {
-        gameObject.SetActive(active);
         if (active)
-            Player.PivotInit(textureObject);
+            VerifyRotation();
+        gameObject.SetActive(active);
     }
 }
