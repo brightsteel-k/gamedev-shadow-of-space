@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        EventManager.OnPlayerDying += OnPlayerDying;
     }
 
     //Menu Manager to manage when UI's start up (if they start inactive, their scripts can't activate themselves
@@ -40,5 +40,10 @@ public class MenuManager : MonoBehaviour
         craft.SetMenuActive(active);
         MuseSystem.SetMusable(!active);
         Player.WORLD_PLAYER.SetInMenu(active);
+    }
+
+    public void OnPlayerDying()
+    {
+        craft.SetMenuActive(false);
     }
 }

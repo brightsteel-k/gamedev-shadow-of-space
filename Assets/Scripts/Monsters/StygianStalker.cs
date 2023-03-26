@@ -29,6 +29,7 @@ public class StygianStalker : Rotatable
 
     [Header("Sounds")]
     private AudioSource audioSource;
+    private bool charged = false;
     [SerializeField] AudioClip roarClip;
     [SerializeField] AudioClip biteClip;
 
@@ -66,6 +67,8 @@ public class StygianStalker : Rotatable
             attackCooldown -= Time.deltaTime;
         else if (attackCooldown < 0)
             attackCooldown = 0;
+
+        RoarWhenCharging();
     }
 
     void StartTracking()
@@ -97,7 +100,6 @@ public class StygianStalker : Rotatable
 
         BeginCircling();
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -137,13 +139,38 @@ public class StygianStalker : Rotatable
         BeginCircling();
     }
 
+    void RoarWhenCharging()
+    {
+        if (!corporeal)
+        {
+            if (charged)
+                charged = false;
+            return;
+        }
+
+        
+        float distance = Vector3.Distance(transform.position, TARGET.position);
+        if (charged)
+        {
+            if (distance > 40)
+                charged = false;
+        }
+        else
+        {
+            if (distance < 30)
+            {
+                audioSource.PlayOneShot(roarClip, 2f);
+                charged = true;
+            }
+        }
+    }
+
     // STALKING = = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF STALKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = STALKING
 
     void BeginCircling()
     {
         Debug.Log("Stalking!");
         currentMode = StygianMode.Stalking;
-        StartCoroutine("Roaring");
         navMeshAgent.speed = circleSpeed;
         stalkingCircles = 0;
 
@@ -240,7 +267,6 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Recuperating!");
         currentMode = StygianMode.Recuperating;
-        StopCoroutine("Roaring");
         incorporealPos = transform.position;
         navMeshAgent.enabled = false;
         corporeal = false;
@@ -270,15 +296,6 @@ public class StygianStalker : Rotatable
     {
         yield return new WaitForSeconds(RandomGen.RecuperationTime(numTimesFled));
         StartTracking();
-    }
-
-    private IEnumerator Roaring()
-    {
-        if (!corporeal)
-            yield return null;
-        if (Vector3.Distance(transform.position, TARGET.position) > 10f)
-            audioSource.PlayOneShot(roarClip);
-        yield return new WaitForSeconds(RandomGen.Range(5f, 20f));
     }
 
     protected override void Pivot(bool clockwise)

@@ -16,6 +16,7 @@ public class MuseSystem : MonoBehaviour
     [SerializeField] private RectTransform museSliderTransform;
     [SerializeField] private TextMeshProUGUI museText;
     private Sprite skyIcon;
+    private Sprite monsterIcon;
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] typingClips = new AudioClip[3];
 
@@ -33,8 +34,9 @@ public class MuseSystem : MonoBehaviour
         INSTANCE = this;
         MUSE_SLIDER = museSliderTransform.transform.GetComponent<Slider>();
         iconEnvironment = museSliderTransform.Find("Icon").GetComponent<Image>();
-        audioSource = museSliderTransform.transform.GetComponent<AudioSource>();
+        audioSource = museText.transform.GetComponent<AudioSource>();
         skyIcon = Resources.Load<Sprite>("Textures/UI/muse_sky");
+        skyIcon = Resources.Load<Sprite>("Textures/UI/muse_monster");
         musableLayerMask = LayerMask.GetMask("Musable");
 
         TextAsset ta = Resources.Load<TextAsset>("Data/musings");
@@ -106,7 +108,12 @@ public class MuseSystem : MonoBehaviour
 
     private void BeginMusingEnvironment()
     {
+        if (Player.WORLD_PLAYER.hasEncounteredMonster)
+            iconEnvironment.sprite = monsterIcon;
+        else
+            iconEnvironment.sprite = skyIcon;
         iconEnvironment.enabled = true;
+
         if (TimeManager.TIME_STATE == TimeState.Penumbra)
             currentSubject = "@E_penumbra";
         else if (TimeManager.TIME_STATE == TimeState.Eclipse)
@@ -115,6 +122,7 @@ public class MuseSystem : MonoBehaviour
             currentSubject = "@E_monster";
         else
             currentSubject = "@E_all";
+
         isMusing = true;
     }
 
@@ -131,13 +139,13 @@ public class MuseSystem : MonoBehaviour
         StopMusing();
         isSpeaking = true;
 
-        LeanTween.cancel(gameObject);
+        LeanTween.cancel(museText.gameObject);
         string[] options = allMusings[subject];
         string message = "\"" + options[RandomGen.Range(0, options.Length - 1)] + "\"";
         museText.maxVisibleCharacters = 0;
         museText.SetText(message);
         museText.CrossFadeAlpha(1, 0, true);
-        LeanTween.value(gameObject, 0, message.Length, message.Length * 0.05f)
+        LeanTween.value(museText.gameObject, 0, message.Length, message.Length * 0.05f)
             .setOnUpdate(c =>
             {
                 int intc = (int)c;
@@ -169,5 +177,11 @@ public class MuseSystem : MonoBehaviour
         MUSE_SLIDER.gameObject.SetActive(musable);
     }
 
-    private void Deactivate() => SetMusable(false);
+    private void Deactivate()
+    {
+        SetMusable(false);
+        LeanTween.cancel(museText.gameObject);
+        isSpeaking = false;
+        museText.gameObject.SetActive(false);
+    }
 }
