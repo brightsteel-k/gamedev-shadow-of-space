@@ -70,7 +70,7 @@ public class RandomGen
 
     public static bool ShouldContinueCircling(int circles)
     {
-        return Random.Range(0, Mathf.Max(0, 6 - circles)) > 1;
+        return Random.Range(0, Mathf.Max(0, 7 - circles)) > 1;
     }
 
     public static float MercuryDirection(float theta)

@@ -221,8 +221,9 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Die()
     {
-        EventManager.PLAYER_DYING = true;
-        LeanTween.value(0.5f, 0f, 1f)
+        anim.Play("Dying", 0);
+        LeanTween.value(0.6f, 0f, 5f)
+            .setEaseOutQuint()
             .setOnUpdate(e => anim.speed = e);
     }
 

@@ -131,9 +131,14 @@ public class Energy : MonoBehaviour
     private void VerifyEnergy()
     {
         if (value > maxEnergy)
+        {
             value = maxEnergy;
+        }
         else if (value <= 0)
+        {
             EnergyEmpty();
+            value = 0f;
+        }
         else if (value <= 20)
         {
             if (!lowEnergy)

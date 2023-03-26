@@ -48,7 +48,7 @@ public class TimeManager : MonoBehaviour
         if (EventManager.PLAYER_DYING)
             return;
 
-        timeStateCounter -= Time.deltaTime; // @TODO: remove accelerated time rate
+        timeStateCounter -= Time.deltaTime;
         if (transitionCounter > 0)
         {
             transitionCounter -= Time.deltaTime;

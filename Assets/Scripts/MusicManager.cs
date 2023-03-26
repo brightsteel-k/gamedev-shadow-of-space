@@ -11,11 +11,15 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioClip stalkingTrack;
     private AudioSource audioSource;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         INSTANCE = this;
         audioSource = GetComponent<AudioSource>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         EventManager.OnPlayerDying += OnPlayerDying;
     }
 

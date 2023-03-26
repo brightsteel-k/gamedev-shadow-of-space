@@ -22,6 +22,7 @@ public class Health : MonoBehaviour
     private AudioSource audioSource;
     private Image barBack;
     [SerializeField] private AudioClip playerHurtClip;
+    [SerializeField] private AudioClip deathClip;
 
     //Starting off by initializing the bar (just in case)
     void Start()
@@ -48,8 +49,9 @@ public class Health : MonoBehaviour
     public void removeHealth(float amount)
     {
         value -= amount;
-        audioSource.PlayOneShot(playerHurtClip, 1.25f);
         VerifyHealth();
+        if (value > 0)
+            audioSource.PlayOneShot(playerHurtClip, 1.25f);
         updateBar();
     }
     public void setHealth(float amount)
@@ -81,9 +83,14 @@ public class Health : MonoBehaviour
     private void VerifyHealth()
     {
         if (value > maxHealth)
+        {
             value = maxHealth;
+        }
         else if (value <= 0)
+        {
             HealthRunout();
+            value = 0;
+        }
         else if (value <= 20)
         {
             if (!lowHealth)
@@ -100,6 +107,7 @@ public class Health : MonoBehaviour
 
     private void HealthRunout()
     {
+        Player.PlaySound(deathClip, 2f);
         EventManager.PlayerDying();
     }
 

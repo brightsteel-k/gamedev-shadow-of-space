@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class StygianStalker : Rotatable
 {
-    [SerializeField] Transform sphere;
+    [SerializeField] Transform sphere; // @TODO: Delete tester object
 
     private static Transform TARGET;
     [SerializeField] private Vector3 spawnPos;
@@ -21,9 +21,16 @@ public class StygianStalker : Rotatable
     private NavMeshAgent navMeshAgent;
 
     private float stalkingTheta;
-    private int stalkingCircles;
+    private int stalkingCircles = 0;
 
     private int numTimesFled = 0;
+    private float attackCooldown = 0;
+    private bool assaultEnded;
+
+    [Header("Sounds")]
+    private AudioSource audioSource;
+    [SerializeField] AudioClip roarClip;
+    [SerializeField] AudioClip biteClip;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -32,6 +39,7 @@ public class StygianStalker : Rotatable
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.autoBraking = false;
+        audioSource = GetComponent<AudioSource>();
         TARGET = Player.WORLD_PLAYER.transform;
         incorporealPos = spawnPos;
         StartTracking();
@@ -53,6 +61,11 @@ public class StygianStalker : Rotatable
             ChargePlayer();
         else if (currentMode == StygianMode.Fleeing)
             DoFleeing();
+
+        if (attackCooldown > 0)
+            attackCooldown -= Time.deltaTime;
+        else if (attackCooldown < 0)
+            attackCooldown = 0;
     }
 
     void StartTracking()
@@ -76,6 +89,7 @@ public class StygianStalker : Rotatable
     void SpawnStalker()
     {
         corporeal = true;
+        assaultEnded = true;
         transform.position = incorporealPos;
         navMeshAgent.enabled = true;
         InitRotation();
@@ -113,7 +127,14 @@ public class StygianStalker : Rotatable
 
     void AttackPlayer(Player player)
     {
+        if (attackCooldown > 0)
+            return;
 
+        player.Hurt(85);
+        audioSource.PlayOneShot(biteClip);
+        attackCooldown = 5f;
+
+        BeginCircling();
     }
 
     // STALKING = = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF STALKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = = STALKING
@@ -122,7 +143,9 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Stalking!");
         currentMode = StygianMode.Stalking;
+        StartCoroutine("Roaring");
         navMeshAgent.speed = circleSpeed;
+        stalkingCircles = 0;
 
         stalkingTheta = Mathf.Atan2(transform.position.z - TARGET.position.z, transform.position.x - TARGET.position.x);
         NextCirclePos();
@@ -142,7 +165,7 @@ public class StygianStalker : Rotatable
         stalkingTheta += 1f;
         if (stalkingTheta > 2 * Mathf.PI)
         {
-            if (!RandomGen.ShouldContinueCircling(stalkingCircles))
+            if (!RandomGen.ShouldContinueCircling(stalkingCircles++))
             {
                 BeginAttacking();
             }
@@ -157,19 +180,26 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Attacking!");
         currentMode = StygianMode.Attacking;
-        MusicManager.SetAttackingTrack(true);
+        if (assaultEnded)
+        {
+            MusicManager.SetAttackingTrack(true);
+            assaultEnded = false;
+        }
         if (!Player.WORLD_PLAYER.hasEncounteredMonster)
             Player.WORLD_PLAYER.hasEncounteredMonster = true;
     }
 
     void ChargePlayer()
     {
-        Vector3 monsterToPlayer = Player.CONTROLLER.transform.position - transform.position;
-        Vector3 cross = Vector3.Cross(monsterToPlayer, Vector3.up).normalized;
-        Vector3 projection = Vector3.Dot(cross, Player.CONTROLLER.velocity) * Player.CONTROLLER.velocity / 4;
-        navMeshAgent.SetDestination(TARGET.position + projection);
-        sphere.position = TARGET.position + projection;
-        
+        // Vector3 monsterToPlayer = Player.CONTROLLER.transform.position - transform.position;
+        // Vector3 cross = Vector3.Cross(monsterToPlayer, Vector3.up).normalized;
+        // Vector3 projection = Vector3.Dot(cross, Player.CONTROLLER.velocity) * Player.CONTROLLER.velocity / 4;
+        // navMeshAgent.SetDestination(TARGET.position + projection);
+        // sphere.position = TARGET.position + projection;
+        if (Vector3.Distance(transform.position, TARGET.position) > 3f)
+            navMeshAgent.SetDestination(TARGET.position + Player.CONTROLLER.velocity);
+        else
+            navMeshAgent.SetDestination(TARGET.position);
     }
 
     // ATTACKING = = = = = = = = = = = = = = = = = = = = = = = [END OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = ATTACKING
@@ -179,10 +209,13 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Fleeing!");
         currentMode = StygianMode.Fleeing;
+        assaultEnded = true;
         numTimesFled++;
         float theta = Mathf.Atan2(transform.position.z - source.z, transform.position.x - source.x);
         theta = RandomGen.MercuryDirection(theta);
 
+        audioSource.pitch = 2.2f;
+        audioSource.PlayOneShot(roarClip);
         MusicManager.SetAttackingTrack(false);
         Vector3 direction = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
         targetPos = ChunkHandler.BoundCoordinate(direction.normalized * 80f);
@@ -207,6 +240,7 @@ public class StygianStalker : Rotatable
     {
         Debug.Log("Recuperating!");
         currentMode = StygianMode.Recuperating;
+        StopCoroutine("Roaring");
         incorporealPos = transform.position;
         navMeshAgent.enabled = false;
         corporeal = false;
@@ -236,6 +270,15 @@ public class StygianStalker : Rotatable
     {
         yield return new WaitForSeconds(RandomGen.RecuperationTime(numTimesFled));
         StartTracking();
+    }
+
+    private IEnumerator Roaring()
+    {
+        if (!corporeal)
+            yield return null;
+        if (Vector3.Distance(transform.position, TARGET.position) > 10f)
+            audioSource.PlayOneShot(roarClip);
+        yield return new WaitForSeconds(RandomGen.Range(5f, 20f));
     }
 
     protected override void Pivot(bool clockwise)

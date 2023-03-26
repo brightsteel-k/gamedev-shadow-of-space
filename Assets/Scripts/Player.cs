@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
     public static Player WORLD_PLAYER;
     public static Inventory INVENTORY;
+    public static Health HEALTH;
     public static Energy ENERGY;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
         CONTROLLER = GetComponent<CharacterController>();
         INVENTORY = GetComponent<Inventory>();
         ENERGY = GetComponent<Energy>();
+        HEALTH = GetComponent<Health>();
         animations = GetComponent<PlayerAnimation>();
         MAIN_CAMERA = transform.Find("Main Camera").GetComponent<Camera>();
         audioSource = GetComponent<AudioSource>();
@@ -247,6 +249,12 @@ public class Player : MonoBehaviour
         IN_MENU = inMenu;
         rotateBar.SetActive(!inMenu);
         animations.SetInMenu(inMenu);
+    }
+
+    public void Hurt(float amount)
+    {
+        HEALTH.removeHealth(amount);
+        
     }
 
     private void Die()
