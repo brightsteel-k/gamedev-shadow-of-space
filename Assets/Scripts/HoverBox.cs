@@ -14,14 +14,13 @@ public class HoverBox : MonoBehaviour
 
     public Sprite unknown;
     public Vector2 offset;
-    //@TODO Setup as a co-routine
 
     void Start()
     {
         
     }
     
-    //@TODO instead of passing in inventory, maybe add it through the editor
+
     public void create(List<Recipe.Pair1> items, List<Recipe.Pair2> liquids, PointerEventData eventData, Inventory inv) 
     {
         gameObject.SetActive(true);

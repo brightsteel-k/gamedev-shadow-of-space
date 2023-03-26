@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class TimeManager : MonoBehaviour
     private MuseSystem museSystem;
     private MusicManager musicManager;
 
-    public static TimeState TIME_STATE = 0;
+    public static TimeState TIME_STATE;
 
     private Dictionary<TimeState, float> timeStateLengths = new Dictionary<TimeState, float>()
     {
@@ -33,6 +34,11 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float timeStateCounter = 180;
     private float transitionLength = 20;
     private float transitionCounter = 0;
+
+    private void Awake()
+    {
+        TIME_STATE = 0;
+    }
 
     void Start()
     {
@@ -48,10 +54,10 @@ public class TimeManager : MonoBehaviour
         if (EventManager.PLAYER_DYING)
             return;
 
-        timeStateCounter -= Time.deltaTime;
+        timeStateCounter -= Time.deltaTime * 20f;
         if (transitionCounter > 0)
         {
-            transitionCounter -= Time.deltaTime;
+            transitionCounter -= Time.deltaTime * 20f;
             if (transitionCounter < 0)
                 transitionCounter = 0;
             UpdatePostProcessing();
@@ -75,6 +81,16 @@ public class TimeManager : MonoBehaviour
 
         SendMuseMessage();
         musicManager.UpdateTimeStateTrack();
+
+        if (TIME_STATE == TimeState.Penumbra)
+        {
+            //StygianStalker.WORLD_STALKER.StartTracking();
+        }
+        else if (TIME_STATE == TimeState.Bright)
+        {
+            //StygianStalker.WORLD_STALKER.BeginFleeing(Player.WORLD_PLAYER.transform.position);
+            EndGame();
+        }
     }
 
     void UpdatePostProcessing()
@@ -131,8 +147,28 @@ public class TimeManager : MonoBehaviour
     private void FadeToBlack()
     {
         fadeImage.gameObject.SetActive(true);
-        LeanTween.value(0f, 1f, 5f)
-            .setOnUpdate(c => fadeImage.color = new Color(0, 0, 0, c));
+        LeanTween.value(0f, 1f, 3.5f)
+            .setOnUpdate(c => fadeImage.color = new Color(0, 0, 0, c))
+            .setOnComplete(e => {
+                LeanTween.delayedCall(4f, f => ChangeScene("Dead"));
+            });
+    }
+
+    private void EndGame()
+    {
+        if (EventManager.PLAYER_DYING)
+            return;
+        EventManager.WinGame();
+        MuseSystem.SetMusable(false);
+        museSystem.PrintMusing("game_ending");
+        LeanTween.delayedCall(5f, e => ChangeScene("Win"));
+    }
+
+    private void ChangeScene(string location)
+    {
+        LeanTween.cancelAll();
+        Cursor.visible = true;
+        SceneManager.LoadScene(location);
     }
 }
 

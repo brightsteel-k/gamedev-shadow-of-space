@@ -6,8 +6,7 @@ using UnityEngine.AI;
 
 public class StygianStalker : Rotatable
 {
-    [SerializeField] Transform sphere; // @TODO: Delete tester object
-
+    public static StygianStalker WORLD_STALKER;
     private static Transform TARGET;
     [SerializeField] private Vector3 spawnPos;
     [SerializeField] float circleSpeed;
@@ -37,13 +36,13 @@ public class StygianStalker : Rotatable
     protected override void Start()
     {
         textureObject = transform.Find("Texture").gameObject;
+        WORLD_STALKER = this;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.autoBraking = false;
         audioSource = GetComponent<AudioSource>();
         TARGET = Player.WORLD_PLAYER.transform;
         incorporealPos = spawnPos;
-        StartTracking();
     }
 
     private void Update()
@@ -71,9 +70,8 @@ public class StygianStalker : Rotatable
         RoarWhenCharging();
     }
 
-    void StartTracking()
+    public void StartTracking()
     {
-        Debug.Log("Tracking");
         currentMode = StygianMode.Tracking;
         corporeal = false;
         targetPos = TARGET.position;
@@ -169,7 +167,6 @@ public class StygianStalker : Rotatable
 
     void BeginCircling()
     {
-        Debug.Log("Stalking!");
         currentMode = StygianMode.Stalking;
         navMeshAgent.speed = circleSpeed;
         stalkingCircles = 0;
@@ -205,7 +202,6 @@ public class StygianStalker : Rotatable
 
     void BeginAttacking()
     {
-        Debug.Log("Attacking!");
         currentMode = StygianMode.Attacking;
         if (assaultEnded)
         {
@@ -232,9 +228,8 @@ public class StygianStalker : Rotatable
     // ATTACKING = = = = = = = = = = = = = = = = = = = = = = = [END OF ATTACKING PHASE] = = = = = = = = = = = = = = = = = = = = = = = ATTACKING
     // FLEEING = = = = = = = = = = = = = = = = = = = = = = = [BEGINNING OF FLEEING PHASE] = = = = = = = = = = = = = = = = = = = = = = = FLEEING
 
-    void BeginFleeing(Vector3 source)
+    public void BeginFleeing(Vector3 source)
     {
-        Debug.Log("Fleeing!");
         currentMode = StygianMode.Fleeing;
         assaultEnded = true;
         numTimesFled++;
@@ -265,7 +260,6 @@ public class StygianStalker : Rotatable
 
     void BeginRecuperating()
     {
-        Debug.Log("Recuperating!");
         currentMode = StygianMode.Recuperating;
         incorporealPos = transform.position;
         navMeshAgent.enabled = false;

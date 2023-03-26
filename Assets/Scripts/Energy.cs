@@ -37,6 +37,7 @@ public class Energy : MonoBehaviour
         powerDownClip = Resources.Load<AudioClip>("Sounds/SuitPowerDown");
         barBack = bar.GetComponent<Image>();
         EventManager.OnPlayerDying += Deactivate;
+        EventManager.OnGameWinning += Deactivate;
     }
     
     //For now, it will slowly drain energy as long as main is running.

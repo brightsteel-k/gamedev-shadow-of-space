@@ -12,10 +12,10 @@ public class Player : MonoBehaviour
     public static Energy ENERGY;
     public static Vector3Int TILE_POSITION = Vector3Int.zero;
     public static CharacterController CONTROLLER;
-    public static int CAMERA_ROTATION = 2;
+    public static int CAMERA_ROTATION;
     public static Camera MAIN_CAMERA;
     private static AudioSource audioSource;
-    public static bool IN_MENU = false;
+    public static bool IN_MENU;
     private PlayerAnimation animations;
     private ItemOperator itemOperator;
 
@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float cameraOffsetRadius;
     private float rotationChangeQuotient = 1f / 8f;
     public float rotationTime = 0.33f;
-    public static bool canRotate = true;
+    public static bool canRotate;
     public static LeanTweenType easeType = LeanTweenType.easeOutQuint;
 
     private int mouseThreshold;
@@ -38,6 +38,9 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         WORLD_PLAYER = GetComponent<Player>();
+        CAMERA_ROTATION = 2;
+        IN_MENU = false;
+        canRotate = true;
     }
 
     private void Start()
@@ -87,19 +90,10 @@ public class Player : MonoBehaviour
 
         CheckCurrentTile();
 
+        // @TODO: Debug function
+        //if (Input.GetKeyDown(KeyCode.P))
+        //    Debug.Log("Why can't I rotate? CanRotate: " + canRotate + ", In_Menu: " + IN_MENU + ", cooldown: " + pivotCooldown);
 
-        // @TODO: Debug methods
-        if (Input.GetKeyDown(KeyCode.I))
-            PrintChunk();
-        if (Input.GetKeyDown(KeyCode.P))
-            Debug.Log("Why can't I rotate? CanRotate: " + canRotate + ", In_Menu: " + IN_MENU + ", cooldown: " + pivotCooldown);
-
-    }
-
-    // @TODO: Debug method to check chunks
-    private void PrintChunk()
-    {
-        ChunkHandler.GetChunk(transform.position).PrintFeatures();
     }
 
     private void TryPickupItem()

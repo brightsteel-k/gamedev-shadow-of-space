@@ -48,6 +48,8 @@ public class Health : MonoBehaviour
     //Use these instead of changing the amount
     public void removeHealth(float amount)
     {
+        if (EventManager.GAME_ENDING)
+            return;
         value -= amount;
         VerifyHealth();
         if (value > 0)

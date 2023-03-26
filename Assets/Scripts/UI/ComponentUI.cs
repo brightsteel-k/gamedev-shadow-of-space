@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 public class ComponentUI : MonoBehaviour
 {
-    //@TODO check for missing items?
     public Image icon;
     public TMP_Text text;
     public TMP_Text amount;

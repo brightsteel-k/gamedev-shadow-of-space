@@ -19,7 +19,8 @@ public class Environment : MonoBehaviour
     void Start()
     {
         INSTANCE = GetComponent<Environment>();
-        InitObjectPrefabs();
+        if (WORLD_OBJECTS.Count == 0)
+            InitObjectPrefabs();
     }
     public static void InitBiomes()
     {

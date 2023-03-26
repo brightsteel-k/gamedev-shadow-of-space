@@ -22,7 +22,6 @@ public class RecipeUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         pointerInBox = false;
     }
     
-    //Having this in update, maybe not good idea @TODO
     public void Update()
     {
         if (pointerInBox && hover.gameObject.activeSelf)

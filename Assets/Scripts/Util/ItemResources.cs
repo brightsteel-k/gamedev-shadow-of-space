@@ -14,6 +14,12 @@ public class ItemResources : MonoBehaviour
         QUANTITIES = JsonConvert.DeserializeObject<Dictionary<string, int>>(t1.text);
         TextAsset t2 = Resources.Load<TextAsset>("Textures/Items/sizes");
         SIZES = JsonConvert.DeserializeObject<Dictionary<string, float>>(t2.text);
+        if (PICKUP_SOUNDS.Count == 0)
+            RegisterSounds();
+    }
+
+    private void RegisterSounds()
+    {
         RegisterSound("ValuablePickup");
         RegisterSound("RockPickup");
         RegisterSound("ItemPickup");

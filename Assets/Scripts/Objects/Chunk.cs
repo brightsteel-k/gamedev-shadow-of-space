@@ -52,16 +52,4 @@ public class Chunk
         features.Add(feature);
         feature.SetChunkRegistry(features);
     }
-
-    // @TODO: Debug method to check chunks
-    public void PrintFeatures()
-    {
-        string s = "Features:";
-        foreach (WorldObject f in features)
-        {
-            s += "\n" + f.name;
-        }
-        s += "\nCount: " + features.Count;
-        Debug.Log(s);
-    }
 }

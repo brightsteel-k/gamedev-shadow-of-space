@@ -18,7 +18,8 @@ public class ChunkHandler : MonoBehaviour
         TILES = GetComponent<Tilemap>();
         LeanTween.init(1000);
 
-        Environment.InitBiomes();
+        if (Environment.Biomes.Count == 0)
+            Environment.InitBiomes();
         BuildWorld();
         EventManager.OnTilePosChanged += OnPlayerMove;
         StartCoroutine("UnloadChunks");
