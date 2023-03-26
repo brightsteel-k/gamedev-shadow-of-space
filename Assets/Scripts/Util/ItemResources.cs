@@ -56,6 +56,8 @@ public class ItemResources : MonoBehaviour
         {
             case "lithium":
                 return 0.283f;
+            case "ferritic_ingot":
+                return 0.416f;
             default:
                 return imgHeight / imgPixelsPerUnit / 12 / Mathf.Sqrt(2);
         }

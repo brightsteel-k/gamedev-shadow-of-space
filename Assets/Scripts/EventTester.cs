@@ -18,33 +18,9 @@ public class EventTester : MonoBehaviour
 
     void Update()
     {
-        //Test should print "true"
         if (Input.GetKeyDown(KeyCode.L))
         {
             hp.removeHealth(20);
         }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            en.removeEnergy(20);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftBracket))
-        {
-            Player.INVENTORY.addItem(Inventory.ALL_ITEMS["flare"]);
-            /*Item battery = ScriptableObject.CreateInstance<Item>().Initialize(Inventory.ALL_ITEMS["battery"], ("power", 80));
-            Player.INVENTORY.addItem(battery);*/
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightBracket))
-        {
-            Player.INVENTORY.addItem(Inventory.ALL_ITEMS["drill"]);
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            inv.addItem(toAdd);
-        }
-
-        
     }
 }

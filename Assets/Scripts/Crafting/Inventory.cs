@@ -1,10 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System;
-using System.Runtime.InteropServices;
-using UnityEditor;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,11 +29,13 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         initializeItems();
+        select = itemBar.selector;
     }
     void Start()
     {
-        select = itemBar.selector;
-        updateBar();
+        // Starting battery
+        Item startingBattery = ScriptableObject.CreateInstance<Item>().Initialize(ALL_ITEMS["battery"], ("power", RandomGen.Range(84, 99)));
+        addItem(startingBattery);
     }
 
     // Maps all item objects in the Scriptables/Items folder to their IDs

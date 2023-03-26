@@ -54,10 +54,10 @@ public class TimeManager : MonoBehaviour
         if (EventManager.PLAYER_DYING)
             return;
 
-        timeStateCounter -= Time.deltaTime * 20f;
+        timeStateCounter -= Time.deltaTime;
         if (transitionCounter > 0)
         {
-            transitionCounter -= Time.deltaTime * 20f;
+            transitionCounter -= Time.deltaTime;
             if (transitionCounter < 0)
                 transitionCounter = 0;
             UpdatePostProcessing();
@@ -82,13 +82,13 @@ public class TimeManager : MonoBehaviour
         SendMuseMessage();
         musicManager.UpdateTimeStateTrack();
 
-        if (TIME_STATE == TimeState.Penumbra)
+        if (TIME_STATE == TimeState.Eclipse)
         {
-            //StygianStalker.WORLD_STALKER.StartTracking();
+            StygianStalker.WORLD_STALKER.StartTracking();
         }
         else if (TIME_STATE == TimeState.Bright)
         {
-            //StygianStalker.WORLD_STALKER.BeginFleeing(Player.WORLD_PLAYER.transform.position);
+            StygianStalker.WORLD_STALKER.BeginFleeing(Player.WORLD_PLAYER.transform.position);
             EndGame();
         }
     }

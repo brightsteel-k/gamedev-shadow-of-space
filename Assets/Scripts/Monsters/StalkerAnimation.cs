@@ -8,39 +8,62 @@ public class StalkerAnimation : MonoBehaviour
     [SerializeField] private SpriteRenderer texture;
     private Animator anim;
     private NavMeshAgent navMeshAgent;
-    public int internalDirection = 2;
+    private SpriteRenderer spriteRenderer;
+    private int previousDirection = 2;
 
     // Start is called before the first frame update
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         anim = texture.transform.GetComponent<Animator>();
+        spriteRenderer = texture.GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateAnimations()
     {
         ManageDirection();
     }
 
     private void ManageDirection()
     {
-        float theta = Mathf.PI / 2 - Player.CAMERA_ROTATION * Mathf.PI / 4f;
-        /*float dx = navMeshAgent.velocity.x;
-        float dz = navMeshAgent.velocity.z;
-        bool sideDominant = Mathf.Abs(dx) >= Mathf.Abs(dz);
+        int direction = 0;
+        float theta = Player.CAMERA_ROTATION * Mathf.PI / 4f - Mathf.Atan2(navMeshAgent.velocity.z, navMeshAgent.velocity.x);
+        float horizontal = Mathf.Sin(theta);
+        float vertical = Mathf.Cos(theta);
+        bool sideDominant = Mathf.Abs(horizontal) >= Mathf.Abs(vertical);
 
         if (sideDominant)
-        {
-            if (dx > 0 && internalDirection != 2)
-            {
+            direction = horizontal >= 0 ? 1 : 3;
+        else
+            direction = vertical > 0 ? 0 : 2;
 
-            }
-        }*/
+        if (direction != previousDirection)
+        {
+            SetRunningDirection(direction);
+            previousDirection = direction;
+        }
     }
 
-    private int calculateRelativeDirection(int playerCameraRotation)
+    void SetRunningDirection(int direction)
     {
-        return (internalDirection * 2 - playerCameraRotation + 8) % 8;
+        string animState = "Running ";
+        switch (direction)
+        {
+            case 0:
+                animState += "(UP)";
+                break;
+            case 1:
+                spriteRenderer.flipX = false;
+                animState += "(SIDE)";
+                break;
+            case 2:
+                animState += "(DOWN)";
+                break;
+            case 3:
+                spriteRenderer.flipX = true;
+                animState += "(SIDE)";
+                break;
+        }
+        anim.Play(animState, 0);
     }
 }

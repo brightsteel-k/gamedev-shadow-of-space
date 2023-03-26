@@ -103,7 +103,7 @@ public class Energy : MonoBehaviour
         }
         else
         {
-            drainSpeed = 0.5f;
+            drainSpeed = 0.4f;
             bar.setColor(normalColor);
         }
         isDrilling = drilling;

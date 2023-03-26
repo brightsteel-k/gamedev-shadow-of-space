@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Diamond-Tipped Drill
   id: drill
-  sprite: {fileID: 21300000, guid: 173fbf992ae38b348851afefed019d55, type: 3}
+  sprite: {fileID: 21300000, guid: dd2973196225a9a47af115f020bdc41f, type: 3}
+  isLiquid: 0
+  madeLiq: {fileID: 0}

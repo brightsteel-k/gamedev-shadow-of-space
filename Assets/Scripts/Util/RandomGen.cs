@@ -80,8 +80,8 @@ public class RandomGen
 
     public static float RecuperationTime(int numTimesFled)
     {
-        float lowerBound = Mathf.Max(7f, 12f - numTimesFled);
-        float upperBound = Mathf.Max(lowerBound, 24f - numTimesFled * 2f);
+        float lowerBound = Mathf.Max(6f, 9f - numTimesFled);
+        float upperBound = Mathf.Max(lowerBound, 18f - numTimesFled * 2f);
         return Random.Range(lowerBound, upperBound);
     }
 

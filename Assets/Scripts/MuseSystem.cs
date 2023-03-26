@@ -36,7 +36,7 @@ public class MuseSystem : MonoBehaviour
         iconEnvironment = museSliderTransform.Find("Icon").GetComponent<Image>();
         audioSource = museText.transform.GetComponent<AudioSource>();
         skyIcon = Resources.Load<Sprite>("Textures/UI/muse_sky");
-        skyIcon = Resources.Load<Sprite>("Textures/UI/muse_monster");
+        monsterIcon = Resources.Load<Sprite>("Textures/UI/muse_monster");
         musableLayerMask = LayerMask.GetMask("Musable");
 
         TextAsset ta = Resources.Load<TextAsset>("Data/musings");
@@ -153,7 +153,7 @@ public class MuseSystem : MonoBehaviour
                     PlayRandomTypeSound();
                 museText.maxVisibleCharacters = intc;
             });
-        speakingCooldown = 5;
+        speakingCooldown = 6.5f;
     }
 
     private void PlayRandomTypeSound()

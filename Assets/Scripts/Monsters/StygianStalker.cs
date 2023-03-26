@@ -12,12 +12,13 @@ public class StygianStalker : Rotatable
     [SerializeField] float circleSpeed;
     [SerializeField] float circleRadius;
     [SerializeField] float circleWaypointThreshold;
-    private StygianMode currentMode = StygianMode.Tracking;
-    private bool corporeal = false;
+    private StygianMode currentMode = StygianMode.Recuperating;
+    private bool corporeal;
     private Vector3 incorporealPos;
     private Vector3 targetPos;
     private float playerPosUpdateTime = 12f;
     private NavMeshAgent navMeshAgent;
+    private StalkerAnimation animations;
 
     private float stalkingTheta;
     private int stalkingCircles = 0;
@@ -37,8 +38,10 @@ public class StygianStalker : Rotatable
     {
         textureObject = transform.Find("Texture").gameObject;
         WORLD_STALKER = this;
+        corporeal = false;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+        animations = GetComponent<StalkerAnimation>();
         navMeshAgent.autoBraking = false;
         audioSource = GetComponent<AudioSource>();
         TARGET = Player.WORLD_PLAYER.transform;
@@ -53,6 +56,9 @@ public class StygianStalker : Rotatable
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (corporeal)
+            animations.UpdateAnimations();
+
         if (currentMode == StygianMode.Tracking)
             TrackingPosition();
         else if (currentMode == StygianMode.Stalking)
@@ -72,6 +78,7 @@ public class StygianStalker : Rotatable
 
     public void StartTracking()
     {
+        gameObject.SetActive(true);
         currentMode = StygianMode.Tracking;
         corporeal = false;
         targetPos = TARGET.position;
@@ -81,7 +88,7 @@ public class StygianStalker : Rotatable
     void TrackingPosition()
     {
         Vector3 deltaVec = Vector3.Normalize(targetPos - incorporealPos);
-        incorporealPos += deltaVec * Time.deltaTime * 10f;
+        incorporealPos += deltaVec * Time.deltaTime * 15f;
 
         if (Vector3.Distance(incorporealPos, TARGET.position) <= 30f)
             SpawnStalker();
@@ -295,7 +302,10 @@ public class StygianStalker : Rotatable
     protected override void Pivot(bool clockwise)
     {
         if (corporeal)
+        {
+            VerifyRotation();
             Player.Pivot(textureObject, clockwise);
+        }
     }
 }
 
