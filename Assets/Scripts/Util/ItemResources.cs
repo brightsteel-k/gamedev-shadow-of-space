@@ -8,12 +8,14 @@ public class ItemResources : MonoBehaviour
     static Dictionary<string, int> QUANTITIES;
     static Dictionary<string, float> SIZES;
     static Dictionary<string, AudioClip> PICKUP_SOUNDS = new Dictionary<string, AudioClip>();
+    public static List<string> RARE_RESOURCES_DROPPED = new List<string>();
     void Start()
     {
         TextAsset t1 = Resources.Load<TextAsset>("Textures/Items/quantities");
         QUANTITIES = JsonConvert.DeserializeObject<Dictionary<string, int>>(t1.text);
         TextAsset t2 = Resources.Load<TextAsset>("Textures/Items/sizes");
         SIZES = JsonConvert.DeserializeObject<Dictionary<string, float>>(t2.text);
+        RARE_RESOURCES_DROPPED.Clear();
         if (PICKUP_SOUNDS.Count == 0)
             RegisterSounds();
     }

@@ -45,8 +45,18 @@ public class LargeObject : WorldObject
             Environment.DropItem(rockDrop, dropPos);
         }
 
-        if (rareDrop != "" && RandomGen.GetCountFromAbundance(0.000002f, 3) > 0)
-            Environment.DropItem(rareDrop, transform.position + Vector3.up);
+        if (rareDrop != "")
+        {
+            if (!ItemResources.RARE_RESOURCES_DROPPED.Contains(rareDrop))
+            {
+                Environment.DropItem(rareDrop, transform.position + Vector3.up);
+                ItemResources.RARE_RESOURCES_DROPPED.Add(rareDrop);
+            }
+            else if (RandomGen.GetCountFromAbundance(0.000004f, 3) > 0)
+            {
+                Environment.DropItem(rareDrop, transform.position + Vector3.up);
+            }
+        }
 
         Instantiate(breakParticles, transform.position + Vector3.up, Quaternion.Euler(new Vector3(-90, 0, 0)));
         Remove();

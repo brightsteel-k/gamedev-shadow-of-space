@@ -11,15 +11,16 @@
 		"If rocks could talk, what would these ones say?"
 	],
 	"tyranite": [
-		"What a pretty colour. The things nature can create sometimes.",
-		"I need to get minerals out of this somehow.",
-		"My computer detects trace amounts of lithium in the core…"
+		"I need to get minerals out of this somehow. That spodumene core might contain lithium.",
+		"My computer detects trace amounts of lithium in the core… now how do I get it out?",
+		"Interesting crystal core… my computer indicates a pyroxene group that could contain lithium."
 	],
 	"lithium": [
 		"The key to more batteries!",
 		"Who knew I could be so happy to see a lithium aluminium inosilicate."
 	],
 	"tyranite_pebble": [
+		"What a pretty colour. The things nature can create sometimes.",
 		"I wonder what chemicals cause that colour.",
 		"I could break that down in my NOVA.",
 		"Any of you rocks want to be my Wilson?"

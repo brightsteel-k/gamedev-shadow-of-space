@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 public class Environment : MonoBehaviour
 {
     public static Environment INSTANCE;
-    static Quaternion spriteTilt = Quaternion.Euler(45, 0, 0);
     public static Dictionary<string, Biome> Biomes = new Dictionary<string, Biome>() { };
     public static Dictionary<string, GameObject> WORLD_OBJECTS = new Dictionary<string, GameObject>();
 

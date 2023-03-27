@@ -98,12 +98,12 @@ public class Energy : MonoBehaviour
 
         if (drilling)
         {
-            drainSpeed = 1f;
+            drainSpeed = 0.75f;
             bar.setColor(drillingColor);
         }
         else
         {
-            drainSpeed = 0.4f;
+            drainSpeed = 0.25f;
             bar.setColor(normalColor);
         }
         isDrilling = drilling;

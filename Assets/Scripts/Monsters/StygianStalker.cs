@@ -134,7 +134,7 @@ public class StygianStalker : Rotatable
 
     void AttackPlayer(Player player)
     {
-        if (attackCooldown > 0)
+        if (attackCooldown > 0 || currentMode == StygianMode.Fleeing)
             return;
 
         player.Hurt(85);
