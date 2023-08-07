@@ -6,7 +6,6 @@ public class MenuManager : MonoBehaviour
 {
     public static bool CAN_CRAFT;
     public CraftingUI craft;
-    public GameObject HoverBox;
     //For the "inMenu" thing.
     public Player player;
 
@@ -30,8 +29,7 @@ public class MenuManager : MonoBehaviour
                 SetCraftingMenuActive(true);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && Player.IN_MENU)
-        {
+        if (Player.IN_MENU && Input.GetKeyDown(KeyCode.Escape)) {
             SetCraftingMenuActive(false);
         }
     }

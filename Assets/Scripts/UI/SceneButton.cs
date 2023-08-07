@@ -21,6 +21,11 @@ public class SceneButton : MonoBehaviour
 
     public void ChangeScene()
     {
+        if (destinationScene == "Quit")
+        {
+            Application.Quit();
+            return;
+        }
         SceneManager.LoadScene(destinationScene);
     }
 }

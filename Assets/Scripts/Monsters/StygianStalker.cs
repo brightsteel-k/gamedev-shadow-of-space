@@ -210,13 +210,12 @@ public class StygianStalker : Rotatable
     void BeginAttacking()
     {
         currentMode = StygianMode.Attacking;
+        Player.WORLD_PLAYER.hasEncounteredMonster = true;
         if (assaultEnded)
         {
             MusicManager.SetAttackingTrack(true);
             assaultEnded = false;
         }
-        if (!Player.WORLD_PLAYER.hasEncounteredMonster)
-            Player.WORLD_PLAYER.hasEncounteredMonster = true;
     }
 
     void ChargePlayer()
@@ -247,7 +246,7 @@ public class StygianStalker : Rotatable
         audioSource.PlayOneShot(roarClip);
         MusicManager.SetAttackingTrack(false);
         Vector3 direction = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
-        targetPos = ChunkHandler.BoundCoordinate(direction.normalized * 80f);
+        targetPos = ChunkHandler.BoundCoordinate(direction.normalized * 30f);
         navMeshAgent.SetDestination(targetPos);
     }
 

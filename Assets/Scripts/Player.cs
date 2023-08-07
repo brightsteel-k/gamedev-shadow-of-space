@@ -82,18 +82,13 @@ public class Player : MonoBehaviour
             PlayerRotateInput();
             if (Input.GetMouseButtonDown(1))
                 itemOperator.UseSelectedItem();
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
                 TryPickupItem();
             if (Input.GetKeyDown(KeyCode.Q))
                 itemOperator.TryDropSelectedItem();
         }
 
         CheckCurrentTile();
-
-        // @TODO: Debug function
-        //if (Input.GetKeyDown(KeyCode.P))
-        //    Debug.Log("Why can't I rotate? CanRotate: " + canRotate + ", In_Menu: " + IN_MENU + ", cooldown: " + pivotCooldown);
-
     }
 
     private void TryPickupItem()

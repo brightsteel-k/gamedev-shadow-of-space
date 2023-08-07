@@ -58,6 +58,7 @@ public class InvBar : MonoBehaviour
     {
         PlayUIClick();
         selector.ShiftPosition(up);
+        Player.WORLD_PLAYER.UpdateSelectedItem();
     }
 
     public void PlayUIClick()
